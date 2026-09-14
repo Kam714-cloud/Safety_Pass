@@ -3,198 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Permit Management System - Audi Safety</title>
+    <title>Work Permit Management System - Audi</title>
     <style>
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
-        body { display: flex; background-color: #f4f6f9; color: #333; min-height: 100vh; }
-
-        /* Sidebar ด้านซ้าย */
-        .sidebar { width: 240px; background-color: #0d4b68; color: white; padding: 20px 0; display: flex; flex-direction: column; }
-        .sidebar h2 { font-size: 18px; padding: 0 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .menu-item { padding: 15px 20px; color: #cfd8dc; cursor: pointer; display: flex; align-items: center; gap: 10px; text-decoration: none; font-size: 14px; transition: 0.3s; }
-        .menu-item:hover, .menu-item.active { background-color: #083449; color: white; border-left: 4px solid #00bcd4; }
-
-        /* พื้นที่เนื้อหาขวา */
-        .main-content { flex: 1; padding: 25px; overflow-y: auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; background: white; padding: 15px 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .header h1 { font-size: 20px; color: #0d4b68; }
-        .user-info { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #666; }
-
-        /* การสลับหน้า */
-        .page { display: none; }
-        .page.active { display: block; }
-
-        /* สไตล์หน้า 1: ฟอร์มกรอก Work Permit */
-        .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 25px; }
-        .card-title { font-size: 16px; font-weight: bold; margin-bottom: 15px; color: #0d4b68; border-bottom: 2px solid #f0f0f0; padding-bottom: 8px; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .form-group { display: flex; flex-direction: column; gap: 5px; }
-        .form-group.full { grid-column: span 2; }
-        label { font-size: 13px; font-weight: bold; color: #555; }
-        input, select, textarea { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%; }
-        .btn-submit { background-color: #2e7d32; color: white; border: none; padding: 12px 25px; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; margin-top: 15px; }
-        .btn-submit:hover { background-color: #1b5e20; }
-
-        /* สไตล์หน้า 2: ตารางและติดตามสถานะ Timeline */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
-        th { background-color: #f8f9fa; color: #555; }
-        .badge { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; }
-        .badge.approved { background-color: #e8f5e9; color: #2e7d32; }
-        .badge.pending { background-color: #fff8e1; color: #f57f17; }
+        body { display: flex; flex-direction: column; background-color: #f4f6f9; color: #333; min-height: 100vh; }
         
-        /* Timeline สไตล์แบบรูปสั่งซื้อ */
-        .timeline { margin-top: 20px; padding-left: 20px; position: relative; border-left: 2px solid #ddd; }
-        .timeline-item { position: relative; padding-bottom: 20px; padding-left: 15px; }
-        .timeline-item::before { content: ''; position: absolute; left: -22px; top: 0; width: 12px; height: 12px; border-radius: 50%; background: #ccc; }
-        .timeline-item.done::before { background: #2e7d32; }
-        .timeline-item.active::before { background: #00bcd4; box-shadow: 0 0 0 3px rgba(0,188,212,0.3); }
-        .timeline-title { font-weight: bold; font-size: 14px; }
-        .timeline-date { font-size: 12px; color: #888; }
+        /* Layout Structure */
+        .app-container { display: flex; flex-direction: column; flex: 1; width: 100%; }
+        
+        /* Navigation Bar */
+        .navbar { background-color: #1a365d; color: white; padding: 15px 20px; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .navbar h2 { font-size: 20px; text-transform: uppercase; letter-spacing: 1px; color: #ffffff; }
+        .nav-menu { display: flex; gap: 10px; width: 100%; }
+        .menu-item { flex: 1; padding: 12px; background: rgba(255, 255, 255, 0.1); border-radius: 8px; cursor: pointer; text-align: center; color: #e2e8f0; font-size: 14px; font-weight: 500; transition: all 0.2s; border: none; outline: none; }
+        .menu-item:hover, .menu-item.active { background-color: #e53e3e; color: white; font-weight: bold; }
+
+        /* Main Content Area */
+        .main-content { flex: 1; padding: 15px; width: 100%; max-width: 900px; margin: 0 auto; }
+        
+        /* Page Display Control */
+        .page { display: none; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .page.active { display: block; }
+        
+        h1 { font-size: 20px; color: #1a365d; margin-bottom: 20px; border-bottom: 2px solid #edf2f7; padding-bottom: 10px; }
+        
+        /* Form Styles */
+        .form-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .form-group { display: flex; flex-direction: column; }
+        label { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #4a5568; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 14px; background-color: #fff; transition: border-color 0.2s; }
+        input:focus, select:focus, textarea:focus { border-color: #3182ce; outline: none; box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1); }
+        .btn-submit { background-color: #3182ce; color: white; border: none; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px; transition: background 0.2s; }
+        .btn-submit:hover { background-color: #2b6cb0; }
+
+        /* Timeline / Tracking Styles */
+        .status-card { background: #ebf8ff; border-left: 4px solid #3182ce; padding: 15px; border-radius: 6px; margin-bottom: 20px; }
+        .status-title { font-weight: bold; color: #2b6cb0; margin-bottom: 4px; }
+        .timeline { position: relative; padding-left: 20px; border-left: 2px solid #e2e8f0; margin-top: 15px; }
+        .timeline-item { position: relative; margin-bottom: 20px; padding-left: 15px; }
+        .timeline-item::before { content: ''; position: absolute; left: -27px; top: 3px; width: 12px; height: 12px; border-radius: 50%; background-color: #cbd5e0; border: 2px solid white; }
+        .timeline-item.completed::before { background-color: #38a169; }
+        .timeline-item.active::before { background-color: #3182ce; box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2); }
+        .timeline-title { font-weight: 600; font-size: 14px; }
+        .timeline-date { font-size: 12px; color: #718096; }
+
+        /* Responsive Design for PC/Tablet */
+        @media (min-width: 768px) {
+            .app-container { flex-direction: row; }
+            .navbar { width: 260px; min-height: 100vh; padding: 25px 20px; }
+            .nav-menu { flex-direction: column; }
+            .main-content { padding: 30px; }
+            .form-grid { grid-template-columns: 1fr 1fr; }
+            .full-width { grid-column: span 2; }
+            h1 { font-size: 24px; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar เมนูด้านซ้าย -->
-    <div class="sidebar">
-        <h2>AUDI WORK PERMIT</h2>
-        <a class="menu-item active" onclick="switchPage('form-page', this)">
-            📝 กรอกคำขอ Work Permit
-        </a>
-        <a class="menu-item" onclick="switchPage('status-page', this)">
-            📦 ติดตามผล / เช็กสถานะ
-        </a>
-    </div>
-
-    <!-- พื้นที่เนื้อหาหลักด้านขวา -->
-    <div class="main-content">
-        <div class="header">
-            <h1>WORK PERMIT MANAGEMENT SYSTEM</h1>
-            <div class="user-info">
-                👤 John Doe - Contractor (Audi Safety)
+    <div class="app-container">
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <h2>AUDI WORK PERMIT</h2>
+            <div class="nav-menu">
+                <button class="menu-item active" onclick="switchPage('form-page', this)">📝 กรอกคำขอ</button>
+                <button class="menu-item" onclick="switchPage('tracking-page', this)">📦 ติดตามผล</button>
             </div>
-        </div>
+        </nav>
 
-        <!-- จอที่ 1: หน้าฟอร์มกรอกขอ Work Permit -->
-        <div id="form-page" class="page active">
-            <div class="card">
-                <div class="card-title">SUBMIT NEW WORK PERMIT REQUEST (ยื่นคำขอใบอนุญาตทำงาน)</div>
-                <form onsubmit="event.preventDefault(); alert('ยื่นคำขอ Work Permit เรียบร้อยแล้ว!'); switchPage('status-page', document.querySelectorAll('.menu-item')[1]);">
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- Page 1: Form -->
+            <section id="form-page" class="page active">
+                <h1>SUBMIT NEW WORK PERMIT REQUEST</h1>
+                <form onsubmit="event.preventDefault(); alert('ส่งข้อมูลคำขอเรียบร้อยแล้ว!'); switchPage('tracking-page', document.querySelectorAll('.menu-item')[1]);">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Contractor Company Name (ชื่อบริษัทผู้รับเหมา)</label>
+                            <label>ชื่อบริษัทผู้รับเหมา (Contractor Company)</label>
                             <input type="text" placeholder="ระบุชื่อบริษัท" required>
                         </div>
                         <div class="form-group">
-                            <label>Project Name (ชื่อโครงการ/งาน)</label>
-                            <input type="text" placeholder="เช่น งานติดตั้งระบบความปลอดภัย Audi" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Work Area (พื้นที่ปฏิบัติงาน)</label>
-                            <select required>
-                                <option value="">-- เลือกพื้นที่ --</option>
-                                <option>Audi Showroom - Zone A</option>
-                                <option>Audi Service Center - Zone B</option>
-                                <option>Safety Testing Track</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Work Type (ประเภทงานเสี่ยง)</label>
+                            <label>ประเภทงาน (Work Type)</label>
                             <select required>
                                 <option value="">-- เลือกประเภทงาน --</option>
-                                <option>Hot Work (งานที่ก่อให้เกิดความร้อน/ประกายไฟ)</option>
-                                <option>High Risk Work (งานในที่สูง)</option>
-                                <option>Electrical Work (งานระบบไฟฟ้า)</option>
+                                <option>งานความร้อน (Hot Work)</option>
+                                <option>งานที่สูง (Working at Height)</option>
+                                <option>งานไฟฟ้า (Electrical Work)</option>
+                                <option>งานทั่วไป (General Work)</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Start Date (วันที่เริ่มต้น)</label>
-                            <input type="date" required>
+                            <label>พื้นที่ปฏิบัติงาน (Work Area)</label>
+                            <select required>
+                                <option value="">-- เลือกพื้นที่ --</option>
+                                <option>Showroom</option>
+                                <option>Service Center</option>
+                                <option>Body & Paint</option>
+                                <option>Warehouse</option>
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label>End Date (วันที่สิ้นสุด)</label>
+                            <label>ระยะเวลาทำงาน (Duration)</label>
                             <input type="date" required>
                         </div>
-                        <div class="form-group full">
-                            <label>Work Description (รายละเอียดงาน)</label>
-                            <textarea rows="3" placeholder="อธิบายรายละเอียดขั้นตอนการทำงานแบบสั้นๆ..."></textarea>
+                        <div class="form-group full-width">
+                            <label>รายละเอียดงาน (Work Description)</label>
+                            <textarea rows="3" placeholder="อธิบายรายละเอียดลักษณะงานที่เข้าไปปฏิบัติ..." required></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>รายชื่อผู้ปฏิบัติงาน (Worker Names)</label>
+                            <textarea rows="2" placeholder="ระบุชื่อ-นามสกุล ช่าง/ผู้ปฏิบัติงาน..." required></textarea>
                         </div>
                     </div>
-                    <button type="submit" class="btn-submit">Submit Request (ส่งคำขอ)</button>
+                    <button type="submit" class="btn-submit">ยื่นคำขอ Work Permit</button>
                 </form>
-            </div>
-        </div>
+            </section>
 
-        <!-- จอที่ 2: หน้าติดตามผลการขอ Work Permit -->
-        <div id="status-page" class="page">
-            <div class="card">
-                <div class="card-title">MY RECENT PERMITS (รายการคำขอของคุณ)</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Permit ID</th>
-                            <th>Request Date</th>
-                            <th>Work Type</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><b>WP-1025</b></td>
-                            <td>14/09/2026</td>
-                            <td>Hot Work</td>
-                            <td><span class="badge pending">Pending Safety Review</span></td>
-                        </tr>
-                        <tr>
-                            <td><b>WP-1023</b></td>
-                            <td>10/09/2026</td>
-                            <td>Electrical Work</td>
-                            <td><span class="badge approved">Approved</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <!-- Page 2: Tracking -->
+            <section id="tracking-page" class="page">
+                <h1>WORK PERMIT STATUS TRACKING</h1>
+                
+                <div class="status-card">
+                    <div class="status-title">คำขอล่าสุด: WP-2024-0082</div>
+                    <div>สถานะปัจจุบัน: <strong style="color: #3182ce;">รอการตรวจสอบความปลอดภัย</strong></div>
+                </div>
 
-            <!-- ส่วน Timeline แสดงสถานะละเอียดแบบในภาพตัวอย่าง -->
-            <div class="card">
-                <div class="card-title">STATUS TRACKING (สถานะดำเนินการล่าสุด: WP-1025)</div>
+                <h3>ขั้นตอนการอนุมัติ (Approval Timeline)</h3>
                 <div class="timeline">
-                    <div class="timeline-item done">
-                        <div class="timeline-title">1. ยื่นคำขอ Work Permit เข้าสู่ระบบ</div>
-                        <div class="timeline-date">14/09/2026 - 09:30 น.</div>
+                    <div class="timeline-item completed">
+                        <div class="timeline-title">ยื่นคำขอเรียบร้อย (Submitted)</div>
+                        <div class="timeline-date">10 ต.ค. 2024 - 09:00 น.</div>
                     </div>
                     <div class="timeline-item active">
-                        <div class="timeline-title">2. อยู่ระหว่าง เจ้าหน้าที่ Safety ตรวจสอบเอกสาร</div>
+                        <div class="timeline-title">จป. ตรวจสอบความปลอดภัย (Safety Officer Review)</div>
                         <div class="timeline-date">กำลังดำเนินการ...</div>
                     </div>
                     <div class="timeline-item">
-                        <div class="timeline-title">3. ผู้จัดการอนุมัติ (Final Approval)</div>
-                        <div class="timeline-date">รอการอนุมัติ</div>
+                        <div class="timeline-title">ผู้อนุมัติลงนาม (Manager Approval)</div>
+                        <div class="timeline-date">รอดำเนินการ</div>
                     </div>
                     <div class="timeline-item">
-                        <div class="timeline-title">4. ออกใบอนุญาตเข้าทำงาน (Work Permit Issued)</div>
-                        <div class="timeline-date">-</div>
+                        <div class="timeline-title">ออกใบอนุญาตสำเร็จ (Permit Issued)</div>
+                        <div class="timeline-date">รอดำเนินการ</div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </section>
 
+        </main>
     </div>
 
-    <!-- สคริปต์สลับหน้า -->
     <script>
         function switchPage(pageId, element) {
-            // ซ่อนทุกหน้า
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            // ปลดสถานะ active ของเมนู
             document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-            
-            // แสดงหน้าที่เลือก
             document.getElementById(pageId).classList.add('active');
             element.classList.add('active');
         }
     </script>
 </body>
 </html>
-
-
