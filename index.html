@@ -1,1 +1,72 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audi Safety - Tracking System</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background-color: #1e1e1e;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            max-width: 400px;
+            width: 90%;
+            border-top: 4px solid #bb0a30;
+        }
+        h2 { text-align: center; margin-top: 0; letter-spacing: 1px; }
+        .status-box {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .status-title { color: #888; font-size: 12px; text-transform: uppercase; }
+        .status-value { color: #4caf50; font-size: 18px; font-weight: bold; margin-top: 5px; }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #bb0a30;
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>AUDI SAFETY PASS</h2>
+    <p style="text-align: center; color: #aaa; font-size: 14px;">ระบบติดตามสถานะการตรวจสอบความปลอดภัย</p>
+    
+    <div class="status-box">
+        <div class="status-title">สถานะล่าสุด</div>
+        <div class="status-value">🚗 ผ่านการตรวจสอบระบบเบรก (Passed)</div>
+    </div>
+
+    <div class="status-box">
+        <div class="status-title">รายการตรวจเช็ก</div>
+        <p style="margin: 5px 0 0 0; font-size: 14px;">Audi Safety Inspection #8802</p>
+    </div>
+
+    <button class="btn" onclick="alert('อัปเดตข้อมูลล่าสุดเรียบร้อยแล้ว')">รีเฟรชสถานะ</button>
+</div>
+
+</body>
+</html>
 
