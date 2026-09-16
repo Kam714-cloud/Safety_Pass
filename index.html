@@ -1,95 +1,244 @@
-import React from 'react';
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AUDI WORK PERMIT</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { display: flex; background-color: #f4f6f9; min-height: 100vh; }
+    
+    .sidebar { width: 250px; background-color: #0d233a; color: white; padding: 20px 0; flex-shrink: 0; }
+    .sidebar h2 { font-size: 18px; font-weight: bold; padding: 0 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .sidebar-menu { margin-top: 20px; }
+    .menu-item { padding: 12px 20px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 14px; }
+    .menu-item.active { background-color: #e63946; border-radius: 0 20px 20px 0; margin-right: 15px; }
 
-export default function SafetyForm() {
-  return (
-    <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-xl">
-      <h1 className="text-2xl font-bold mb-6 text-blue-700">Safety Digital Passport Registration</h1>
+    .main-content { flex-grow: 1; padding: 40px; overflow-y: auto; }
+    .form-container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    .form-title { text-align: center; color: #0d233a; margin-bottom: 25px; font-size: 22px; }
+    
+    .section-title { font-size: 16px; font-weight: bold; color: #0d233a; border-left: 4px solid #0056b3; padding-left: 10px; margin: 25px 0 15px 0; }
+    
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .form-group { margin-bottom: 15px; }
+    .form-group.full-width { grid-column: span 2; }
+    
+    label { display: block; font-size: 13px; font-weight: 600; color: #333; margin-bottom: 6px; }
+    label .req { color: red; }
+    
+    input[type="text"], input[type="number"], input[type="date"], select, textarea {
+      width: 100%; padding: 10px; border: 1px solid #dcdcdc; border-radius: 6px; font-size: 14px; outline: none; transition: 0.2s;
+    }
+    input:focus, select:focus, textarea:focus { border-color: #0056b3; box-shadow: 0 0 0 2px rgba(0,86,179,0.1); }
+    
+    .options-group { display: flex; flex-direction: column; gap: 8px; margin-top: 5px; }
+    .option-label { display: flex; align-items: center; gap: 8px; font-weight: normal; font-size: 14px; cursor: pointer; }
+    .option-label input { width: auto; }
+
+    .btn-submit { width: 100%; background-color: #0056b3; color: white; padding: 12px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+    .btn-submit:hover { background-color: #004085; }
+    
+    .file-hint { font-size: 11px; color: #888; margin-top: 4px; }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>AUDI WORK PERMIT</h2>
+    <div class="sidebar-menu">
+      <div class="menu-item active">📝 กรอกคำขอ</div>
+      <div class="menu-item">📂 ติดตามผล</div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="form-container">
+      <h2 class="form-title">ระบบกรอกคำขอ Work Permit</h2>
       
-      <form className="space-y-6">
-        {/* ข้อ 6 */}
-        <div>
-          <label className="block font-medium">6. ตำแหน่งงาน <span className="text-red-500">*</span></label>
-          <input type="text" className="w-full border p-2 rounded mt-1" required placeholder="ใส่คำตอบ" />
-        </div>
+      <form id="workPermitForm">
+        
+        <div class="section-title">ข้อมูลทั่วไป & Safety Training</div>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>6. ตำแหน่งงาน <span class="req">*</span></label>
+            <input type="text" placeholder="ใส่คำตอบ" required>
+          </div>
 
-        {/* Section: Safety Training */}
-        <div className="border-t pt-4">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">Safety Training</h2>
-          
-          {/* ข้อ 7 */}
-          <div className="mb-4">
-            <label className="block font-medium">7. ผ่านการอบรมมาตรฐานความปลอดภัย <span className="text-red-500">*</span></label>
-            <div className="mt-2 space-y-1">
-              <label className="flex items-center space-x-2"><input type="radio" name="q7" value="ผ่าน" /> <span>ผ่าน</span></label>
-              <label className="flex items-center space-x-2"><input type="radio" name="q7" value="ไม่ผ่าน" /> <span>ไม่ผ่าน</span></label>
+          <div class="form-group full-width">
+            <label>7. ผ่านการอบรมมาตรฐานความปลอดภัย <span class="req">*</span></label>
+            <div class="options-group">
+              <label class="option-label"><input type="radio" name="q7" value="ผ่าน" required> ผ่าน</label>
+              <label class="option-label"><input type="radio" name="q7" value="ไม่ผ่าน"> ไม่ผ่าน</label>
             </div>
           </div>
 
-          {/* ข้อ 8 */}
-          <div className="mb-4">
-            <label className="block font-medium">8. ใบรับรองผ่านการอบรมด้านความปลอดภัย <span className="text-red-500">*</span></label>
-            {['Fire Safety', 'Work at Height', 'Confined Space', 'Hot Work', 'Electrical Work', 'Forklift', 'อื่นๆ'].map((item) => (
-              <label key={item} className="flex items-center space-x-2 mt-1">
-                <input type="checkbox" name="q8" value={item} />
-                <span>{item}</span>
-              </label>
-            ))}
+          <div class="form-group full-width">
+            <label>8. ใบรับรองผ่านการอบรมด้านความปลอดภัย <span class="req">*</span></label>
+            <div class="options-group">
+              <label class="option-label"><input type="checkbox" name="q8" value="Fire Safety"> Fire Safety</label>
+              <label class="option-label"><input type="checkbox" name="q8" value="Work at Height"> Work at Height</label>
+              <label class="option-label"><input type="checkbox" name="q8" value="Confined Space"> Confined Space</label>
+              <label class="option-label"><input type="checkbox" name="q8" value="Hot Work"> Hot Work</label>
+              <label class="option-label"><input type="checkbox" name="q8" value="Electrical Work"> Electrical Work</label>
+              <label class="option-label"><input type="checkbox" name="q8" value="Forklift"> Forklift</label>
+              <label class="option-label"><input type="checkbox" name="q8" value="อื่นๆ"> อื่นๆ</label>
+            </div>
           </div>
 
-          {/* ข้อ 9 */}
-          <div className="mb-4">
-            <label className="block font-medium">9. คำถามหลักฐานการอบรมมาตรฐานความปลอดภัย</label>
-            <input type="file" className="mt-2 block w-full text-sm text-gray-500 border p-2 rounded" />
-            <span className="text-xs text-gray-400">จำกัด 1 ไฟล์ ไม่เกิน 10MB (Word, Excel, PPT, PDF, รูป, วิดีโอ, เสียง)</span>
+          <div class="form-group full-width">
+            <label>9. คำถามหลักฐานการอบรมมาตรฐานความปลอดภัย</label>
+            <input type="file">
+            <div class="file-hint">ขีดจำกัดจำนวนไฟล์: 1 | ขีดจำกัดขนาดไฟล์เดียว: 10MB</div>
           </div>
         </div>
 
-        {/* Section: Smart Work Permit */}
-        <div className="border-t pt-4">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">Smart Work Permit</h2>
-          <div className="space-y-4">
-            <div>
-              <label className="block font-medium">10. ชื่อผู้ขอ Work Permit <span className="text-red-500">*</span></label>
-              <input type="text" className="w-full border p-2 rounded mt-1" required />
+        <div class="section-title">Smart Work Permit</div>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>10. ชื่อผู้ขอ Work Permit <span class="req">*</span></label>
+            <input type="text" placeholder="ใส่คำตอบ" required>
+          </div>
+
+          <div class="form-group">
+            <label>11. บริษัท <span class="req">*</span></label>
+            <input type="text" placeholder="ใส่คำตอบ" required>
+          </div>
+
+          <div class="form-group">
+            <label>12. จำนวนผู้ปฏิบัติงาน <span class="req">*</span></label>
+            <input type="number" placeholder="ใส่คำตอบ" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label>13. รายชื่อผู้ปฏิบัติงาน <span class="req">*</span></label>
+            <textarea rows="3" placeholder="ใส่คำตอบ" required></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <label>14. พื้นที่การทำงาน <span class="req">*</span></label>
+            <div class="options-group">
+              <label class="option-label"><input type="radio" name="q14" value="Production Area" required> Production Area</label>
+              <label class="option-label"><input type="radio" name="q14" value="Warehouse"> Warehouse</label>
+              <label class="option-label"><input type="radio" name="q14" value="Roof"> Roof</label>
+              <label class="option-label"><input type="radio" name="q14" value="Maintenance Area"> Maintenance Area</label>
+              <label class="option-label"><input type="radio" name="q14" value="Utility Area"> Utility Area</label>
+              <label class="option-label"><input type="radio" name="q14" value="Confined Space Area"> Confined Space Area</label>
+              <label class="option-label"><input type="radio" name="q14" value="อื่นๆ"> อื่นๆ</label>
             </div>
-            <div>
-              <label className="block font-medium">11. บริษัท <span className="text-red-500">*</span></label>
-              <input type="text" className="w-full border p-2 rounded mt-1" required />
+          </div>
+
+          <div class="form-group">
+            <label>15. วันที่เริ่มงาน <span class="req">*</span></label>
+            <input type="date" required>
+          </div>
+
+          <div class="form-group">
+            <label>16. วันที่สิ้นสุดงาน <span class="req">*</span></label>
+            <input type="date" required>
+          </div>
+        </div>
+
+        <div class="section-title">อันตรายและการควบคุม</div>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>17. อันตรายที่คาดว่าจะพบ <span class="req">*</span></label>
+            <div class="options-group">
+              <label class="option-label"><input type="checkbox" name="q17" value="Fire"> Fire</label>
+              <label class="option-label"><input type="checkbox" name="q17" value="Fall from Height"> Fall from Height</label>
+              <label class="option-label"><input type="checkbox" name="q17" value="Electrical"> Electrical</label>
+              <label class="option-label"><input type="checkbox" name="q17" value="Chemical"> Chemical</label>
+              <label class="option-label"><input type="checkbox" name="q17" value="Falling Object"> Falling Object</label>
+              <label class="option-label"><input type="checkbox" name="q17" value="Confined Space"> Confined Space</label>
+              <label class="option-label"><input type="checkbox" name="q17" value="Machine"> Machine</label>
+              <label class="option-label"><input type="checkbox" name="q17" value="Noise"> Noise</label>
+              <label class="option-label"><input type="checkbox" name="q17" value="อื่นๆ"> อื่นๆ</label>
             </div>
-            <div>
-              <label className="block font-medium">12. จำนวนผู้ปฏิบัติงาน <span className="text-red-500">*</span></label>
-              <input type="number" className="w-full border p-2 rounded mt-1" required />
+          </div>
+
+          <div class="form-group full-width">
+            <label>18. มาตรการควบคุม <span class="req">*</span></label>
+            <textarea rows="2" placeholder="ใส่คำตอบ" required></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <label>19. เอกสารควบคุมมาตรการ</label>
+            <input type="file">
+            <div class="file-hint">ขีดจำกัดจำนวนไฟล์: 1 | ขีดจำกัดขนาดไฟล์เดียว: 10MB</div>
+          </div>
+        </div>
+
+        <div class="section-title">PPE & Site Readiness Checklist</div>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>20. PPE ที่ต้องใช้ <span class="req">*</span></label>
+            <div class="options-group">
+              <label class="option-label"><input type="checkbox" name="q20" value="Safety Helmet"> Safety Helmet</label>
+              <label class="option-label"><input type="checkbox" name="q20" value="Safety Shoes"> Safety Shoes</label>
+              <label class="option-label"><input type="checkbox" name="q20" value="Face Shield"> Face Shield</label>
+              <label class="option-label"><input type="checkbox" name="q20" value="Safety Glasses"> Safety Glasses</label>
+              <label class="option-label"><input type="checkbox" name="q20" value="Gloves"> Gloves</label>
+              <label class="option-label"><input type="checkbox" name="q20" value="Full Body Harness"> Full Body Harness</label>
+              <label class="option-label"><input type="checkbox" name="q20" value="Respirator"> Respirator</label>
+              <label class="option-label"><input type="checkbox" name="q20" value="อื่นๆ"> อื่นๆ</label>
             </div>
-            <div>
-              <label className="block font-medium">13. รายชื่อผู้ปฏิบัติงาน <span className="text-red-500">*</span></label>
-              <textarea className="w-full border p-2 rounded mt-1" rows={3} required></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <label>21. มี Work Permit ที่เกี่ยวข้องหรือไม่? <span class="req">*</span></label>
+            <div class="options-group">
+              <label class="option-label"><input type="radio" name="q21" value="มี" required> มี</label>
+              <label class="option-label"><input type="radio" name="q21" value="ไม่มี"> ไม่มี</label>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label>22. PPE พร้อมใช้งานหรือไม่ <span class="req">*</span></label>
+            <div class="options-group">
+              <label class="option-label"><input type="radio" name="q22" value="พร้อม" required> พร้อม</label>
+              <label class="option-label"><input type="radio" name="q22" value="ไม่พร้อม"> ไม่พร้อม</label>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label>23. อุปกรณ์/เครื่องมือผ่านการตรวจสอบหรือไม่ <span class="req">*</span></label>
+            <div class="options-group">
+              <label class="option-label"><input type="radio" name="q23" value="ผ่าน" required> ผ่าน</label>
+              <label class="option-label"><input type="radio" name="q23" value="ไม่ผ่าน"> ไม่ผ่าน</label>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label>24. มีผู้ควบคุมงานหรือไม่ <span class="req">*</span></label>
+            <div class="options-group">
+              <label class="option-label"><input type="radio" name="q24" value="มี" required> มี</label>
+              <label class="option-label"><input type="radio" name="q24" value="ไม่มี"> ไม่มี</label>
             </div>
           </div>
         </div>
 
-        {/* Section: Site Readiness Checklist */}
-        <div className="border-t pt-4">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">Site Readiness Checklist</h2>
-          <div className="mb-4">
-            <label className="block font-medium">21. มี Work Permit ที่เกี่ยวข้องหรือไม่? <span className="text-red-500">*</span></label>
-            <div className="mt-2 space-y-1">
-              <label className="flex items-center space-x-2"><input type="radio" name="q21" value="มี" /> <span>มี</span></label>
-              <label className="flex items-center space-x-2"><input type="radio" name="q21" value="ไม่มี" /> <span>ไม่มี</span></label>
-            </div>
+        <div class="section-title">ผู้รับผิดชอบการปฏิบัติงาน</div>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>25. ชื่อผู้รับผิดชอบ <span class="req">*</span></label>
+            <input type="text" placeholder="ใส่คำตอบ" required>
           </div>
-          <div className="mb-4">
-            <label className="block font-medium">22. PPE พร้อมใช้งานหรือไม่ <span className="text-red-500">*</span></label>
-            <div className="mt-2 space-y-1">
-              <label className="flex items-center space-x-2"><input type="radio" name="q22" value="พร้อม" /> <span>พร้อม</span></label>
-              <label className="flex items-center space-x-2"><input type="radio" name="q22" value="ไม่พร้อม" /> <span>ไม่พร้อม</span></label>
-            </div>
+
+          <div class="form-group full-width">
+            <label>26. เบอร์ติดต่อ <span class="req">*</span></label>
+            <input type="text" placeholder="ใส่คำตอบ" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label>27. หมายเหตุเพิ่มเติม</label>
+            <textarea rows="2" placeholder="ใส่คำตอบ"></textarea>
           </div>
         </div>
 
-        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-          ส่งแบบฟอร์ม
-        </button>
+        <button type="submit" class="btn-submit">ยื่นคำขออนุญาตทำงาน</button>
       </form>
     </div>
-  );
-}
+  </div>
+
+</body>
+</html>
