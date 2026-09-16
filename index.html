@@ -1,224 +1,95 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Permit Management System - Audi</title>
-    <style>
-        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-        body { display: flex; flex-direction: column; background-color: #f7f9fc; color: #2d3748; min-height: 100vh; }
-        
-        .app-container { display: flex; flex-direction: column; flex: 1; width: 100%; }
-        
-        /* Navigation Bar Header */
-        .navbar { background-color: #1a365d; color: white; padding: 15px 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        .navbar h2 { font-size: 18px; text-transform: uppercase; letter-spacing: 1px; color: #ffffff; text-align: center; font-weight: 700; }
-        .nav-menu { display: flex; gap: 8px; width: 100%; max-width: 500px; margin: 0 auto; }
-        .menu-item { flex: 1; padding: 10px 14px; background: rgba(255, 255, 255, 0.12); border-radius: 10px; cursor: pointer; text-align: center; color: #e2e8f0; font-size: 14px; font-weight: 600; transition: all 0.25s ease; border: none; outline: none; }
-        .menu-item:hover, .menu-item.active { background-color: #e53e3e; color: white; box-shadow: 0 2px 8px rgba(229, 62, 62, 0.4); }
+import React from 'react';
 
-        /* Main Content Container */
-        .main-content { flex: 1; padding: 16px; width: 100%; max-width: 600px; margin: 0 auto; }
-        
-        /* Page Display Control */
-        .page { display: none; background: white; padding: 22px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.04); border: 1px solid #edf2f7; }
-        .page.active { display: block; }
-        
-        h1 { font-size: 22px; color: #1a365d; margin-bottom: 18px; text-align: center; font-weight: 700; }
-        
-        /* Form Styles (หน้ากรอกคำขอ) */
-        .form-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
-        .form-group { display: flex; flex-direction: column; }
-        label { font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #4a5568; }
-        input, select, textarea { width: 100%; padding: 12px 14px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 14px; background-color: #f8fafc; transition: all 0.2s; }
-        input:focus, select:focus, textarea:focus { border-color: #3182ce; background-color: #fff; outline: none; box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15); }
-        .btn-submit { background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 10px; box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3); transition: transform 0.1s; }
-        .btn-submit:active { transform: scale(0.98); }
+export default function SafetyForm() {
+  return (
+    <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-xl">
+      <h1 className="text-2xl font-bold mb-6 text-blue-700">Safety Digital Passport Registration</h1>
+      
+      <form className="space-y-6">
+        {/* ข้อ 6 */}
+        <div>
+          <label className="block font-medium">6. ตำแหน่งงาน <span className="text-red-500">*</span></label>
+          <input type="text" className="w-full border p-2 rounded mt-1" required placeholder="ใส่คำตอบ" />
+        </div>
 
-        /* Tracking Page (ดีไซน์สไตล์คล้ายรูปตัวอย่าง) */
-        .search-tab-group { display: flex; background: #f1f5f9; padding: 4px; border-radius: 12px; margin-bottom: 16px; }
-        .search-tab { flex: 1; padding: 10px; border: none; background: transparent; font-size: 13px; font-weight: 600; color: #64748b; border-radius: 9px; cursor: pointer; transition: all 0.2s; }
-        .search-tab.active { background: #fff; color: #1e293b; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
-
-        .search-box-container { margin-bottom: 20px; }
-        .input-search { width: 100%; padding: 14px; border: 1.5px solid #e2e8f0; border-radius: 14px; font-size: 15px; text-align: center; background-color: #fafafa; margin-bottom: 12px; letter-spacing: 0.5px; }
-        .btn-search { width: 100%; padding: 14px; background: #e53e3e; color: white; border: none; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(229, 62, 62, 0.25); transition: background 0.2s; }
-        .btn-search:active { opacity: 0.9; }
-
-        /* Search Results Area */
-        .result-container { display: none; border-top: 1px dashed #e2e8f0; padding-top: 20px; margin-top: 20px; }
-        .result-header { font-size: 14px; font-weight: 700; color: #475569; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-
-        .card-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px; margin-bottom: 12px; }
-        .card-label { font-size: 12px; font-weight: 600; color: #64748b; margin-bottom: 4px; }
-        .card-value { font-size: 15px; font-weight: 700; color: #1e293b; }
-
-        .status-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; }
-        .status-pending { background: #fef3c7; color: #d97706; }
-        .status-approved { background: #dcfce7; color: #15803d; }
-
-        @media (min-width: 768px) {
-            .app-container { flex-direction: row; }
-            .navbar { width: 260px; min-height: 100vh; padding: 25px 20px; }
-            .nav-menu { flex-direction: column; }
-            .main-content { padding: 30px; max-width: 700px; }
-            .form-grid { grid-template-columns: 1fr 1fr; }
-            .full-width { grid-column: span 2; }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="app-container">
-        <!-- Navigation Bar Header -->
-        <nav class="navbar">
-            <h2>AUDI WORK PERMIT</h2>
-            <div class="nav-menu">
-                <button class="menu-item active" onclick="switchPage('form-page', this)">📝 กรอกคำขอ</button>
-                <button class="menu-item" onclick="switchPage('tracking-page', this)">📦 ติดตามผล</button>
+        {/* Section: Safety Training */}
+        <div className="border-t pt-4">
+          <h2 className="text-xl font-semibold mb-4 text-gray-800">Safety Training</h2>
+          
+          {/* ข้อ 7 */}
+          <div className="mb-4">
+            <label className="block font-medium">7. ผ่านการอบรมมาตรฐานความปลอดภัย <span className="text-red-500">*</span></label>
+            <div className="mt-2 space-y-1">
+              <label className="flex items-center space-x-2"><input type="radio" name="q7" value="ผ่าน" /> <span>ผ่าน</span></label>
+              <label className="flex items-center space-x-2"><input type="radio" name="q7" value="ไม่ผ่าน" /> <span>ไม่ผ่าน</span></label>
             </div>
-        </nav>
+          </div>
 
-        <!-- Main Content Area -->
-        <main class="main-content">
-            
-            <!-- Page 1: Form (หน้ายื่นคำขอ) -->
-            <section id="form-page" class="page active">
-                <h1>ระบบกรอกคำขอ Work Permit</h1>
-                <form onsubmit="handleFormSubmit(event)">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>รหัสพนักงานผู้ขอ (Employee ID)</label>
-                            <input type="text" id="empIdInput" placeholder="เช่น EMP-9042" required>
-                        </div>
-                        <div class="form-group">
-                            <label>ชื่อบริษัทผู้รับเหมา (Contractor)</label>
-                            <input type="text" placeholder="ระบุชื่อบริษัท" required>
-                        </div>
-                        <div class="form-group">
-                            <label>ประเภทงาน (Work Type)</label>
-                            <select required>
-                                <option value="">-- เลือกประเภทงาน --</option>
-                                <option>งานความร้อน (Hot Work)</option>
-                                <option>งานที่สูง (Working at Height)</option>
-                                <option>งานไฟฟ้า (Electrical Work)</option>
-                                <option>งานทั่วไป (General Work)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>พื้นที่ปฏิบัติงาน (Work Area)</label>
-                            <select required>
-                                <option value="">-- เลือกพื้นที่ --</option>
-                                <option>Showroom</option>
-                                <option>Service Center</option>
-                                <option>Body & Paint</option>
-                                <option>Warehouse</option>
-                            </select>
-                        </div>
-                        <div class="form-group full-width">
-                            <label>รายละเอียดงาน (Work Description)</label>
-                            <textarea rows="3" placeholder="ระบุรายละเอียดการปฏิบัติงาน..." required></textarea>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn-submit">ยื่นคำขออนุญาตทำงาน</button>
-                </form>
-            </section>
+          {/* ข้อ 8 */}
+          <div className="mb-4">
+            <label className="block font-medium">8. ใบรับรองผ่านการอบรมด้านความปลอดภัย <span className="text-red-500">*</span></label>
+            {['Fire Safety', 'Work at Height', 'Confined Space', 'Hot Work', 'Electrical Work', 'Forklift', 'อื่นๆ'].map((item) => (
+              <label key={item} className="flex items-center space-x-2 mt-1">
+                <input type="checkbox" name="q8" value={item} />
+                <span>{item}</span>
+              </label>
+            ))}
+          </div>
 
-            <!-- Page 2: Tracking (หน้าเช็คสถานะสไตล์มินิมอล) -->
-            <section id="tracking-page" class="page">
-                <h1>ระบบเช็คสถานะ</h1>
-                
-                <!-- เลือกประเภทการค้นหา -->
-                <div class="search-tab-group">
-                    <button class="search-tab active" onclick="setSearchType('emp', this)">รหัสพนักงาน</button>
-                    <button class="search-tab" onclick="setSearchType('wp', this)">เลขที่คำขอ (WP)</button>
-                </div>
+          {/* ข้อ 9 */}
+          <div className="mb-4">
+            <label className="block font-medium">9. คำถามหลักฐานการอบรมมาตรฐานความปลอดภัย</label>
+            <input type="file" className="mt-2 block w-full text-sm text-gray-500 border p-2 rounded" />
+            <span className="text-xs text-gray-400">จำกัด 1 ไฟล์ ไม่เกิน 10MB (Word, Excel, PPT, PDF, รูป, วิดีโอ, เสียง)</span>
+          </div>
+        </div>
 
-                <!-- ช่องค้นหา -->
-                <div class="search-box-container">
-                    <input type="text" id="searchInput" class="input-search" placeholder="กรอกรหัสพนักงาน เช่น EMP-9042">
-                    <button class="btn-search" onclick="doSearch()">ตรวจสอบสถานะ</button>
-                </div>
+        {/* Section: Smart Work Permit */}
+        <div className="border-t pt-4">
+          <h2 className="text-xl font-semibold mb-4 text-gray-800">Smart Work Permit</h2>
+          <div className="space-y-4">
+            <div>
+              <label className="block font-medium">10. ชื่อผู้ขอ Work Permit <span className="text-red-500">*</span></label>
+              <input type="text" className="w-full border p-2 rounded mt-1" required />
+            </div>
+            <div>
+              <label className="block font-medium">11. บริษัท <span className="text-red-500">*</span></label>
+              <input type="text" className="w-full border p-2 rounded mt-1" required />
+            </div>
+            <div>
+              <label className="block font-medium">12. จำนวนผู้ปฏิบัติงาน <span className="text-red-500">*</span></label>
+              <input type="number" className="w-full border p-2 rounded mt-1" required />
+            </div>
+            <div>
+              <label className="block font-medium">13. รายชื่อผู้ปฏิบัติงาน <span className="text-red-500">*</span></label>
+              <textarea className="w-full border p-2 rounded mt-1" rows={3} required></textarea>
+            </div>
+          </div>
+        </div>
 
-                <!-- ผลลัพธ์การค้นหา -->
-                <div id="searchResult" class="result-container">
-                    <div class="result-header">📦 ผลการตรวจเช็คสถานะ</div>
+        {/* Section: Site Readiness Checklist */}
+        <div className="border-t pt-4">
+          <h2 className="text-xl font-semibold mb-4 text-gray-800">Site Readiness Checklist</h2>
+          <div className="mb-4">
+            <label className="block font-medium">21. มี Work Permit ที่เกี่ยวข้องหรือไม่? <span className="text-red-500">*</span></label>
+            <div className="mt-2 space-y-1">
+              <label className="flex items-center space-x-2"><input type="radio" name="q21" value="มี" /> <span>มี</span></label>
+              <label className="flex items-center space-x-2"><input type="radio" name="q21" value="ไม่มี" /> <span>ไม่มี</span></label>
+            </div>
+          </div>
+          <div className="mb-4">
+            <label className="block font-medium">22. PPE พร้อมใช้งานหรือไม่ <span className="text-red-500">*</span></label>
+            <div className="mt-2 space-y-1">
+              <label className="flex items-center space-x-2"><input type="radio" name="q22" value="พร้อม" /> <span>พร้อม</span></label>
+              <label className="flex items-center space-x-2"><input type="radio" name="q22" value="ไม่พร้อม" /> <span>ไม่พร้อม</span></label>
+            </div>
+          </div>
+        </div>
 
-                    <div class="card-box">
-                        <div class="card-label">รหัสพนักงาน / เลขที่คำขอ</div>
-                        <div class="card-value" id="resId">EMP-9042 (WP-2024-0082)</div>
-                    </div>
-
-                    <div class="card-box">
-                        <div class="card-label">วันที่ยื่นคำขอ</div>
-                        <div class="card-value" id="resDate">14 ก.ย. 2026 - 10:30 น.</div>
-                    </div>
-
-                    <div class="card-box">
-                        <div class="card-label">รายละเอียดงาน / พื้นที่</div>
-                        <div class="card-value" id="resDetail">งานติดตั้งระบบไฟฟ้า - Service Center</div>
-                    </div>
-
-                    <div class="card-box" style="text-align: center; background: #fff; border: 1.5px solid #edf2f7;">
-                        <div class="card-label" style="margin-bottom: 8px;">สถานะปัจจุบัน</div>
-                        <span class="status-badge status-pending" id="resStatus">⏳ อยู่ระหว่างการตรวจสอบความปลอดภัย (Safety Review)</span>
-                    </div>
-                </div>
-            </section>
-
-        </main>
+        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+          ส่งแบบฟอร์ม
+        </button>
+      </form>
     </div>
-
-    <script>
-        let currentSearchType = 'emp';
-
-        function switchPage(pageId, element) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            element.classList.add('active');
-        }
-
-        function setSearchType(type, element) {
-            currentSearchType = type;
-            document.querySelectorAll('.search-tab').forEach(tab => tab.classList.remove('active'));
-            element.classList.add('active');
-            
-            const input = document.getElementById('searchInput');
-            if(type === 'emp') {
-                input.placeholder = "กรอกรหัสพนักงาน เช่น EMP-9042";
-            } else {
-                input.placeholder = "กรอกเลขที่คำขอ เช่น WP-2024-0082";
-            }
-        }
-
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            const empVal = document.getElementById('empIdInput').value;
-            alert('ยื่นคำขอเรียบร้อยแล้ว! ระบบกำลังพาไปหน้าติดตามผล');
-            
-            // Switch to tracking page
-            switchPage('tracking-page', document.querySelectorAll('.menu-item')[1]);
-            
-            // Set input and trigger search automatically
-            document.getElementById('searchInput').value = empVal;
-            doSearch();
-        }
-
-        function doSearch() {
-            const val = document.getElementById('searchInput').value.trim();
-            if(!val) {
-                alert('กรุณากรอกข้อมูลก่อนกดค้นหาครับ');
-                return;
-            }
-
-            // แสดงผลลัพธ์
-            const resultBox = document.getElementById('searchResult');
-            resultBox.style.display = 'block';
-
-            // อัปเดตข้อมูลจำลองตามที่พิมพ์
-            document.getElementById('resId').innerText = val.toUpperCase() + " (WP-2026-0104)";
-        }
-    </script>
-</body>
-</html>
+  );
+}
