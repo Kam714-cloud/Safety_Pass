@@ -55,10 +55,13 @@
     input[type="text"], input[type="number"], input[type="date"], input[type="email"], select, textarea {
       width: 100%; padding: 10px; border: 1px solid #dcdcdc; border-radius: 6px; font-size: 14px; outline: none; background: #fff;
     }
+    input[readonly] { background-color: #eef2f5; font-weight: bold; color: #0056b3; border-color: #cbd5e1; }
     input:focus, select:focus, textarea:focus { border-color: #0056b3; }
     
     .options-group { display: flex; flex-direction: column; gap: 8px; margin-top: 5px; }
     .option-label { display: flex; align-items: center; gap: 8px; font-weight: normal; font-size: 14px; cursor: pointer; }
+
+    .other-input { margin-top: 6px; margin-left: 24px; width: calc(100% - 24px) !important; }
 
     .btn-submit { width: 100%; background-color: #e63946; color: white; padding: 12px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.2s; }
     .btn-submit:hover { background-color: #c92a37; }
@@ -88,12 +91,18 @@
   <!-- Main Content -->
   <div class="main-content">
     
-    <!-- PAGE 1: หน้ากรอกคำขอ (ข้อ 1 - 27) -->
+    <!-- PAGE 1: หน้ากรอกคำขอ -->
     <div id="page-form" class="card-container">
       <h2 class="page-title">ระบบกรอกคำขอ Work Permit</h2>
       
       <form id="workPermitForm">
         
+        <!-- เลขใบอนุญาตทำงาน Auto Gen -->
+        <div class="form-group full-width" style="margin-bottom: 20px;">
+          <label style="font-size: 14px; color: #0056b3;">เลขที่ใบอนุญาตทำงาน (Work Permit No.) <span class="req">*</span></label>
+          <input type="text" id="wp_no" name="wp_no" readonly>
+        </div>
+
         <!-- ส่วนที่ 1: ข้อมูลผู้ขออนุญาต -->
         <div class="section-title">ข้อมูลผู้ขออนุญาต</div>
         <div class="form-grid">
@@ -120,12 +129,13 @@
           <div class="form-group full-width">
             <label>5. แผนก <span class="req">*</span></label>
             <div class="options-group">
-              <label class="option-label"><input type="radio" name="q5" value="Production" required> Production</label>
-              <label class="option-label"><input type="radio" name="q5" value="Maintenance"> Maintenance</label>
-              <label class="option-label"><input type="radio" name="q5" value="Warehouse"> Warehouse</label>
-              <label class="option-label"><input type="radio" name="q5" value="Engineering"> Engineering</label>
-              <label class="option-label"><input type="radio" name="q5" value="QC"> QC</label>
-              <label class="option-label"><input type="radio" name="q5" value="อื่นๆ"> อื่นๆ</label>
+              <label class="option-label"><input type="radio" name="q5" value="Production" onclick="toggleOtherInput('q5', false)" required> Production</label>
+              <label class="option-label"><input type="radio" name="q5" value="Maintenance" onclick="toggleOtherInput('q5', false)"> Maintenance</label>
+              <label class="option-label"><input type="radio" name="q5" value="Warehouse" onclick="toggleOtherInput('q5', false)"> Warehouse</label>
+              <label class="option-label"><input type="radio" name="q5" value="Engineering" onclick="toggleOtherInput('q5', false)"> Engineering</label>
+              <label class="option-label"><input type="radio" name="q5" value="QC" onclick="toggleOtherInput('q5', false)"> QC</label>
+              <label class="option-label"><input type="radio" name="q5" value="อื่นๆ" onclick="toggleOtherInput('q5', true)"> อื่นๆ</label>
+              <input type="text" id="q5_other" name="q5_other" class="other-input hidden" placeholder="โปรดระบุแผนก...">
             </div>
           </div>
 
@@ -155,7 +165,8 @@
               <label class="option-label"><input type="checkbox" name="q8" value="Hot Work"> Hot Work</label>
               <label class="option-label"><input type="checkbox" name="q8" value="Electrical Work"> Electrical Work</label>
               <label class="option-label"><input type="checkbox" name="q8" value="Forklift"> Forklift</label>
-              <label class="option-label"><input type="checkbox" name="q8" value="อื่นๆ"> อื่นๆ</label>
+              <label class="option-label"><input type="checkbox" name="q8" value="อื่นๆ" id="q8_other_cb" onchange="toggleCheckboxOther('q8_other_cb', 'q8_other')"> อื่นๆ</label>
+              <input type="text" id="q8_other" name="q8_other" class="other-input hidden" placeholder="โปรดระบุระบุใบรับรอง...">
             </div>
           </div>
 
@@ -192,13 +203,14 @@
           <div class="form-group full-width">
             <label>14. พื้นที่การทำงาน <span class="req">*</span></label>
             <div class="options-group">
-              <label class="option-label"><input type="radio" name="q14" value="Production Area" required> Production Area</label>
-              <label class="option-label"><input type="radio" name="q14" value="Warehouse"> Warehouse</label>
-              <label class="option-label"><input type="radio" name="q14" value="Roof"> Roof</label>
-              <label class="option-label"><input type="radio" name="q14" value="Maintenance Area"> Maintenance Area</label>
-              <label class="option-label"><input type="radio" name="q14" value="Utility Area"> Utility Area</label>
-              <label class="option-label"><input type="radio" name="q14" value="Confined Space Area"> Confined Space Area</label>
-              <label class="option-label"><input type="radio" name="q14" value="อื่นๆ"> อื่นๆ</label>
+              <label class="option-label"><input type="radio" name="q14" value="Production Area" onclick="toggleOtherInput('q14', false)" required> Production Area</label>
+              <label class="option-label"><input type="radio" name="q14" value="Warehouse" onclick="toggleOtherInput('q14', false)"> Warehouse</label>
+              <label class="option-label"><input type="radio" name="q14" value="Roof" onclick="toggleOtherInput('q14', false)"> Roof</label>
+              <label class="option-label"><input type="radio" name="q14" value="Maintenance Area" onclick="toggleOtherInput('q14', false)"> Maintenance Area</label>
+              <label class="option-label"><input type="radio" name="q14" value="Utility Area" onclick="toggleOtherInput('q14', false)"> Utility Area</label>
+              <label class="option-label"><input type="radio" name="q14" value="Confined Space Area" onclick="toggleOtherInput('q14', false)"> Confined Space Area</label>
+              <label class="option-label"><input type="radio" name="q14" value="อื่นๆ" onclick="toggleOtherInput('q14', true)"> อื่นๆ</label>
+              <input type="text" id="q14_other" name="q14_other" class="other-input hidden" placeholder="โปรดระบุพื้นที่การทำงาน...">
             </div>
           </div>
 
@@ -227,7 +239,8 @@
               <label class="option-label"><input type="checkbox" name="q17" value="Confined Space"> Confined Space</label>
               <label class="option-label"><input type="checkbox" name="q17" value="Machine"> Machine</label>
               <label class="option-label"><input type="checkbox" name="q17" value="Noise"> Noise</label>
-              <label class="option-label"><input type="checkbox" name="q17" value="อื่นๆ"> อื่นๆ</label>
+              <label class="option-label"><input type="checkbox" name="q17" value="อื่นๆ" id="q17_other_cb" onchange="toggleCheckboxOther('q17_other_cb', 'q17_other')"> อื่นๆ</label>
+              <input type="text" id="q17_other" name="q17_other" class="other-input hidden" placeholder="โปรดระบุอันตรายเพิ่มเติม...">
             </div>
           </div>
 
@@ -256,7 +269,8 @@
               <label class="option-label"><input type="checkbox" name="q20" value="Gloves"> Gloves</label>
               <label class="option-label"><input type="checkbox" name="q20" value="Full Body Harness"> Full Body Harness</label>
               <label class="option-label"><input type="checkbox" name="q20" value="Respirator"> Respirator</label>
-              <label class="option-label"><input type="checkbox" name="q20" value="อื่นๆ"> อื่นๆ</label>
+              <label class="option-label"><input type="checkbox" name="q20" value="อื่นๆ" id="q20_other_cb" onchange="toggleCheckboxOther('q20_other_cb', 'q20_other')"> อื่นๆ</label>
+              <input type="text" id="q20_other" name="q20_other" class="other-input hidden" placeholder="โปรดระบุ PPE อื่นๆ...">
             </div>
           </div>
 
@@ -316,7 +330,7 @@
       </form>
     </div>
 
-    <!-- PAGE 2: หน้าติดตามผล / ระบบเช็คสถานะ -->
+    <!-- PAGE 2: หน้าติดตามผล -->
     <div id="page-track" class="card-container hidden">
       <h2 class="page-title">ระบบเช็คสถานะ</h2>
 
@@ -331,15 +345,58 @@
 
       <button type="button" class="btn-submit btn-search" onclick="checkStatus()">ตรวจสอบสถานะ</button>
 
-      <div id="status-result" class="hidden" style="margin-top: 20px; padding: 15px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #f8fafc;">
-        <!-- แสดงผลลัพธ์การค้นหาตรงนี้ -->
-      </div>
+      <div id="status-result" class="hidden" style="margin-top: 20px; padding: 15px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #f8fafc;"></div>
     </div>
 
   </div>
 
   <script>
-    // สลับหน้าระหว่าง "กรอกคำขอ" กับ "ติดตามผล"
+    // สุ่มเลข Running Number เมื่อโหลดหน้าเว็บ
+    window.onload = function() {
+      generateWPNo();
+    };
+
+    function generateWPNo() {
+      const now = new Date();
+      const day = String(now.getDate()).padStart(2, '0');
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      
+      // ดึงรันนิ่งรหัสจาก LocalStorage (เริ่มต้น 001)
+      let seq = localStorage.getItem('wp_sequence') || 1;
+      const seqStr = String(seq).padStart(3, '0');
+      
+      const wpNo = `AA_${day}${month}_${seqStr}`;
+      document.getElementById('wp_no').value = wpNo;
+    }
+
+    // Toggle ช่องกรอกข้อมูล Radio "อื่นๆ"
+    function toggleOtherInput(fieldName, show) {
+      const otherInput = document.getElementById(fieldName + '_other');
+      if (show) {
+        otherInput.classList.remove('hidden');
+        otherInput.required = true;
+      } else {
+        otherInput.classList.add('hidden');
+        otherInput.required = false;
+        otherInput.value = '';
+      }
+    }
+
+    // Toggle ช่องกรอกข้อมูล Checkbox "อื่นๆ"
+    function toggleCheckboxOther(checkboxId, inputId) {
+      const cb = document.getElementById(checkboxId);
+      const input = document.getElementById(inputId);
+      if (cb.checked) {
+        input.classList.remove('hidden');
+        input.required = true;
+      } else {
+        input.classList.add('hidden');
+        input.required = false;
+        input.value = '';
+      }
+    }
+
+    // สลับหน้า
     function switchPage(page) {
       const pageForm = document.getElementById('page-form');
       const pageTrack = document.getElementById('page-track');
@@ -359,7 +416,7 @@
       }
     }
 
-    // สลับแท็บค้นหาในหน้าติดตามผล
+    // สลับแท็บค้นหา
     let currentTab = 'emp';
     function switchTab(type) {
       currentTab = type;
@@ -374,11 +431,11 @@
       } else {
         tabWp.classList.add('active');
         tabEmp.classList.remove('active');
-        searchInput.placeholder = 'กรอกเลขที่คำขอ เช่น WP-2026-001';
+        searchInput.placeholder = 'กรอกเลขที่คำขอ เช่น AA_1609_001';
       }
     }
 
-    // จำลองฟังก์ชันค้นหาสถานะ
+    // เช็คสถานะ
     function checkStatus() {
       const input = document.getElementById('search-input').value.trim();
       const resultDiv = document.getElementById('status-result');
@@ -395,8 +452,15 @@
         <p style="font-size: 12px; color: #666; margin-top: 5px;">วันที่ยื่นคำขอ: ${new Date().toLocaleDateString('th-TH')}</p>
       `;
     }
+
+    // บันทึกฟอร์มและรันเลขรหัสถัดไป
+    document.getElementById('workPermitForm').addEventListener('submit', function(e) {
+      let seq = parseInt(localStorage.getItem('wp_sequence') || 1);
+      localStorage.setItem('wp_sequence', seq + 1);
+    });
   </script>
 
 </body>
 </html>
+
 
