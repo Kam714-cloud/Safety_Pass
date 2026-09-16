@@ -5,41 +5,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AUDI WORK PERMIT</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { display: flex; background-color: #f4f6f9; min-height: 100vh; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    body { display: flex; background-color: #f4f6f9; min-height: 100vh; flex-direction: column; }
     
-    .sidebar { width: 250px; background-color: #0d233a; color: white; padding: 20px 0; flex-shrink: 0; }
-    .sidebar h2 { font-size: 18px; font-weight: bold; padding: 0 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-    .sidebar-menu { margin-top: 20px; }
-    .menu-item { padding: 12px 20px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 14px; }
-    .menu-item.active { background-color: #e63946; border-radius: 0 20px 20px 0; margin-right: 15px; }
+    @media (min-width: 768px) {
+      body { flex-direction: row; }
+    }
 
-    .main-content { flex-grow: 1; padding: 40px; overflow-y: auto; }
-    .form-container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-    .form-title { text-align: center; color: #0d233a; margin-bottom: 25px; font-size: 22px; }
+    /* Sidebar */
+    .sidebar { width: 100%; background-color: #0d233a; color: white; padding: 15px 0; flex-shrink: 0; }
+    @media (min-width: 768px) {
+      .sidebar { width: 240px; min-height: 100vh; padding: 20px 0; }
+    }
     
-    .section-title { font-size: 16px; font-weight: bold; color: #0d233a; border-left: 4px solid #0056b3; padding-left: 10px; margin: 25px 0 15px 0; }
+    .sidebar h2 { font-size: 18px; font-weight: bold; padding: 0 20px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .sidebar-menu { display: flex; gap: 10px; padding: 10px 15px 0; }
+    @media (min-width: 768px) {
+      .sidebar-menu { flex-direction: column; padding: 20px 0 0; gap: 0; }
+    }
+
+    .menu-item { padding: 10px 15px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px; border-radius: 8px; }
+    @media (min-width: 768px) {
+      .menu-item { border-radius: 0 20px 20px 0; margin-right: 15px; padding: 12px 20px; }
+    }
+    .menu-item.active { background-color: #e63946; color: white; }
+
+    /* Content Area */
+    .main-content { flex-grow: 1; padding: 15px; width: 100%; }
+    @media (min-width: 768px) {
+      .main-content { padding: 30px; }
+    }
+
+    .form-container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    @media (min-width: 768px) {
+      .form-container { padding: 30px; }
+    }
+
+    .form-title { text-align: center; color: #0d233a; margin-bottom: 20px; font-size: 20px; }
+    .section-title { font-size: 15px; font-weight: bold; color: #0d233a; border-left: 4px solid #0056b3; padding-left: 10px; margin: 25px 0 15px 0; }
     
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    .form-group { margin-bottom: 15px; }
-    .form-group.full-width { grid-column: span 2; }
+    .form-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+    @media (min-width: 600px) {
+      .form-grid { grid-template-columns: 1fr 1fr; }
+      .form-group.full-width { grid-column: span 2; }
+    }
     
     label { display: block; font-size: 13px; font-weight: 600; color: #333; margin-bottom: 6px; }
     label .req { color: red; }
     
     input[type="text"], input[type="number"], input[type="date"], select, textarea {
-      width: 100%; padding: 10px; border: 1px solid #dcdcdc; border-radius: 6px; font-size: 14px; outline: none; transition: 0.2s;
+      width: 100%; padding: 10px; border: 1px solid #dcdcdc; border-radius: 6px; font-size: 14px; outline: none; background: #fff;
     }
-    input:focus, select:focus, textarea:focus { border-color: #0056b3; box-shadow: 0 0 0 2px rgba(0,86,179,0.1); }
+    input:focus, select:focus, textarea:focus { border-color: #0056b3; }
     
     .options-group { display: flex; flex-direction: column; gap: 8px; margin-top: 5px; }
     .option-label { display: flex; align-items: center; gap: 8px; font-weight: normal; font-size: 14px; cursor: pointer; }
-    .option-label input { width: auto; }
 
     .btn-submit { width: 100%; background-color: #0056b3; color: white; padding: 12px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; }
-    .btn-submit:hover { background-color: #004085; }
-    
-    .file-hint { font-size: 11px; color: #888; margin-top: 4px; }
+    .file-hint { font-size: 11px; color: #888; margin-top: 4px; line-height: 1.4; }
   </style>
 </head>
 <body>
