@@ -12,38 +12,37 @@
       body { flex-direction: row; }
     }
 
-    /* Sidebar */
+    /* Sidebar Design */
     .sidebar { width: 100%; background-color: #0d233a; color: white; padding: 15px 0; flex-shrink: 0; }
     @media (min-width: 768px) {
-      .sidebar { width: 240px; min-height: 100vh; padding: 20px 0; }
+      .sidebar { width: 250px; min-height: 100vh; padding: 20px 0; }
     }
     
-    .sidebar h2 { font-size: 18px; font-weight: bold; padding: 0 20px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-    .sidebar-menu { display: flex; gap: 10px; padding: 10px 15px 0; }
+    .sidebar h2 { font-size: 18px; font-weight: bold; padding: 0 20px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; }
+    @media (min-width: 768px) { .sidebar h2 { text-align: left; } }
+
+    .sidebar-menu { display: flex; gap: 10px; padding: 10px 15px 0; justify-content: center; }
     @media (min-width: 768px) {
-      .sidebar-menu { flex-direction: column; padding: 20px 0 0; gap: 0; }
+      .sidebar-menu { flex-direction: column; padding: 20px 0 0; gap: 8px; justify-content: flex-start; }
     }
 
-    .menu-item { padding: 10px 15px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px; border-radius: 8px; }
+    .menu-item { padding: 10px 20px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px; border-radius: 8px; background-color: rgba(255,255,255,0.05); transition: 0.2s; }
     @media (min-width: 768px) {
-      .menu-item { border-radius: 0 20px 20px 0; margin-right: 15px; padding: 12px 20px; }
+      .menu-item { border-radius: 0 20px 20px 0; margin-right: 15px; padding: 12px 20px; background-color: transparent; }
     }
-    .menu-item.active { background-color: #e63946; color: white; }
+    .menu-item.active { background-color: #e63946; color: white; font-weight: bold; }
 
     /* Content Area */
     .main-content { flex-grow: 1; padding: 15px; width: 100%; }
-    @media (min-width: 768px) {
-      .main-content { padding: 30px; }
-    }
+    @media (min-width: 768px) { .main-content { padding: 30px; } }
 
-    .form-container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-    @media (min-width: 768px) {
-      .form-container { padding: 30px; }
-    }
+    .card-container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    @media (min-width: 768px) { .card-container { padding: 30px; } }
 
-    .form-title { text-align: center; color: #0d233a; margin-bottom: 20px; font-size: 20px; }
+    .page-title { text-align: center; color: #0d233a; margin-bottom: 20px; font-size: 20px; font-weight: bold; }
     .section-title { font-size: 15px; font-weight: bold; color: #0d233a; border-left: 4px solid #0056b3; padding-left: 10px; margin: 25px 0 15px 0; }
     
+    /* Grid Form */
     .form-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
     @media (min-width: 600px) {
       .form-grid { grid-template-columns: 1fr 1fr; }
@@ -53,7 +52,7 @@
     label { display: block; font-size: 13px; font-weight: 600; color: #333; margin-bottom: 6px; }
     label .req { color: red; }
     
-    input[type="text"], input[type="number"], input[type="date"], select, textarea {
+    input[type="text"], input[type="number"], input[type="date"], input[type="email"], select, textarea {
       width: 100%; padding: 10px; border: 1px solid #dcdcdc; border-radius: 6px; font-size: 14px; outline: none; background: #fff;
     }
     input:focus, select:focus, textarea:focus { border-color: #0056b3; }
@@ -61,33 +60,84 @@
     .options-group { display: flex; flex-direction: column; gap: 8px; margin-top: 5px; }
     .option-label { display: flex; align-items: center; gap: 8px; font-weight: normal; font-size: 14px; cursor: pointer; }
 
-    .btn-submit { width: 100%; background-color: #0056b3; color: white; padding: 12px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+    .btn-submit { width: 100%; background-color: #e63946; color: white; padding: 12px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.2s; }
+    .btn-submit:hover { background-color: #c92a37; }
+    .btn-search { background-color: #e63946; }
+
     .file-hint { font-size: 11px; color: #888; margin-top: 4px; line-height: 1.4; }
+
+    /* Track Status UI */
+    .tab-switch { display: flex; background: #eef2f5; border-radius: 8px; padding: 4px; margin-bottom: 20px; }
+    .tab-btn { flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 600; border-radius: 6px; cursor: pointer; color: #666; }
+    .tab-btn.active { background: white; color: #0d233a; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
 
+  <!-- Sidebar -->
   <div class="sidebar">
     <h2>AUDI WORK PERMIT</h2>
     <div class="sidebar-menu">
-      <div class="menu-item active">📝 กรอกคำขอ</div>
-      <div class="menu-item">📂 ติดตามผล</div>
+      <div class="menu-item active" id="menu-form" onclick="switchPage('form')">📝 กรอกคำขอ</div>
+      <div class="menu-item" id="menu-track" onclick="switchPage('track')">📦 ติดตามผล</div>
     </div>
   </div>
 
+  <!-- Main Content -->
   <div class="main-content">
-    <div class="form-container">
-      <h2 class="form-title">ระบบกรอกคำขอ Work Permit</h2>
+    
+    <!-- PAGE 1: หน้ากรอกคำขอ (ข้อ 1 - 27) -->
+    <div id="page-form" class="card-container">
+      <h2 class="page-title">ระบบกรอกคำขอ Work Permit</h2>
       
       <form id="workPermitForm">
         
-        <div class="section-title">ข้อมูลทั่วไป & Safety Training</div>
+        <!-- ส่วนที่ 1: ข้อมูลผู้ขออนุญาต -->
+        <div class="section-title">ข้อมูลผู้ขออนุญาต</div>
         <div class="form-grid">
           <div class="form-group full-width">
-            <label>6. ตำแหน่งงาน <span class="req">*</span></label>
-            <input type="text" placeholder="ใส่คำตอบ" required>
+            <label>1. ชื่อบริษัท <span class="req">*</span></label>
+            <input type="text" name="q1" placeholder="ใส่คำตอบ" required>
           </div>
 
+          <div class="form-group full-width">
+            <label>2. ชื่อ-นามสกุล <span class="req">*</span></label>
+            <input type="text" name="q2" placeholder="ใส่คำตอบ" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label>3. รหัสพนักงาน/ผู้รับเหมา <span class="req">*</span></label>
+            <input type="text" name="q3" placeholder="ใส่คำตอบ" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label>4. Outlook บริษัท <span class="req">*</span></label>
+            <input type="email" name="q4" placeholder="ใส่คำตอบ" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label>5. แผนก <span class="req">*</span></label>
+            <div class="options-group">
+              <label class="option-label"><input type="radio" name="q5" value="Production" required> Production</label>
+              <label class="option-label"><input type="radio" name="q5" value="Maintenance"> Maintenance</label>
+              <label class="option-label"><input type="radio" name="q5" value="Warehouse"> Warehouse</label>
+              <label class="option-label"><input type="radio" name="q5" value="Engineering"> Engineering</label>
+              <label class="option-label"><input type="radio" name="q5" value="QC"> QC</label>
+              <label class="option-label"><input type="radio" name="q5" value="อื่นๆ"> อื่นๆ</label>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label>6. ตำแหน่งงาน <span class="req">*</span></label>
+            <input type="text" name="q6" placeholder="ใส่คำตอบ" required>
+          </div>
+        </div>
+
+        <!-- ส่วนที่ 2: Safety Training -->
+        <div class="section-title">Safety Training</div>
+        <div class="form-grid">
           <div class="form-group full-width">
             <label>7. ผ่านการอบรมมาตรฐานความปลอดภัย <span class="req">*</span></label>
             <div class="options-group">
@@ -111,31 +161,32 @@
 
           <div class="form-group full-width">
             <label>9. คำถามหลักฐานการอบรมมาตรฐานความปลอดภัย</label>
-            <input type="file">
+            <input type="file" name="q9">
             <div class="file-hint">ขีดจำกัดจำนวนไฟล์: 1 | ขีดจำกัดขนาดไฟล์เดียว: 10MB</div>
           </div>
         </div>
 
+        <!-- ส่วนที่ 3: Smart Work Permit -->
         <div class="section-title">Smart Work Permit</div>
         <div class="form-grid">
           <div class="form-group full-width">
             <label>10. ชื่อผู้ขอ Work Permit <span class="req">*</span></label>
-            <input type="text" placeholder="ใส่คำตอบ" required>
+            <input type="text" name="q10" placeholder="ใส่คำตอบ" required>
           </div>
 
           <div class="form-group">
             <label>11. บริษัท <span class="req">*</span></label>
-            <input type="text" placeholder="ใส่คำตอบ" required>
+            <input type="text" name="q11" placeholder="ใส่คำตอบ" required>
           </div>
 
           <div class="form-group">
             <label>12. จำนวนผู้ปฏิบัติงาน <span class="req">*</span></label>
-            <input type="number" placeholder="ใส่คำตอบ" required>
+            <input type="number" name="q12" placeholder="ใส่คำตอบ" required>
           </div>
 
           <div class="form-group full-width">
             <label>13. รายชื่อผู้ปฏิบัติงาน <span class="req">*</span></label>
-            <textarea rows="3" placeholder="ใส่คำตอบ" required></textarea>
+            <textarea name="q13" rows="3" placeholder="ใส่คำตอบ" required></textarea>
           </div>
 
           <div class="form-group full-width">
@@ -153,15 +204,16 @@
 
           <div class="form-group">
             <label>15. วันที่เริ่มงาน <span class="req">*</span></label>
-            <input type="date" required>
+            <input type="date" name="q15" required>
           </div>
 
           <div class="form-group">
             <label>16. วันที่สิ้นสุดงาน <span class="req">*</span></label>
-            <input type="date" required>
+            <input type="date" name="q16" required>
           </div>
         </div>
 
+        <!-- ส่วนที่ 4: อันตรายและการควบคุม -->
         <div class="section-title">อันตรายและการควบคุม</div>
         <div class="form-grid">
           <div class="form-group full-width">
@@ -181,16 +233,17 @@
 
           <div class="form-group full-width">
             <label>18. มาตรการควบคุม <span class="req">*</span></label>
-            <textarea rows="2" placeholder="ใส่คำตอบ" required></textarea>
+            <textarea name="q18" rows="2" placeholder="ใส่คำตอบ" required></textarea>
           </div>
 
           <div class="form-group full-width">
             <label>19. เอกสารควบคุมมาตรการ</label>
-            <input type="file">
+            <input type="file" name="q19">
             <div class="file-hint">ขีดจำกัดจำนวนไฟล์: 1 | ขีดจำกัดขนาดไฟล์เดียว: 10MB</div>
           </div>
         </div>
 
+        <!-- ส่วนที่ 5: PPE & Site Readiness Checklist -->
         <div class="section-title">PPE & Site Readiness Checklist</div>
         <div class="form-grid">
           <div class="form-group full-width">
@@ -240,28 +293,110 @@
           </div>
         </div>
 
+        <!-- ส่วนที่ 6: ผู้รับผิดชอบการปฏิบัติงาน -->
         <div class="section-title">ผู้รับผิดชอบการปฏิบัติงาน</div>
         <div class="form-grid">
           <div class="form-group full-width">
             <label>25. ชื่อผู้รับผิดชอบ <span class="req">*</span></label>
-            <input type="text" placeholder="ใส่คำตอบ" required>
+            <input type="text" name="q25" placeholder="ใส่คำตอบ" required>
           </div>
 
           <div class="form-group full-width">
             <label>26. เบอร์ติดต่อ <span class="req">*</span></label>
-            <input type="text" placeholder="ใส่คำตอบ" required>
+            <input type="text" name="q26" placeholder="ใส่คำตอบ" required>
           </div>
 
           <div class="form-group full-width">
             <label>27. หมายเหตุเพิ่มเติม</label>
-            <textarea rows="2" placeholder="ใส่คำตอบ"></textarea>
+            <textarea name="q27" rows="2" placeholder="ใส่คำตอบ"></textarea>
           </div>
         </div>
 
         <button type="submit" class="btn-submit">ยื่นคำขออนุญาตทำงาน</button>
       </form>
     </div>
+
+    <!-- PAGE 2: หน้าติดตามผล / ระบบเช็คสถานะ -->
+    <div id="page-track" class="card-container hidden">
+      <h2 class="page-title">ระบบเช็คสถานะ</h2>
+
+      <div class="tab-switch">
+        <div class="tab-btn active" id="tab-emp" onclick="switchTab('emp')">รหัสพนักงาน</div>
+        <div class="tab-btn" id="tab-wp" onclick="switchTab('wp')">เลขที่คำขอ (WP)</div>
+      </div>
+
+      <div class="form-group">
+        <input type="text" id="search-input" placeholder="กรอกรหัสพนักงาน เช่น EMP-9042">
+      </div>
+
+      <button type="button" class="btn-submit btn-search" onclick="checkStatus()">ตรวจสอบสถานะ</button>
+
+      <div id="status-result" class="hidden" style="margin-top: 20px; padding: 15px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #f8fafc;">
+        <!-- แสดงผลลัพธ์การค้นหาตรงนี้ -->
+      </div>
+    </div>
+
   </div>
+
+  <script>
+    // สลับหน้าระหว่าง "กรอกคำขอ" กับ "ติดตามผล"
+    function switchPage(page) {
+      const pageForm = document.getElementById('page-form');
+      const pageTrack = document.getElementById('page-track');
+      const menuForm = document.getElementById('menu-form');
+      const menuTrack = document.getElementById('menu-track');
+
+      if (page === 'form') {
+        pageForm.classList.remove('hidden');
+        pageTrack.classList.add('hidden');
+        menuForm.classList.add('active');
+        menuTrack.classList.remove('active');
+      } else {
+        pageForm.classList.add('hidden');
+        pageTrack.classList.remove('hidden');
+        menuForm.classList.remove('active');
+        menuTrack.classList.add('active');
+      }
+    }
+
+    // สลับแท็บค้นหาในหน้าติดตามผล
+    let currentTab = 'emp';
+    function switchTab(type) {
+      currentTab = type;
+      const tabEmp = document.getElementById('tab-emp');
+      const tabWp = document.getElementById('tab-wp');
+      const searchInput = document.getElementById('search-input');
+
+      if (type === 'emp') {
+        tabEmp.classList.add('active');
+        tabWp.classList.remove('active');
+        searchInput.placeholder = 'กรอกรหัสพนักงาน เช่น EMP-9042';
+      } else {
+        tabWp.classList.add('active');
+        tabEmp.classList.remove('active');
+        searchInput.placeholder = 'กรอกเลขที่คำขอ เช่น WP-2026-001';
+      }
+    }
+
+    // จำลองฟังก์ชันค้นหาสถานะ
+    function checkStatus() {
+      const input = document.getElementById('search-input').value.trim();
+      const resultDiv = document.getElementById('status-result');
+
+      if (!input) {
+        alert('กรุณากรอกข้อมูลที่ต้องการค้นหา');
+        return;
+      }
+
+      resultDiv.classList.remove('hidden');
+      resultDiv.innerHTML = `
+        <p style="font-weight: bold; color: #0d233a;">ผลการค้นหาสำหรับ: ${input}</p>
+        <p style="margin-top: 5px; color: #16a34a; font-weight: bold;">สถานะ: อนุมัติแล้ว (Approved)</p>
+        <p style="font-size: 12px; color: #666; margin-top: 5px;">วันที่ยื่นคำขอ: ${new Date().toLocaleDateString('th-TH')}</p>
+      `;
+    }
+  </script>
 
 </body>
 </html>
+
