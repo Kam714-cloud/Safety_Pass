@@ -49,6 +49,8 @@ body {
 
 .main-content {
   padding: 15px;
+  flex: 1;
+  min-width: 0;
 }
 
 .card-container {
@@ -280,6 +282,19 @@ textarea {
   resize: vertical;
 }
 
+hr {
+  border: 0;
+  border-top: 1px solid #e2e8f0;
+  margin: 20px 0;
+}
+
+button:focus,
+input:focus,
+textarea:focus {
+  outline: 2px solid #38bdf8;
+  outline-offset: 2px;
+}
+
 @media (min-width: 768px) {
   body {
     display: flex;
@@ -327,455 +342,623 @@ textarea {
   <h2>AUDI WORK PERMIT</h2>
 
   <nav class="sidebar-menu">
-    <button class="menu-item active" id="menu-form"
-      onclick="switchPage('form')">กรอกคำขอ</button>
+    <button type="button"
+      class="menu-item active"
+      id="menu-form"
+      onclick="switchPage('form')">
+      กรอกคำขอ
+    </button>
 
-    <button class="menu-item" id="menu-track"
-      onclick="switchPage('track')">ติดตามผล</button>
+    <button type="button"
+      class="menu-item"
+      id="menu-track"
+      onclick="switchPage('track')">
+      ติดตามผล
+    </button>
 
-    <button class="menu-item" id="menu-safety"
-      onclick="switchPage('safety')">Safety Approval</button>
+    <button type="button"
+      class="menu-item"
+      id="menu-safety"
+      onclick="switchPage('safety')">
+      Safety Approval
+    </button>
   </nav>
 </aside>
 
 <main class="main-content">
+
+<!-- ================================================== -->
+<!-- PAGE 1: WORK PERMIT FORM                           -->
+<!-- ================================================== -->
 
 <section id="page-form" class="card-container">
 
 <h1 class="page-title">ระบบกรอกคำขอ Work Permit</h1>
 
 <div class="warning">
-<strong>หมายเหตุ:</strong>
-เวอร์ชันนี้เป็นต้นแบบ ข้อมูลเก็บในเบราว์เซอร์ของเครื่องที่ใช้งาน
-ยังไม่ได้เชื่อมฐานข้อมูลออนไลน์หรืออัปโหลดไฟล์จริง
+  <strong>หมายเหตุ:</strong>
+  เวอร์ชันนี้เป็นต้นแบบ ข้อมูลเก็บในเบราว์เซอร์ของเครื่องที่ใช้งาน
+  ยังไม่ได้เชื่อมฐานข้อมูลออนไลน์หรืออัปโหลดไฟล์จริง
 </div>
 
 <form id="workPermitForm">
 
 <div class="form-group">
-<label>เลขที่ใบอนุญาตทำงาน (Work Permit No.)
-<span class="req">*</span></label>
-<input type="text" id="wp_no" name="wp_no" readonly required>
+  <label>
+    เลขที่ใบอนุญาตทำงาน (Work Permit No.)
+    <span class="req">*</span>
+  </label>
+  <input type="text" id="wp_no" name="wp_no" readonly required>
 </div>
+
+<!-- ข้อ 1-6 -->
 
 <div class="section-title">ข้อมูลผู้ขออนุญาต</div>
 
 <div class="form-grid">
 
-<div class="form-group full-width">
-<label>1. ชื่อบริษัท <span class="req">*</span></label>
-<input type="text" name="q1" required placeholder="ใส่คำตอบ">
+  <div class="form-group full-width">
+    <label>1. ชื่อบริษัท <span class="req">*</span></label>
+    <input type="text" name="q1" required placeholder="ใส่คำตอบ">
+  </div>
+
+  <div class="form-group full-width">
+    <label>2. ชื่อ-นามสกุล <span class="req">*</span></label>
+    <input type="text" name="q2" required placeholder="ใส่คำตอบ">
+  </div>
+
+  <div class="form-group full-width">
+    <label>3. รหัสพนักงาน/ผู้รับเหมา <span class="req">*</span></label>
+    <input type="text" name="q3" required placeholder="ใส่คำตอบ">
+  </div>
+
+  <div class="form-group full-width">
+    <label>4. Email <span class="req">*</span></label>
+    <input type="email" name="q4" required placeholder="name@company.com">
+  </div>
+
+  <div class="form-group full-width">
+    <label>5. แผนก <span class="req">*</span></label>
+
+    <div class="options-group">
+      <label class="option-label">
+        <input type="radio" name="q5" value="Production" required>
+        Production
+      </label>
+
+      <label class="option-label">
+        <input type="radio" name="q5" value="Maintenance">
+        Maintenance
+      </label>
+
+      <label class="option-label">
+        <input type="radio" name="q5" value="Warehouse">
+        Warehouse
+      </label>
+
+      <label class="option-label">
+        <input type="radio" name="q5" value="Engineering">
+        Engineering
+      </label>
+
+      <label class="option-label">
+        <input type="radio" name="q5" value="QC">
+        QC
+      </label>
+
+      <label class="option-label">
+        <input type="radio" name="q5" value="อื่นๆ">
+        อื่นๆ
+      </label>
+
+      <input type="text"
+        id="q5_other"
+        name="q5_other"
+        class="other-input hidden"
+        placeholder="โปรดระบุแผนก">
+    </div>
+  </div>
+
+  <div class="form-group full-width">
+    <label>6. ตำแหน่งงาน <span class="req">*</span></label>
+    <input type="text" name="q6" required placeholder="ใส่คำตอบ">
+  </div>
+
 </div>
 
-<div class="form-group full-width">
-<label>2. ชื่อ-นามสกุล <span class="req">*</span></label>
-<input type="text" name="q2" required placeholder="ใส่คำตอบ">
-</div>
-
-<div class="form-group full-width">
-<label>3. รหัสพนักงาน/ผู้รับเหมา <span class="req">*</span></label>
-<input type="text" name="q3" required placeholder="ใส่คำตอบ">
-</div>
-
-<div class="form-group full-width">
-<label>4. email  <span class="req">*</span></label>
-<input type="email" name="q4" required placeholder="name@company.com">
-</div>
-
-<div class="form-group full-width">
-<label>5. แผนก <span class="req">*</span></label>
-
-<div class="options-group">
-<label class="option-label">
-<input type="radio" name="q5" value="Production" required>
-Production
-</label>
-
-<label class="option-label">
-<input type="radio" name="q5" value="Maintenance">
-Maintenance
-</label>
-
-<label class="option-label">
-<input type="radio" name="q5" value="Warehouse">
-Warehouse
-</label>
-
-<label class="option-label">
-<input type="radio" name="q5" value="Engineering">
-Engineering
-</label>
-
-<label class="option-label">
-<input type="radio" name="q5" value="QC">
-QC
-</label>
-
-<label class="option-label">
-<input type="radio" name="q5" value="อื่นๆ"
-onchange="toggleRadioOther('q5')">
-อื่นๆ
-</label>
-
-<input type="text" id="q5_other" name="q5_other"
-class="other-input hidden" placeholder="โปรดระบุแผนก">
-</div>
-</div>
-
-<div class="form-group full-width">
-<label>6. ตำแหน่งงาน <span class="req">*</span></label>
-<input type="text" name="q6" required placeholder="ใส่คำตอบ">
-</div>
-
-</div>
+<!-- ข้อ 7-9 -->
 
 <div class="section-title">Safety Training</div>
 
 <div class="form-grid">
 
-<div class="form-group full-width">
-<label>7. ผ่านการอบรมมาตรฐานความปลอดภัย
-<span class="req">*</span></label>
+  <div class="form-group full-width">
+    <label>
+      7. ผ่านการอบรมมาตรฐานความปลอดภัย
+      <span class="req">*</span>
+    </label>
 
-<div class="options-group">
-<label class="option-label">
-<input type="radio" name="q7" value="ผ่าน" required> ผ่าน
-</label>
-<label class="option-label">
-<input type="radio" name="q7" value="ไม่ผ่าน"> ไม่ผ่าน
-</label>
-</div>
+    <div class="options-group">
+      <label class="option-label">
+        <input type="radio" name="q7" value="ผ่าน" required>
+        ผ่าน
+      </label>
+
+      <label class="option-label">
+        <input type="radio" name="q7" value="ไม่ผ่าน">
+        ไม่ผ่าน
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group full-width">
+    <label>
+      8. ใบรับรองผ่านการอบรมด้านความปลอดภัย
+      <span class="req">*</span>
+    </label>
+
+    <div class="options-group">
+      <label class="option-label">
+        <input type="checkbox" name="q8" value="Fire Safety">
+        Fire Safety
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox" name="q8" value="Work at Height">
+        Work at Height
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox" name="q8" value="Confined Space">
+        Confined Space
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox" name="q8" value="Hot Work">
+        Hot Work
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox" name="q8" value="Electrical Work">
+        Electrical Work
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox" name="q8" value="Forklift">
+        Forklift
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox"
+          id="q8_other_cb"
+          name="q8"
+          value="อื่นๆ">
+        อื่นๆ
+      </label>
+
+      <input type="text"
+        id="q8_other"
+        name="q8_other"
+        class="other-input hidden"
+        placeholder="โปรดระบุใบรับรอง">
+    </div>
+  </div>
+
+  <div class="form-group full-width">
+    <label>9. หลักฐานการอบรมมาตรฐานความปลอดภัย</label>
+    <input type="file" name="q9" accept="image/*,.pdf">
+    <p class="muted">
+      เลือกไฟล์ได้ 1 ไฟล์ ขนาดไม่เกิน 10MB
+      (ยังไม่อัปโหลดขึ้นระบบออนไลน์)
+    </p>
+  </div>
+
 </div>
 
-<div class="form-group full-width">
-<label>8. ใบรับรองผ่านการอบรมด้านความปลอดภัย
-<span class="req">*</span></label>
-
-<div class="options-group">
-<label class="option-label">
-<input type="checkbox" name="q8" value="Fire Safety"> Fire Safety
-</label>
-<label class="option-label">
-<input type="checkbox" name="q8" value="Work at Height"> Work at Height
-</label>
-<label class="option-label">
-<input type="checkbox" name="q8" value="Confined Space"> Confined Space
-</label>
-<label class="option-label">
-<input type="checkbox" name="q8" value="Hot Work"> Hot Work
-</label>
-<label class="option-label">
-<input type="checkbox" name="q8" value="Electrical Work"> Electrical Work
-</label>
-<label class="option-label">
-<input type="checkbox" name="q8" value="Forklift"> Forklift
-</label>
-<label class="option-label">
-<input type="checkbox" id="q8_other_cb" name="q8" value="อื่นๆ"
-onchange="toggleCheckboxOther('q8_other_cb','q8_other')">
-อื่นๆ
-</label>
-<input type="text" id="q8_other" name="q8_other"
-class="other-input hidden" placeholder="โปรดระบุใบรับรอง">
-</div>
-</div>
-
-<div class="form-group full-width">
-<label>9. หลักฐานการอบรมมาตรฐานความปลอดภัย</label>
-<input type="file" name="q9" accept="image/*,.pdf">
-<p class="muted">เลือกไฟล์ได้ 1 ไฟล์ ขนาดไม่เกิน 10MB
-(ยังไม่อัปโหลดขึ้นระบบออนไลน์)</p>
-</div>
-
-</div>
+<!-- ข้อ 10-16 -->
 
 <div class="section-title">Smart Work Permit</div>
 
 <div class="form-grid">
 
-<div class="form-group full-width">
-<label>10. ชื่อผู้ขอ Work Permit <span class="req">*</span></label>
-<input type="text" name="q10" required placeholder="ใส่คำตอบ">
+  <div class="form-group full-width">
+    <label>10. ชื่อผู้ขอ Work Permit <span class="req">*</span></label>
+    <input type="text" name="q10" required placeholder="ใส่คำตอบ">
+  </div>
+
+  <div class="form-group">
+    <label>11. บริษัท <span class="req">*</span></label>
+    <input type="text" name="q11" required placeholder="ใส่คำตอบ">
+  </div>
+
+  <div class="form-group">
+    <label>12. จำนวนผู้ปฏิบัติงาน <span class="req">*</span></label>
+    <input type="number" name="q12" min="1" required placeholder="ใส่จำนวน">
+  </div>
+
+  <div class="form-group full-width">
+    <label>13. รายชื่อผู้ปฏิบัติงาน <span class="req">*</span></label>
+    <textarea name="q13" rows="3" required
+      placeholder="ใส่รายชื่อผู้ปฏิบัติงาน"></textarea>
+  </div>
+
+  <div class="form-group full-width">
+    <label>14. พื้นที่การทำงาน <span class="req">*</span></label>
+
+    <div class="options-group">
+      <label class="option-label">
+        <input type="radio" name="q14" value="Production Area" required>
+        Production Area
+      </label>
+
+      <label class="option-label">
+        <input type="radio" name="q14" value="Warehouse">
+        Warehouse
+      </label>
+
+      <label class="option-label">
+        <input type="radio" name="q14" value="Roof">
+        Roof
+      </label>
+
+      <label class="option-label">
+        <input type="radio" name="q14" value="Maintenance Area">
+        Maintenance Area
+      </label>
+
+      <label class="option-label">
+        <input type="radio" name="q14" value="Utility Area">
+        Utility Area
+      </label>
+
+      <label class="option-label">
+        <input type="radio" name="q14" value="Confined Space Area">
+        Confined Space Area
+      </label>
+
+      <label class="option-label">
+        <input type="radio" name="q14" value="อื่นๆ">
+        อื่นๆ
+      </label>
+
+      <input type="text"
+        id="q14_other"
+        name="q14_other"
+        class="other-input hidden"
+        placeholder="โปรดระบุพื้นที่การทำงาน">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>15. วันที่เริ่มงาน <span class="req">*</span></label>
+    <input type="date" name="q15" required>
+  </div>
+
+  <div class="form-group">
+    <label>16. วันที่สิ้นสุดงาน <span class="req">*</span></label>
+    <input type="date" name="q16" required>
+  </div>
+
 </div>
 
-<div class="form-group">
-<label>11. บริษัท <span class="req">*</span></label>
-<input type="text" name="q11" required placeholder="ใส่คำตอบ">
-</div>
-
-<div class="form-group">
-<label>12. จำนวนผู้ปฏิบัติงาน <span class="req">*</span></label>
-<input type="number" name="q12" min="1" required placeholder="ใส่จำนวน">
-</div>
-
-<div class="form-group full-width">
-<label>13. รายชื่อผู้ปฏิบัติงาน <span class="req">*</span></label>
-<textarea name="q13" rows="3" required placeholder="ใส่รายชื่อผู้ปฏิบัติงาน"></textarea>
-</div>
-
-<div class="form-group full-width">
-<label>14. พื้นที่การทำงาน <span class="req">*</span></label>
-
-<div class="options-group">
-<label class="option-label">
-<input type="radio" name="q14" value="Production Area" required>
-Production Area
-</label>
-<label class="option-label">
-<input type="radio" name="q14" value="Warehouse"> Warehouse
-</label>
-<label class="option-label">
-<input type="radio" name="q14" value="Roof"> Roof
-</label>
-<label class="option-label">
-<input type="radio" name="q14" value="Maintenance Area"> Maintenance Area
-</label>
-<label class="option-label">
-<input type="radio" name="q14" value="Utility Area"> Utility Area
-</label>
-<label class="option-label">
-<input type="radio" name="q14" value="Confined Space Area"> Confined Space Area
-</label>
-<label class="option-label">
-<input type="radio" name="q14" value="อื่นๆ"
-onchange="toggleRadioOther('q14')"> อื่นๆ
-</label>
-
-<input type="text" id="q14_other" name="q14_other"
-class="other-input hidden" placeholder="โปรดระบุพื้นที่การทำงาน">
-</div>
-</div>
-
-<div class="form-group">
-<label>15. วันที่เริ่มงาน <span class="req">*</span></label>
-<input type="date" name="q15" required>
-</div>
-
-<div class="form-group">
-<label>16. วันที่สิ้นสุดงาน <span class="req">*</span></label>
-<input type="date" name="q16" required>
-</div>
-
-</div>
+<!-- ข้อ 17-18 -->
 
 <div class="section-title">อันตรายและการควบคุม</div>
 
 <div class="form-grid">
 
-<div class="form-group full-width">
-<label>17. อันตรายที่คาดว่าจะพบ <span class="req">*</span></label>
+  <div class="form-group full-width">
+    <label>17. อันตรายที่คาดว่าจะพบ <span class="req">*</span></label>
 
-<div class="options-group">
-<label class="option-label">
-<input type="checkbox" name="q17" value="Fire"> Fire
-</label>
-<label class="option-label">
-<input type="checkbox" name="q17" value="Fall from Height"> Fall from Height
-</label>
-<label class="option-label">
-<input type="checkbox" name="q17" value="Electrical"> Electrical
-</label>
-<label class="option-label">
-<input type="checkbox" name="q17" value="Chemical"> Chemical
-</label>
-<label class="option-label">
-<input type="checkbox" name="q17" value="Falling Object"> Falling Object
-</label>
-<label class="option-label">
-<input type="checkbox" name="q17" value="Confined Space"> Confined Space
-</label>
-<label class="option-label">
-<input type="checkbox" name="q17" value="Machine"> Machine
-</label>
-<label class="option-label">
-<input type="checkbox" name="q17" value="Noise"> Noise
-</label>
-<label class="option-label">
-<input type="checkbox" id="q17_other_cb" name="q17" value="อื่นๆ"
-onchange="toggleCheckboxOther('q17_other_cb','q17_other')">
-อื่นๆ
-</label>
+    <div class="options-group">
+      <label class="option-label">
+        <input type="checkbox" name="q17" value="Fire">
+        Fire
+      </label>
 
-<input type="text" id="q17_other" name="q17_other"
-class="other-input hidden" placeholder="โปรดระบุอันตรายเพิ่มเติม">
+      <label class="option-label">
+        <input type="checkbox" name="q17" value="Fall from Height">
+        Fall from Height
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox" name="q17" value="Electrical">
+        Electrical
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox" name="q17" value="Chemical">
+        Chemical
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox" name="q17" value="Falling Object">
+        Falling Object
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox" name="q17" value="Confined Space">
+        Confined Space
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox" name="q17" value="Machine">
+        Machine
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox" name="q17" value="Noise">
+        Noise
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox"
+          id="q17_other_cb"
+          name="q17"
+          value="อื่นๆ">
+        อื่นๆ
+      </label>
+
+      <input type="text"
+        id="q17_other"
+        name="q17_other"
+        class="other-input hidden"
+        placeholder="โปรดระบุอันตรายเพิ่มเติม">
+    </div>
+  </div>
+
+  <div class="form-group full-width">
+    <label>18. เอกสารควบคุมมาตรการ</label>
+    <input type="file" name="q18" accept="image/*,.pdf">
+    <p class="muted">
+      แนบเอกสารควบคุมมาตรการหรือเอกสารประกอบที่เกี่ยวข้อง
+      (ไฟล์ยังไม่ถูกอัปโหลดขึ้นระบบออนไลน์)
+    </p>
+  </div>
+
 </div>
-</div>
 
-</div>
+<!-- ข้อ 19-23 -->
 
-<div class="section-title">PPE & Site Readiness Checklist</div>
+<div class="section-title">PPE &amp; Site Readiness Checklist</div>
 
 <div class="form-grid">
 
-<div class="form-group full-width">
-<label>18. PPE ที่ต้องใช้ <span class="req">*</span></label>
+  <div class="form-group full-width">
+    <label>19. PPE ที่ต้องใช้ <span class="req">*</span></label>
 
-<div class="options-group">
-<label class="option-label">
-<input type="checkbox" name="q20" value="Safety Helmet"> Safety Helmet
-</label>
-<label class="option-label">
-<input type="checkbox" name="q20" value="Safety Shoes"> Safety Shoes
-</label>
-<label class="option-label">
-<input type="checkbox" name="q20" value="Face Shield"> Face Shield
-</label>
-<label class="option-label">
-<input type="checkbox" name="q20" value="Safety Glasses"> Safety Glasses
-</label>
-<label class="option-label">
-<input type="checkbox" name="q20" value="Gloves"> Gloves
-</label>
-<label class="option-label">
-<input type="checkbox" name="q20" value="Full Body Harness"> Full Body Harness
-</label>
-<label class="option-label">
-<input type="checkbox" name="q20" value="Respirator"> Respirator
-</label>
-<label class="option-label">
-<input type="checkbox" id="q20_other_cb" name="q20" value="อื่นๆ"
-onchange="toggleCheckboxOther('q20_other_cb','q20_other')">
-อื่นๆ
-</label>
+    <div class="options-group">
+      <label class="option-label">
+        <input type="checkbox" name="q20" value="Safety Helmet">
+        Safety Helmet
+      </label>
 
-<input type="text" id="q20_other" name="q20_other"
-class="other-input hidden" placeholder="โปรดระบุ PPE อื่นๆ">
-</div>
+      <label class="option-label">
+        <input type="checkbox" name="q20" value="Safety Shoes">
+        Safety Shoes
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox" name="q20" value="Face Shield">
+        Face Shield
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox" name="q20" value="Safety Glasses">
+        Safety Glasses
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox" name="q20" value="Gloves">
+        Gloves
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox" name="q20" value="Full Body Harness">
+        Full Body Harness
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox" name="q20" value="Respirator">
+        Respirator
+      </label>
+
+      <label class="option-label">
+        <input type="checkbox"
+          id="q20_other_cb"
+          name="q20"
+          value="อื่นๆ">
+        อื่นๆ
+      </label>
+
+      <input type="text"
+        id="q20_other"
+        name="q20_other"
+        class="other-input hidden"
+        placeholder="โปรดระบุ PPE อื่นๆ">
+    </div>
+  </div>
+
+  <div class="form-group full-width">
+    <label>
+      20. มี Work Permit ที่เกี่ยวข้องหรือไม่?
+      <span class="req">*</span>
+    </label>
+
+    <div class="options-group">
+      <label class="option-label">
+        <input type="radio" name="q21" value="มี" required>
+        มี
+      </label>
+
+      <label class="option-label">
+        <input type="radio" name="q21" value="ไม่มี">
+        ไม่มี
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group full-width">
+    <label>21. PPE พร้อมใช้งานหรือไม่ <span class="req">*</span></label>
+
+    <div class="options-group">
+      <label class="option-label">
+        <input type="radio" name="q22" value="พร้อม" required>
+        พร้อม
+      </label>
+
+      <label class="option-label">
+        <input type="radio" name="q22" value="ไม่พร้อม">
+        ไม่พร้อม
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group full-width">
+    <label>
+      22. อุปกรณ์/เครื่องมือผ่านการตรวจสอบหรือไม่
+      <span class="req">*</span>
+    </label>
+
+    <div class="options-group">
+      <label class="option-label">
+        <input type="radio" name="q23" value="ผ่าน" required>
+        ผ่าน
+      </label>
+
+      <label class="option-label">
+        <input type="radio" name="q23" value="ไม่ผ่าน">
+        ไม่ผ่าน
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group full-width">
+    <label>23. มีผู้ควบคุมงานหรือไม่ <span class="req">*</span></label>
+
+    <div class="options-group">
+      <label class="option-label">
+        <input type="radio" name="q24" value="มี" required>
+        มี
+      </label>
+
+      <label class="option-label">
+        <input type="radio" name="q24" value="ไม่มี">
+        ไม่มี
+      </label>
+    </div>
+  </div>
+
 </div>
 
-<div class="form-group full-width">
-<label>19. มี Work Permit ที่เกี่ยวข้องหรือไม่?
-<span class="req">*</span></label>
-
-<div class="options-group">
-<label class="option-label">
-<input type="radio" name="q21" value="มี" required> มี
-</label>
-<label class="option-label">
-<input type="radio" name="q21" value="ไม่มี"> ไม่มี
-</label>
-</div>
-</div>
-
-<div class="form-group full-width">
-<label>20. PPE พร้อมใช้งานหรือไม่ <span class="req">*</span></label>
-
-<div class="options-group">
-<label class="option-label">
-<input type="radio" name="q22" value="พร้อม" required> พร้อม
-</label>
-<label class="option-label">
-<input type="radio" name="q22" value="ไม่พร้อม"> ไม่พร้อม
-</label>
-</div>
-</div>
-
-<div class="form-group full-width">
-<label>21. อุปกรณ์/เครื่องมือผ่านการตรวจสอบหรือไม่
-<span class="req">*</span></label>
-
-<div class="options-group">
-<label class="option-label">
-<input type="radio" name="q23" value="ผ่าน" required> ผ่าน
-</label>
-<label class="option-label">
-<input type="radio" name="q23" value="ไม่ผ่าน"> ไม่ผ่าน
-</label>
-</div>
-</div>
-
-<div class="form-group full-width">
-<label>22. มีผู้ควบคุมงานหรือไม่ <span class="req">*</span></label>
-
-<div class="options-group">
-<label class="option-label">
-<input type="radio" name="q24" value="มี" required> มี
-</label>
-<label class="option-label">
-<input type="radio" name="q24" value="ไม่มี"> ไม่มี
-</label>
-</div>
-</div>
-
-</div>
+<!-- ข้อ 24-26 -->
 
 <div class="section-title">ผู้รับผิดชอบการปฏิบัติงาน</div>
 
 <div class="form-grid">
 
-<div class="form-group full-width">
-<label>23. ชื่อผู้รับผิดชอบ <span class="req">*</span></label>
-<input type="text" name="q25" required placeholder="ใส่คำตอบ">
-</div>
+  <div class="form-group full-width">
+    <label>24. ชื่อผู้รับผิดชอบ <span class="req">*</span></label>
+    <input type="text" name="q25" required placeholder="ใส่คำตอบ">
+  </div>
 
-<div class="form-group full-width">
-<label>24. เบอร์ติดต่อ <span class="req">*</span></label>
-<input type="text" name="q26" required placeholder="ใส่คำตอบ">
-</div>
+  <div class="form-group full-width">
+    <label>25. เบอร์ติดต่อ <span class="req">*</span></label>
+    <input type="text" name="q26" required placeholder="ใส่คำตอบ">
+  </div>
 
-<div class="form-group full-width">
-<label>25. หมายเหตุเพิ่มเติม</label>
-<textarea name="q27" rows="2" placeholder="ใส่คำตอบ"></textarea>
-</div>
+  <div class="form-group full-width">
+    <label>26. หมายเหตุเพิ่มเติม</label>
+    <textarea name="q27" rows="2" placeholder="ใส่คำตอบ"></textarea>
+  </div>
 
 </div>
 
 <button type="submit" class="btn btn-primary btn-submit">
-ยื่นคำขออนุญาตทำงาน
+  ยื่นคำขออนุญาตทำงาน
 </button>
 
 </form>
 </section>
+
+<!-- ================================================== -->
+<!-- PAGE 2: TRACKING                                   -->
+<!-- ================================================== -->
 
 <section id="page-track" class="card-container hidden">
 
 <h1 class="page-title">ระบบติดตามสถานะ</h1>
 
 <div class="notice">
-ค้นหาด้วยรหัสพนักงาน/ผู้รับเหมา หรือเลขที่ WP
+  ค้นหาด้วยรหัสพนักงาน/ผู้รับเหมา หรือเลขที่ WP
 </div>
 
 <div class="tab-switch">
-<button class="tab-btn active" id="tab-emp"
-onclick="switchTab('emp')">รหัสพนักงาน</button>
+  <button type="button"
+    class="tab-btn active"
+    id="tab-emp"
+    onclick="switchTab('emp')">
+    รหัสพนักงาน
+  </button>
 
-<button class="tab-btn" id="tab-wp"
-onclick="switchTab('wp')">เลขที่คำขอ (WP)</button>
+  <button type="button"
+    class="tab-btn"
+    id="tab-wp"
+    onclick="switchTab('wp')">
+    เลขที่คำขอ (WP)
+  </button>
 </div>
 
 <div class="form-group">
-<label>ข้อมูลสำหรับค้นหา</label>
-<input type="text" id="search-input"
-placeholder="กรอกรหัสพนักงาน/ผู้รับเหมา">
+  <label for="search-input">ข้อมูลสำหรับค้นหา</label>
+  <input type="text"
+    id="search-input"
+    placeholder="กรอกรหัสพนักงาน/ผู้รับเหมา">
 </div>
 
-<button type="button" class="btn btn-primary btn-submit"
-onclick="checkStatus()">ตรวจสอบสถานะ</button>
+<button type="button"
+  class="btn btn-primary btn-submit"
+  onclick="checkStatus()">
+  ตรวจสอบสถานะ
+</button>
 
 <div id="status-result" class="hidden"></div>
 
 </section>
+
+<!-- ================================================== -->
+<!-- PAGE 3: SAFETY APPROVAL                            -->
+<!-- ================================================== -->
 
 <section id="page-safety" class="card-container hidden">
 
 <h1 class="page-title">Safety Approval</h1>
 
 <div class="warning">
-หน้านี้เป็นต้นแบบ ยังไม่มีระบบล็อกอินหรือสิทธิ์ Safety
-ห้ามใช้อนุมัติคำขอจริงจนกว่าจะเชื่อมฐานข้อมูลและระบบยืนยันตัวตน
+  หน้านี้เป็นต้นแบบ ยังไม่มีระบบล็อกอินหรือสิทธิ์ Safety
+  ห้ามใช้อนุมัติคำขอจริงจนกว่าจะเชื่อมฐานข้อมูลและระบบยืนยันตัวตน
 </div>
 
 <div class="tab-switch">
-<button class="tab-btn active" id="filter-pending"
-onclick="setSafetyFilter('Pending')">รอพิจารณา</button>
+  <button type="button"
+    class="tab-btn active"
+    id="filter-pending"
+    onclick="setSafetyFilter('Pending')">
+    รอพิจารณา
+  </button>
 
-<button class="tab-btn" id="filter-all"
-onclick="setSafetyFilter('All')">คำขอทั้งหมด</button>
+  <button type="button"
+    class="tab-btn"
+    id="filter-all"
+    onclick="setSafetyFilter('All')">
+    คำขอทั้งหมด
+  </button>
 </div>
 
 <div id="safety-list"></div>
 
 </section>
+
 </main>
 
 <script>
@@ -784,10 +967,14 @@ const STORAGE_KEY = 'audi_wp_requests_v2_no_q18';
 let currentTab = 'emp';
 let safetyFilter = 'Pending';
 
+/* ================================================== */
+/* STORAGE                                            */
+/* ================================================== */
+
 function getRequests() {
   try {
     return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-  } catch (e) {
+  } catch (error) {
     return [];
   }
 }
@@ -796,24 +983,38 @@ function saveRequests(items) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
 }
 
+/* ================================================== */
+/* WORK PERMIT NUMBER                                 */
+/* ================================================== */
+
 function nextWPNo() {
   const now = new Date();
+
   const day = String(now.getDate()).padStart(2, '0');
   const month = String(now.getMonth() + 1).padStart(2, '0');
-  const key = `audi_wp_seq_${now.getFullYear()}${month}${day}`;
+  const year = now.getFullYear();
+
+  const key = `audi_wp_seq_${year}${month}${day}`;
+
   const seq = Number(localStorage.getItem(key) || '0') + 1;
+
   localStorage.setItem(key, String(seq));
 
   return `AA_${day}${month}_${String(seq).padStart(3, '0')}`;
 }
 
 function generateWPNo() {
-  document.getElementById('wp_no').value = nextWPNo();
+  const input = document.getElementById('wp_no');
+
+  if (input) {
+    input.value = nextWPNo();
+  }
 }
 
-window.addEventListener('DOMContentLoaded', generateWPNo);
+/* ================================================== */
+/* OTHER FIELDS                                       */
+/* ================================================== */
 
-/* ช่องอื่นๆ สำหรับ Radio */
 function toggleRadioOther(name) {
   const selected = document.querySelector(
     `input[name="${name}"][value="อื่นๆ"]:checked`
@@ -828,27 +1029,44 @@ function toggleRadioOther(name) {
   input.classList.toggle('hidden', !show);
   input.required = show;
 
-  if (!show) input.value = '';
+  if (!show) {
+    input.value = '';
+  }
 }
 
-/* ช่องอื่นๆ สำหรับ Checkbox */
 function toggleCheckboxOther(checkboxId, inputId) {
   const checkbox = document.getElementById(checkboxId);
   const input = document.getElementById(inputId);
 
   if (!checkbox || !input) return;
 
-  input.classList.toggle('hidden', !checkbox.checked);
-  input.required = checkbox.checked;
+  const show = checkbox.checked;
 
-  if (!checkbox.checked) input.value = '';
+  input.classList.toggle('hidden', !show);
+  input.required = show;
+
+  if (!show) {
+    input.value = '';
+  }
 }
 
-/* สำรองการแสดงช่องอื่นๆ เผื่อ JavaScript ของหน้าเว็บโหลดช้า */
+function refreshOtherFields() {
+  toggleRadioOther('q5');
+  toggleRadioOther('q14');
+
+  toggleCheckboxOther('q8_other_cb', 'q8_other');
+  toggleCheckboxOther('q17_other_cb', 'q17_other');
+  toggleCheckboxOther('q20_other_cb', 'q20_other');
+}
+
+/* ตรวจสอบช่องอื่นๆ เมื่อมีการเปลี่ยนตัวเลือก */
 document.addEventListener('change', function(event) {
   const target = event.target;
 
-  if (target.matches('input[type="radio"][name="q5"], input[type="radio"][name="q14"]')) {
+  if (
+    target.matches('input[type="radio"][name="q5"]') ||
+    target.matches('input[type="radio"][name="q14"]')
+  ) {
     toggleRadioOther(target.name);
   }
 
@@ -865,20 +1083,36 @@ document.addEventListener('change', function(event) {
   }
 });
 
+/* ================================================== */
+/* PAGE NAVIGATION                                    */
+/* ================================================== */
+
 function switchPage(page) {
-  ['form', 'track', 'safety'].forEach(function(p) {
-    document.getElementById('page-' + p).classList.toggle('hidden', p !== page);
-    document.getElementById('menu-' + p).classList.toggle('active', p === page);
+  ['form', 'track', 'safety'].forEach(function(name) {
+    const section = document.getElementById('page-' + name);
+    const button = document.getElementById('menu-' + name);
+
+    section.classList.toggle('hidden', name !== page);
+    button.classList.toggle('active', name === page);
   });
 
-  if (page === 'safety') renderSafetyList();
+  if (page === 'safety') {
+    renderSafetyList();
+  }
 }
+
+/* ================================================== */
+/* TRACKING TABS                                      */
+/* ================================================== */
 
 function switchTab(type) {
   currentTab = type;
 
-  document.getElementById('tab-emp').classList.toggle('active', type === 'emp');
-  document.getElementById('tab-wp').classList.toggle('active', type === 'wp');
+  document.getElementById('tab-emp')
+    .classList.toggle('active', type === 'emp');
+
+  document.getElementById('tab-wp')
+    .classList.toggle('active', type === 'wp');
 
   document.getElementById('search-input').placeholder =
     type === 'emp'
@@ -888,11 +1122,15 @@ function switchTab(type) {
   document.getElementById('status-result').classList.add('hidden');
 }
 
+/* ================================================== */
+/* FORM DATA                                          */
+/* ================================================== */
+
 function collectFormData(form) {
   const data = {};
-  const fd = new FormData(form);
+  const formData = new FormData(form);
 
-  for (const [key, value] of fd.entries()) {
+  for (const [key, value] of formData.entries()) {
     if (value instanceof File) {
       if (value.name) {
         data[key] = {
@@ -901,11 +1139,15 @@ function collectFormData(form) {
           fileType: value.type || 'ไม่ทราบชนิด'
         };
       }
+
       continue;
     }
 
     if (Object.prototype.hasOwnProperty.call(data, key)) {
-      if (!Array.isArray(data[key])) data[key] = [data[key]];
+      if (!Array.isArray(data[key])) {
+        data[key] = [data[key]];
+      }
+
       data[key].push(value);
     } else {
       data[key] = value;
@@ -915,96 +1157,129 @@ function collectFormData(form) {
   return data;
 }
 
-document.getElementById('workPermitForm').addEventListener('submit', function(e) {
-  e.preventDefault();
+/* ================================================== */
+/* FORM SUBMISSION                                    */
+/* ================================================== */
 
-  const start = this.elements.q15.value;
-  const end = this.elements.q16.value;
+document.getElementById('workPermitForm')
+  .addEventListener('submit', function(event) {
+    event.preventDefault();
 
-  if (start && end && end < start) {
-    alert('วันที่สิ้นสุดงานต้องไม่อยู่ก่อนวันที่เริ่มงาน');
-    return;
-  }
+    const form = this;
 
-  const requests = getRequests();
-  const wpNo = document.getElementById('wp_no').value || nextWPNo();
+    const startDate = form.elements.q15.value;
+    const endDate = form.elements.q16.value;
 
-  if (requests.some(r => r.wp_no === wpNo)) {
-    alert('เลข WP นี้มีอยู่แล้ว กรุณาลองสร้างเลขใหม่');
+    if (startDate && endDate && endDate < startDate) {
+      alert('วันที่สิ้นสุดงานต้องไม่อยู่ก่อนวันที่เริ่มงาน');
+      return;
+    }
+
+    /* ตรวจสอบเลข WP */
+    let wpNo = document.getElementById('wp_no').value;
+    const requests = getRequests();
+
+    if (!wpNo || requests.some(function(record) {
+      return record.wp_no === wpNo;
+    })) {
+      generateWPNo();
+      wpNo = document.getElementById('wp_no').value;
+    }
+
+    const data = collectFormData(form);
+
+    const record = {
+      id: (
+        crypto.randomUUID
+          ? crypto.randomUUID()
+          : String(Date.now()) + Math.random().toString(16).slice(2)
+      ),
+
+      wp_no: wpNo,
+      employee_id: data.q3 || '',
+      applicant_email: data.q4 || '',
+      company: data.q1 || '',
+      applicant_name: data.q2 || '',
+
+      submitted_at: new Date().toISOString(),
+
+      status: 'Pending',
+      safety_comment: '',
+      reviewed_by: '',
+      reviewed_at: '',
+
+      form_data: data
+    };
+
+    requests.unshift(record);
+    saveRequests(requests);
+
+    alert(
+      'ส่งคำขอเรียบร้อย\n' +
+      'เลขที่ WP: ' + wpNo + '\n\n' +
+      'หมายเหตุ: ข้อมูลอยู่ในเบราว์เซอร์เครื่องนี้เท่านั้น ' +
+      'ยังไม่ได้ส่งเข้าฐานข้อมูลออนไลน์'
+    );
+
+    form.reset();
+
+    document.querySelectorAll('.other-input').forEach(function(input) {
+      input.classList.add('hidden');
+      input.required = false;
+    });
+
     generateWPNo();
-    return;
-  }
-
-  const data = collectFormData(this);
-
-  const record = {
-    id: (crypto.randomUUID
-      ? crypto.randomUUID()
-      : String(Date.now()) + Math.random().toString(16).slice(2)),
-    wp_no: wpNo,
-    employee_id: data.q3 || '',
-    applicant_email: data.q4 || '',
-    company: data.q1 || '',
-    applicant_name: data.q2 || '',
-    submitted_at: new Date().toISOString(),
-    status: 'Pending',
-    safety_comment: '',
-    reviewed_by: '',
-    reviewed_at: '',
-    form_data: data
-  };
-
-  requests.unshift(record);
-  saveRequests(requests);
-
-  alert(
-    `ส่งคำขอเรียบร้อย\nเลขที่ WP: ${wpNo}\n\n` +
-    'หมายเหตุ: ข้อมูลอยู่ในเบราว์เซอร์เครื่องนี้เท่านั้น ' +
-    'ยังไม่ได้ส่งเข้าฐานข้อมูลออนไลน์'
-  );
-
-  this.reset();
-  document.querySelectorAll('.other-input').forEach(function(input) {
-    input.classList.add('hidden');
-    input.required = false;
   });
 
-  generateWPNo();
-});
+/* ================================================== */
+/* TEXT HELPERS                                       */
+/* ================================================== */
+
+function safeText(value) {
+  return String(value ?? '').replace(/[&<>"']/g, function(character) {
+    const replacements = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    };
+
+    return replacements[character];
+  });
+}
 
 function formatDate(value) {
   if (!value) return '-';
 
   const date = new Date(value);
 
-  return Number.isNaN(date.getTime())
-    ? value
-    : date.toLocaleString('th-TH');
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleString('th-TH');
 }
 
 function statusLabel(status) {
-  return {
+  const labels = {
     Pending: 'รอพิจารณา',
     Approved: 'อนุมัติแล้ว',
     Rejected: 'ไม่อนุมัติ',
     Revision: 'ส่งกลับแก้ไข'
-  }[status] || status;
+  };
+
+  return labels[status] || status;
 }
 
-function safeText(value) {
-  return String(value ?? '').replace(/[&<>"']/g, function(ch) {
-    return {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    }[ch];
-  });
-}
+/* ================================================== */
+/* TRACKING SEARCH                                    */
+/* ================================================== */
 
 function checkStatus() {
-  const input = document.getElementById('search-input').value.trim();
+  const input = document.getElementById('search-input')
+    .value.trim();
+
   const result = document.getElementById('status-result');
 
   if (!input) {
@@ -1014,10 +1289,14 @@ function checkStatus() {
 
   const requests = getRequests();
 
-  const record = requests.find(function(r) {
-    return currentTab === 'emp'
-      ? String(r.employee_id).toLowerCase() === input.toLowerCase()
-      : String(r.wp_no).toLowerCase() === input.toLowerCase();
+  const record = requests.find(function(item) {
+    if (currentTab === 'emp') {
+      return String(item.employee_id).toLowerCase() ===
+        input.toLowerCase();
+    }
+
+    return String(item.wp_no).toLowerCase() ===
+      input.toLowerCase();
   });
 
   result.classList.remove('hidden');
@@ -1025,28 +1304,52 @@ function checkStatus() {
   if (!record) {
     result.innerHTML =
       '<div class="empty">ไม่พบคำขอในเบราว์เซอร์นี้</div>';
+
     return;
   }
 
   result.innerHTML = `
     <div class="record">
       <h3>${safeText(record.wp_no)}</h3>
-      <p>สถานะ:
+
+      <p>
+        สถานะ:
         <span class="status status-${safeText(record.status)}">
           ${safeText(statusLabel(record.status))}
         </span>
       </p>
-      <p><strong>ผู้ขอ:</strong> ${safeText(record.applicant_name)}</p>
-      <p><strong>บริษัท:</strong> ${safeText(record.company)}</p>
-      <p><strong>วันที่ยื่น:</strong> ${safeText(formatDate(record.submitted_at))}</p>
-      <p><strong>หมายเหตุจาก Safety:</strong>
+
+      <p>
+        <strong>ผู้ขอ:</strong>
+        ${safeText(record.applicant_name)}
+      </p>
+
+      <p>
+        <strong>บริษัท:</strong>
+        ${safeText(record.company)}
+      </p>
+
+      <p>
+        <strong>วันที่ยื่น:</strong>
+        ${safeText(formatDate(record.submitted_at))}
+      </p>
+
+      <p>
+        <strong>หมายเหตุจาก Safety:</strong>
         ${safeText(record.safety_comment || 'ไม่มี')}
       </p>
-      <p><strong>ผู้พิจารณา:</strong>
+
+      <p>
+        <strong>ผู้พิจารณา:</strong>
         ${safeText(record.reviewed_by || '-')}
       </p>
-    </div>`;
+    </div>
+  `;
 }
+
+/* ================================================== */
+/* SAFETY APPROVAL FILTER                             */
+/* ================================================== */
 
 function setSafetyFilter(filter) {
   safetyFilter = filter;
@@ -1060,70 +1363,125 @@ function setSafetyFilter(filter) {
   renderSafetyList();
 }
 
+/* ================================================== */
+/* SAFETY APPROVAL LIST                               */
+/* ================================================== */
+
 function renderSafetyList() {
   const container = document.getElementById('safety-list');
+
   let requests = getRequests();
 
   if (safetyFilter === 'Pending') {
-    requests = requests.filter(function(r) {
-      return r.status === 'Pending' || r.status === 'Revision';
+    requests = requests.filter(function(record) {
+      return record.status === 'Pending' ||
+        record.status === 'Revision';
     });
   }
 
   if (!requests.length) {
     container.innerHTML =
       '<div class="empty">ยังไม่มีคำขอในรายการนี้</div>';
+
     return;
   }
 
-  container.innerHTML = requests.map(function(r) {
-    const data = r.form_data || {};
-    const canReview = r.status === 'Pending' || r.status === 'Revision';
+  container.innerHTML = requests.map(function(record) {
+    const data = record.form_data || {};
 
-    const display = function(key) {
+    const canReview =
+      record.status === 'Pending' ||
+      record.status === 'Revision';
+
+    function display(key) {
       const value = data[key];
 
-      if (Array.isArray(value)) return value.join(', ');
-      if (value && typeof value === 'object') return value.fileName || '-';
+      if (Array.isArray(value)) {
+        return value.join(', ');
+      }
+
+      if (value && typeof value === 'object') {
+        return value.fileName || '-';
+      }
 
       return value || '-';
-    };
+    }
+
+    const area = display('q14') === 'อื่นๆ'
+      ? display('q14_other')
+      : display('q14');
+
+    const hazards = [
+      display('q17'),
+      data.q17_other || ''
+    ].filter(Boolean).join(' — ');
+
+    const ppe = [
+      display('q20'),
+      data.q20_other || ''
+    ].filter(Boolean).join(' — ');
 
     return `
       <article class="record">
-        <h3>${safeText(r.wp_no)}</h3>
+
+        <h3>${safeText(record.wp_no)}</h3>
 
         <p>
-          <span class="status status-${safeText(r.status)}">
-            ${safeText(statusLabel(r.status))}
+          <span class="status status-${safeText(record.status)}">
+            ${safeText(statusLabel(record.status))}
           </span>
         </p>
 
-        <p><strong>บริษัท:</strong> ${safeText(r.company)}</p>
-        <p><strong>ผู้ขอ:</strong> ${safeText(r.applicant_name)}</p>
-        <p><strong>รหัสผู้รับเหมา:</strong> ${safeText(r.employee_id)}</p>
-        <p><strong>อีเมล:</strong> ${safeText(r.applicant_email)}</p>
-        <p><strong>พื้นที่ทำงาน:</strong>
-          ${safeText(display('q14') === 'อื่นๆ'
-            ? display('q14_other')
-            : display('q14'))}
+        <p>
+          <strong>บริษัท:</strong>
+          ${safeText(record.company)}
         </p>
-        <p><strong>วันที่ทำงาน:</strong>
-          ${safeText(display('q15'))} ถึง ${safeText(display('q16'))}
+
+        <p>
+          <strong>ผู้ขอ:</strong>
+          ${safeText(record.applicant_name)}
         </p>
-        <p><strong>จำนวนผู้ปฏิบัติงาน:</strong>
+
+        <p>
+          <strong>รหัสผู้รับเหมา:</strong>
+          ${safeText(record.employee_id)}
+        </p>
+
+        <p>
+          <strong>อีเมล:</strong>
+          ${safeText(record.applicant_email)}
+        </p>
+
+        <p>
+          <strong>พื้นที่ทำงาน:</strong>
+          ${safeText(area)}
+        </p>
+
+        <p>
+          <strong>วันที่ทำงาน:</strong>
+          ${safeText(display('q15'))}
+          ถึง
+          ${safeText(display('q16'))}
+        </p>
+
+        <p>
+          <strong>จำนวนผู้ปฏิบัติงาน:</strong>
           ${safeText(display('q12'))}
         </p>
-        <p><strong>รายชื่อผู้ปฏิบัติงาน:</strong>
+
+        <p>
+          <strong>รายชื่อผู้ปฏิบัติงาน:</strong>
           ${safeText(display('q13'))}
         </p>
-        <p><strong>อันตราย:</strong>
-          ${safeText(display('q17'))}
-          ${safeText(data.q17_other || '')}
+
+        <p>
+          <strong>อันตราย:</strong>
+          ${safeText(hazards)}
         </p>
-        <p><strong>PPE:</strong>
-          ${safeText(display('q20'))}
-          ${safeText(data.q20_other || '')}
+
+        <p>
+          <strong>PPE:</strong>
+          ${safeText(ppe)}
         </p>
 
         <details>
@@ -1133,71 +1491,103 @@ function renderSafetyList() {
 
           ${Object.entries(data)
             .filter(function(entry) {
-              return entry[0] !== 'wp_no' && entry[1] !== '';
+              return entry[0] !== 'wp_no' &&
+                entry[1] !== '';
             })
             .map(function(entry) {
               let value = entry[1];
 
-              if (Array.isArray(value)) value = value.join(', ');
-              else if (value && typeof value === 'object') {
+              if (Array.isArray(value)) {
+                value = value.join(', ');
+              } else if (value && typeof value === 'object') {
                 value = value.fileName || '';
               }
 
-              return `<p><strong>${safeText(entry[0])}:</strong>
-                ${safeText(value)}</p>`;
+              return `
+                <p>
+                  <strong>${safeText(entry[0])}:</strong>
+                  ${safeText(value)}
+                </p>
+              `;
             }).join('')}
         </details>
 
         <hr>
 
-        <p><strong>หมายเหตุ Safety:</strong>
-          ${safeText(r.safety_comment || 'ไม่มี')}
+        <p>
+          <strong>หมายเหตุ Safety:</strong>
+          ${safeText(record.safety_comment || 'ไม่มี')}
         </p>
 
-        ${canReview ? `
-          <div class="form-group">
-            <label>ชื่อผู้พิจารณา</label>
-            <input type="text" id="reviewer-${safeText(r.id)}"
-              placeholder="ชื่อ Safety">
-          </div>
+        ${
+          canReview
+          ? `
+            <div class="form-group">
+              <label for="reviewer-${safeText(record.id)}">
+                ชื่อผู้พิจารณา
+              </label>
 
-          <div class="form-group">
-            <label>เหตุผล/หมายเหตุ</label>
-            <textarea id="comment-${safeText(r.id)}" rows="3"
-              placeholder="ระบุเหตุผลหรือสิ่งที่ต้องแก้ไข"></textarea>
-          </div>
+              <input type="text"
+                id="reviewer-${safeText(record.id)}"
+                placeholder="ชื่อ Safety">
+            </div>
 
-          <div class="actions">
-            <button class="btn btn-success"
-              onclick="reviewRequest('${safeText(r.id)}','Approved')">
-              อนุมัติ
-            </button>
+            <div class="form-group">
+              <label for="comment-${safeText(record.id)}">
+                เหตุผล/หมายเหตุ
+              </label>
 
-            <button class="btn btn-danger"
-              onclick="reviewRequest('${safeText(r.id)}','Rejected')">
-              ไม่อนุมัติ
-            </button>
+              <textarea
+                id="comment-${safeText(record.id)}"
+                rows="3"
+                placeholder="ระบุเหตุผลหรือสิ่งที่ต้องแก้ไข"></textarea>
+            </div>
 
-            <button class="btn btn-warning"
-              onclick="reviewRequest('${safeText(r.id)}','Revision')">
-              ส่งกลับแก้ไข
-            </button>
-          </div>
-        ` : `
-          <p class="muted">
-            ผู้พิจารณา: ${safeText(r.reviewed_by || '-')} |
-            เวลา: ${safeText(formatDate(r.reviewed_at))}
-          </p>
-        `}
+            <div class="actions">
+
+              <button type="button"
+                class="btn btn-success"
+                onclick="reviewRequest('${safeText(record.id)}','Approved')">
+                อนุมัติ
+              </button>
+
+              <button type="button"
+                class="btn btn-danger"
+                onclick="reviewRequest('${safeText(record.id)}','Rejected')">
+                ไม่อนุมัติ
+              </button>
+
+              <button type="button"
+                class="btn btn-warning"
+                onclick="reviewRequest('${safeText(record.id)}','Revision')">
+                ส่งกลับแก้ไข
+              </button>
+
+            </div>
+          `
+          : `
+            <p class="muted">
+              ผู้พิจารณา: ${safeText(record.reviewed_by || '-')}
+              |
+              เวลา: ${safeText(formatDate(record.reviewed_at))}
+            </p>
+          `
+        }
+
       </article>
     `;
   }).join('');
 }
 
+/* ================================================== */
+/* SAFETY REVIEW ACTION                               */
+/* ================================================== */
+
 function reviewRequest(id, status) {
   const requests = getRequests();
-  const record = requests.find(function(r) {
-    return r.id === id;
+
+  const record = requests.find(function(item) {
+    return item.id === id;
   });
 
   if (!record) {
@@ -1205,18 +1595,29 @@ function reviewRequest(id, status) {
     return;
   }
 
-  const reviewerInput = document.getElementById('reviewer-' + id);
-  const commentInput = document.getElementById('comment-' + id);
+  const reviewerInput =
+    document.getElementById('reviewer-' + id);
 
-  const reviewer = reviewerInput ? reviewerInput.value.trim() : '';
-  const comment = commentInput ? commentInput.value.trim() : '';
+  const commentInput =
+    document.getElementById('comment-' + id);
+
+  const reviewer = reviewerInput
+    ? reviewerInput.value.trim()
+    : '';
+
+  const comment = commentInput
+    ? commentInput.value.trim()
+    : '';
 
   if (!reviewer) {
     alert('กรุณาระบุชื่อผู้พิจารณา');
     return;
   }
 
-  if ((status === 'Rejected' || status === 'Revision') && !comment) {
+  if (
+    (status === 'Rejected' || status === 'Revision') &&
+    !comment
+  ) {
     alert('กรุณาระบุเหตุผลก่อนดำเนินการ');
     return;
   }
@@ -1234,7 +1635,17 @@ function reviewRequest(id, status) {
     '\nหมายเหตุ: ยังไม่ได้บันทึกบนฐานข้อมูลออนไลน์หรือส่งอีเมล'
   );
 }
+
+/* ================================================== */
+/* INITIALIZATION                                     */
+/* ================================================== */
+
+window.addEventListener('DOMContentLoaded', function() {
+  generateWPNo();
+  refreshOtherFields();
+});
 </script>
 
 </body>
 </html>
+
