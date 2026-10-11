@@ -7,109 +7,93 @@
 
 <style>
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, Tahoma, sans-serif;
+  box-sizing: border-box;
+  font-family: Arial, Tahoma, sans-serif;
 }
 
 body {
-    display: flex;
-    min-height: 100vh;
-    background: #f1f5f9;
-    color: #1e293b;
+  margin: 0;
+  background: #f0f4f8;
+  color: #1e293b;
 }
 
 .sidebar {
-    width: 230px;
-    background: #0f172a;
-    color: white;
-    padding: 22px 0;
-    flex-shrink: 0;
+  background: #0f172a;
+  color: white;
+  padding: 15px;
 }
 
 .sidebar h2 {
-    padding: 0 18px 20px;
-    font-size: 19px;
-    border-bottom: 1px solid #334155;
+  color: #38bdf8;
+  text-align: center;
+}
+
+.sidebar-menu {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .menu-item {
-    display: block;
-    width: calc(100% - 15px);
-    padding: 14px 20px;
-    margin-top: 8px;
-    border: none;
-    border-radius: 0 20px 20px 0;
-    background: transparent;
-    color: #cbd5e1;
-    text-align: left;
-    font-size: 14px;
-    cursor: pointer;
+  border: 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: transparent;
+  color: white;
+  cursor: pointer;
 }
 
-.menu-item:hover,
 .menu-item.active {
-    background: #0284c7;
-    color: white;
+  background: #0284c7;
 }
 
 .main-content {
-    flex: 1;
-    min-width: 0;
-    padding: 28px;
+  padding: 15px;
 }
 
 .card-container {
-    max-width: 1000px;
-    margin: 0 auto 24px;
-    padding: 28px;
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    box-shadow: 0 4px 18px #00000008;
+  max-width: 950px;
+  margin: 0 auto 20px;
+  background: white;
+  padding: 22px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
 }
 
 .page-title {
-    margin-bottom: 22px;
-    text-align: center;
-    font-size: 23px;
-    color: #0f172a;
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 25px;
 }
 
 .section-title {
-    margin: 26px 0 15px;
-    padding-left: 10px;
-    border-left: 4px solid #0284c7;
-    color: #0369a1;
-    font-size: 16px;
-    font-weight: bold;
+  color: #0369a1;
+  font-size: 19px;
+  font-weight: bold;
+  border-left: 5px solid #0284c7;
+  padding-left: 12px;
+  margin: 28px 0 18px;
 }
 
 .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
 }
 
 .form-group {
-    min-width: 0;
-}
-
-.full-width {
-    grid-column: 1 / -1;
+  min-width: 0;
 }
 
 label {
-    display: block;
-    margin-bottom: 7px;
-    color: #334155;
-    font-size: 13px;
-    font-weight: bold;
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  line-height: 1.5;
 }
 
-.required {
-    color: #dc2626;
+.req {
+  color: red;
 }
 
 input[type="text"],
@@ -119,275 +103,220 @@ input[type="date"],
 input[type="file"],
 textarea,
 select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    background: white;
-    color: #1e293b;
-    font-size: 14px;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-    outline: none;
-    border-color: #0284c7;
-    box-shadow: 0 0 0 2px #0284c722;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 16px;
+  background: white;
 }
 
 input[readonly] {
-    background: #f1f5f9;
-    color: #0284c7;
-    font-weight: bold;
+  background: #f1f5f9;
+  color: #0284c7;
+  font-weight: bold;
 }
 
 .options-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .option-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: normal;
-    cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: normal;
+  cursor: pointer;
 }
 
 .option-label input {
-    flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
 }
 
 .other-input {
-    width: calc(100% - 24px) !important;
-    margin: 4px 0 8px 24px;
+  display: block;
+  margin: 5px 0 12px 28px;
+  width: calc(100% - 28px) !important;
 }
 
 .hidden {
-    display: none !important;
+  display: none !important;
 }
 
-.btn {
-    padding: 11px 16px;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-.btn-primary {
-    background: #0284c7;
-    color: white;
-}
-
-.btn-primary:hover {
-    background: #0369a1;
-}
-
-.btn-success {
-    background: #15803d;
-    color: white;
-}
-
-.btn-danger {
-    background: #dc2626;
-    color: white;
-}
-
-.btn-warning {
-    background: #d97706;
-    color: white;
-}
-
-.btn-submit {
-    width: 100%;
-    margin-top: 25px;
-    padding: 14px;
-    font-size: 16px;
+.notice,
+.warning {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  line-height: 1.6;
+  font-size: 14px;
 }
 
 .notice {
-    margin-bottom: 18px;
-    padding: 13px;
-    border: 1px solid #bfdbfe;
-    border-radius: 7px;
-    background: #eff6ff;
-    color: #1d4ed8;
-    font-size: 13px;
-    line-height: 1.6;
+  background: #eff6ff;
+  color: #1d4ed8;
 }
 
 .warning {
-    margin-bottom: 18px;
-    padding: 13px;
-    border: 1px solid #fed7aa;
-    border-radius: 7px;
-    background: #fff7ed;
-    color: #9a3412;
-    font-size: 13px;
-    line-height: 1.6;
+  background: #fff7ed;
+  color: #9a3412;
 }
 
-.file-hint,
-.muted {
-    margin-top: 5px;
-    color: #64748b;
-    font-size: 12px;
-    line-height: 1.5;
+.btn {
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 7px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-.tab-switch {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 18px;
-    padding: 4px;
-    border-radius: 8px;
-    background: #f1f5f9;
+.btn-primary {
+  background: #0284c7;
+  color: white;
+}
+
+.btn-success {
+  background: #15803d;
+  color: white;
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: white;
+}
+
+.btn-warning {
+  background: #d97706;
+  color: white;
+}
+
+.btn-submit {
+  width: 100%;
+  margin-top: 24px;
+}
+
+.tab-switch,
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 15px 0;
 }
 
 .tab-btn {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    border-radius: 6px;
-    background: transparent;
-    color: #64748b;
-    cursor: pointer;
+  padding: 10px;
+  border: 0;
+  border-radius: 6px;
+  background: #e2e8f0;
+  cursor: pointer;
 }
 
 .tab-btn.active {
-    background: white;
-    color: #0284c7;
-    font-weight: bold;
-}
-
-.status {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.status-Pending {
-    background: #fef3c7;
-    color: #92400e;
-}
-
-.status-Approved {
-    background: #dcfce7;
-    color: #166534;
-}
-
-.status-Rejected {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-.status-Revision {
-    background: #ffedd5;
-    color: #9a3412;
+  background: #0284c7;
+  color: white;
 }
 
 .record {
-    margin-top: 14px;
-    padding: 16px;
-    border: 1px solid #e2e8f0;
-    border-radius: 9px;
-    overflow-wrap: anywhere;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  padding: 15px;
+  margin-top: 15px;
+  overflow-wrap: anywhere;
 }
 
-.record p {
-    margin: 7px 0;
-    font-size: 13px;
-    line-height: 1.5;
+.status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
 }
 
-.record-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 12px;
+.status-Pending {
+  background: #fef3c7;
+  color: #92400e;
 }
 
-.record-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
+.status-Approved {
+  background: #dcfce7;
+  color: #166534;
 }
 
-.actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 14px;
+.status-Rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.status-Revision {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
+.muted {
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 .empty {
-    padding: 25px;
-    border: 1px dashed #cbd5e1;
-    border-radius: 8px;
-    color: #64748b;
-    text-align: center;
+  padding: 20px;
+  text-align: center;
+  background: #f8fafc;
+  border-radius: 8px;
 }
 
-hr {
-    margin: 15px 0;
-    border: 0;
-    border-top: 1px solid #e2e8f0;
+.record-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
 }
 
-@media (max-width: 760px) {
-    body {
-        flex-direction: column;
-    }
+textarea {
+  resize: vertical;
+}
 
-    .sidebar {
-        width: 100%;
-        padding: 12px;
-    }
+@media (min-width: 768px) {
+  body {
+    display: flex;
+  }
 
-    .sidebar h2 {
-        padding: 8px 8px 15px;
-        text-align: center;
-    }
+  .sidebar {
+    width: 240px;
+    min-height: 100vh;
+    flex-shrink: 0;
+  }
 
-    .sidebar nav {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
-    }
+  .sidebar-menu {
+    flex-direction: column;
+  }
 
-    .menu-item {
-        width: auto;
-        flex: 1;
-        margin: 0;
-        padding: 11px 8px;
-        border-radius: 6px;
-        text-align: center;
-    }
+  .menu-item {
+    text-align: left;
+  }
 
-    .main-content {
-        padding: 12px;
-    }
+  .main-content {
+    flex: 1;
+    padding: 30px;
+    min-width: 0;
+  }
 
-    .card-container {
-        padding: 17px;
-    }
+  .card-container {
+    padding: 30px;
+  }
 
-    .form-grid,
-    .record-grid {
-        grid-template-columns: 1fr;
-    }
+  .form-grid,
+  .record-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 
-    .page-title {
-        font-size: 20px;
-    }
+  .full-width {
+    grid-column: 1 / -1;
+  }
 }
 </style>
 </head>
@@ -395,790 +324,915 @@ hr {
 <body>
 
 <aside class="sidebar">
-    <h2>AUDI WORK PERMIT</h2>
+  <h2>AUDI WORK PERMIT</h2>
 
-    <nav>
-        <button class="menu-item active" id="menu-form"
-                onclick="switchPage('form')">กรอกคำขอ</button>
+  <nav class="sidebar-menu">
+    <button class="menu-item active" id="menu-form"
+      onclick="switchPage('form')">กรอกคำขอ</button>
 
-        <button class="menu-item" id="menu-track"
-                onclick="switchPage('track')">ติดตามผล</button>
+    <button class="menu-item" id="menu-track"
+      onclick="switchPage('track')">ติดตามผล</button>
 
-        <button class="menu-item" id="menu-safety"
-                onclick="switchPage('safety')">Safety Approval</button>
-    </nav>
+    <button class="menu-item" id="menu-safety"
+      onclick="switchPage('safety')">Safety Approval</button>
+  </nav>
 </aside>
 
 <main class="main-content">
 
-<!-- ==================== FORM PAGE ==================== -->
-
 <section id="page-form" class="card-container">
-    <h1 class="page-title">ระบบกรอกคำขอ Work Permit</h1>
 
-    <div class="warning">
-        <strong>รุ่นทดสอบ:</strong>
-        ข้อมูลจะถูกเก็บไว้ในเบราว์เซอร์เครื่องนี้เท่านั้น
-        ยังไม่ได้เชื่อมต่อฐานข้อมูลออนไลน์หรือระบบอัปโหลดไฟล์จริง
-    </div>
+<h1 class="page-title">ระบบกรอกคำขอ Work Permit</h1>
 
-    <form id="workPermitForm">
+<div class="warning">
+<strong>หมายเหตุ:</strong>
+เวอร์ชันนี้เป็นต้นแบบ ข้อมูลเก็บในเบราว์เซอร์ของเครื่องที่ใช้งาน
+ยังไม่ได้เชื่อมฐานข้อมูลออนไลน์หรืออัปโหลดไฟล์จริง
+</div>
 
-        <div class="form-group full-width">
-            <label>เลขที่ใบอนุญาตทำงาน (Work Permit No.)</label>
-            <input type="text" id="wp_no" name="wp_no" readonly required>
-        </div>
+<form id="workPermitForm">
 
-        <div class="section-title">ข้อมูลผู้ขออนุญาต</div>
+<div class="form-group">
+<label>เลขที่ใบอนุญาตทำงาน (Work Permit No.)
+<span class="req">*</span></label>
+<input type="text" id="wp_no" name="wp_no" readonly required>
+</div>
 
-        <div class="form-grid">
+<div class="section-title">ข้อมูลผู้ขออนุญาต</div>
 
-            <div class="form-group full-width">
-                <label>1. ชื่อบริษัท <span class="required">*</span></label>
-                <input type="text" name="q1" required>
-            </div>
+<div class="form-grid">
 
-            <div class="form-group full-width">
-                <label>2. ชื่อ-นามสกุล <span class="required">*</span></label>
-                <input type="text" name="q2" required>
-            </div>
+<div class="form-group full-width">
+<label>1. ชื่อบริษัท <span class="req">*</span></label>
+<input type="text" name="q1" required placeholder="ใส่คำตอบ">
+</div>
 
-            <div class="form-group full-width">
-                <label>3. รหัสพนักงาน/ผู้รับเหมา <span class="required">*</span></label>
-                <input type="text" name="q3" required>
-            </div>
+<div class="form-group full-width">
+<label>2. ชื่อ-นามสกุล <span class="req">*</span></label>
+<input type="text" name="q2" required placeholder="ใส่คำตอบ">
+</div>
 
-            <div class="form-group full-width">
-                <label>4. Outlook บริษัท <span class="required">*</span></label>
-                <input type="email" name="q4" required placeholder="name@company.com">
-            </div>
+<div class="form-group full-width">
+<label>3. รหัสพนักงาน/ผู้รับเหมา <span class="req">*</span></label>
+<input type="text" name="q3" required placeholder="ใส่คำตอบ">
+</div>
 
-            <div class="form-group full-width">
-                <label>5. แผนก <span class="required">*</span></label>
+<div class="form-group full-width">
+<label>4. email  <span class="req">*</span></label>
+<input type="email" name="q4" required placeholder="name@company.com">
+</div>
 
-                <div class="options-group">
-                    <label class="option-label">
-                        <input type="radio" name="q5" value="Production" required> Production
-                    </label>
-                    <label class="option-label">
-                        <input type="radio" name="q5" value="Maintenance"> Maintenance
-                    </label>
-                    <label class="option-label">
-                        <input type="radio" name="q5" value="Warehouse"> Warehouse
-                    </label>
-                    <label class="option-label">
-                        <input type="radio" name="q5" value="Engineering"> Engineering
-                    </label>
-                    <label class="option-label">
-                        <input type="radio" name="q5" value="QC"> QC
-                    </label>
-                    <label class="option-label">
-                        <input type="radio" name="q5" value="อื่นๆ"
-                               onchange="toggleRadioOther('q5','q5_other')"> อื่นๆ
-                    </label>
-                    <input class="other-input hidden" type="text" id="q5_other"
-                           name="q5_other" placeholder="โปรดระบุแผนก">
-                </div>
-            </div>
+<div class="form-group full-width">
+<label>5. แผนก <span class="req">*</span></label>
 
-            <div class="form-group full-width">
-                <label>6. ตำแหน่งงาน <span class="required">*</span></label>
-                <input type="text" name="q6" required>
-            </div>
+<div class="options-group">
+<label class="option-label">
+<input type="radio" name="q5" value="Production" required>
+Production
+</label>
 
-        </div>
+<label class="option-label">
+<input type="radio" name="q5" value="Maintenance">
+Maintenance
+</label>
 
-        <div class="section-title">Safety Training</div>
+<label class="option-label">
+<input type="radio" name="q5" value="Warehouse">
+Warehouse
+</label>
 
-        <div class="form-grid">
+<label class="option-label">
+<input type="radio" name="q5" value="Engineering">
+Engineering
+</label>
 
-            <div class="form-group full-width">
-                <label>7. ผ่านการอบรมมาตรฐานความปลอดภัย <span class="required">*</span></label>
-                <div class="options-group">
-                    <label class="option-label">
-                        <input type="radio" name="q7" value="ผ่าน" required> ผ่าน
-                    </label>
-                    <label class="option-label">
-                        <input type="radio" name="q7" value="ไม่ผ่าน"> ไม่ผ่าน
-                    </label>
-                </div>
-            </div>
+<label class="option-label">
+<input type="radio" name="q5" value="QC">
+QC
+</label>
 
-            <div class="form-group full-width">
-                <label>8. ใบรับรองผ่านการอบรมด้านความปลอดภัย <span class="required">*</span></label>
-                <div class="options-group">
-                    <label class="option-label"><input type="checkbox" name="q8" value="Fire Safety"> Fire Safety</label>
-                    <label class="option-label"><input type="checkbox" name="q8" value="Work at Height"> Work at Height</label>
-                    <label class="option-label"><input type="checkbox" name="q8" value="Confined Space"> Confined Space</label>
-                    <label class="option-label"><input type="checkbox" name="q8" value="Hot Work"> Hot Work</label>
-                    <label class="option-label"><input type="checkbox" name="q8" value="Electrical Work"> Electrical Work</label>
-                    <label class="option-label"><input type="checkbox" name="q8" value="Forklift"> Forklift</label>
-                    <label class="option-label">
-                        <input type="checkbox" id="q8_other_cb" name="q8" value="อื่นๆ"
-                               onchange="toggleCheckboxOther('q8_other_cb','q8_other')"> อื่นๆ
-                    </label>
-                    <input class="other-input hidden" type="text" id="q8_other"
-                           name="q8_other" placeholder="โปรดระบุใบรับรองอื่นๆ">
-                </div>
-            </div>
+<label class="option-label">
+<input type="radio" name="q5" value="อื่นๆ"
+onchange="toggleRadioOther('q5')">
+อื่นๆ
+</label>
 
-            <div class="form-group full-width">
-                <label>9. หลักฐานการอบรมมาตรฐานความปลอดภัย</label>
-                <input type="file" name="q9" accept="image/*,.pdf">
-                <div class="file-hint">เลือกไฟล์ภาพหรือ PDF ได้ 1 ไฟล์</div>
-            </div>
+<input type="text" id="q5_other" name="q5_other"
+class="other-input hidden" placeholder="โปรดระบุแผนก">
+</div>
+</div>
 
-        </div>
+<div class="form-group full-width">
+<label>6. ตำแหน่งงาน <span class="req">*</span></label>
+<input type="text" name="q6" required placeholder="ใส่คำตอบ">
+</div>
 
-        <div class="section-title">Smart Work Permit</div>
+</div>
 
-        <div class="form-grid">
+<div class="section-title">Safety Training</div>
 
-            <div class="form-group full-width">
-                <label>10. ชื่อผู้ขอ Work Permit <span class="required">*</span></label>
-                <input type="text" name="q10" required>
-            </div>
+<div class="form-grid">
 
-            <div class="form-group">
-                <label>11. บริษัท <span class="required">*</span></label>
-                <input type="text" name="q11" required>
-            </div>
+<div class="form-group full-width">
+<label>7. ผ่านการอบรมมาตรฐานความปลอดภัย
+<span class="req">*</span></label>
 
-            <div class="form-group">
-                <label>12. จำนวนผู้ปฏิบัติงาน <span class="required">*</span></label>
-                <input type="number" name="q12" min="1" required>
-            </div>
+<div class="options-group">
+<label class="option-label">
+<input type="radio" name="q7" value="ผ่าน" required> ผ่าน
+</label>
+<label class="option-label">
+<input type="radio" name="q7" value="ไม่ผ่าน"> ไม่ผ่าน
+</label>
+</div>
+</div>
 
-            <div class="form-group full-width">
-                <label>13. รายชื่อผู้ปฏิบัติงาน <span class="required">*</span></label>
-                <textarea name="q13" rows="3" required></textarea>
-            </div>
+<div class="form-group full-width">
+<label>8. ใบรับรองผ่านการอบรมด้านความปลอดภัย
+<span class="req">*</span></label>
 
-            <div class="form-group full-width">
-                <label>14. พื้นที่การทำงาน <span class="required">*</span></label>
-                <div class="options-group">
-                    <label class="option-label"><input type="radio" name="q14" value="Production Area" required> Production Area</label>
-                    <label class="option-label"><input type="radio" name="q14" value="Warehouse"> Warehouse</label>
-                    <label class="option-label"><input type="radio" name="q14" value="Roof"> Roof</label>
-                    <label class="option-label"><input type="radio" name="q14" value="Maintenance Area"> Maintenance Area</label>
-                    <label class="option-label"><input type="radio" name="q14" value="Utility Area"> Utility Area</label>
-                    <label class="option-label"><input type="radio" name="q14" value="Confined Space Area"> Confined Space Area</label>
-                    <label class="option-label">
-                        <input type="radio" name="q14" value="อื่นๆ"
-                               onchange="toggleRadioOther('q14','q14_other')"> อื่นๆ
-                    </label>
-                    <input class="other-input hidden" type="text" id="q14_other"
-                           name="q14_other" placeholder="โปรดระบุพื้นที่ทำงาน">
-                </div>
-            </div>
+<div class="options-group">
+<label class="option-label">
+<input type="checkbox" name="q8" value="Fire Safety"> Fire Safety
+</label>
+<label class="option-label">
+<input type="checkbox" name="q8" value="Work at Height"> Work at Height
+</label>
+<label class="option-label">
+<input type="checkbox" name="q8" value="Confined Space"> Confined Space
+</label>
+<label class="option-label">
+<input type="checkbox" name="q8" value="Hot Work"> Hot Work
+</label>
+<label class="option-label">
+<input type="checkbox" name="q8" value="Electrical Work"> Electrical Work
+</label>
+<label class="option-label">
+<input type="checkbox" name="q8" value="Forklift"> Forklift
+</label>
+<label class="option-label">
+<input type="checkbox" id="q8_other_cb" name="q8" value="อื่นๆ"
+onchange="toggleCheckboxOther('q8_other_cb','q8_other')">
+อื่นๆ
+</label>
+<input type="text" id="q8_other" name="q8_other"
+class="other-input hidden" placeholder="โปรดระบุใบรับรอง">
+</div>
+</div>
 
-            <div class="form-group">
-                <label>15. วันที่เริ่มงาน <span class="required">*</span></label>
-                <input type="date" name="q15" required>
-            </div>
+<div class="form-group full-width">
+<label>9. หลักฐานการอบรมมาตรฐานความปลอดภัย</label>
+<input type="file" name="q9" accept="image/*,.pdf">
+<p class="muted">เลือกไฟล์ได้ 1 ไฟล์ ขนาดไม่เกิน 10MB
+(ยังไม่อัปโหลดขึ้นระบบออนไลน์)</p>
+</div>
 
-            <div class="form-group">
-                <label>16. วันที่สิ้นสุดงาน <span class="required">*</span></label>
-                <input type="date" name="q16" required>
-            </div>
+</div>
 
-        </div>
+<div class="section-title">Smart Work Permit</div>
 
-        <div class="section-title">อันตรายและการควบคุม</div>
+<div class="form-grid">
 
-        <div class="form-grid">
+<div class="form-group full-width">
+<label>10. ชื่อผู้ขอ Work Permit <span class="req">*</span></label>
+<input type="text" name="q10" required placeholder="ใส่คำตอบ">
+</div>
 
-            <div class="form-group full-width">
-                <label>17. อันตรายที่คาดว่าจะพบ <span class="required">*</span></label>
-                <div class="options-group">
-                    <label class="option-label"><input type="checkbox" name="q17" value="Fire"> Fire</label>
-                    <label class="option-label"><input type="checkbox" name="q17" value="Fall from Height"> Fall from Height</label>
-                    <label class="option-label"><input type="checkbox" name="q17" value="Electrical"> Electrical</label>
-                    <label class="option-label"><input type="checkbox" name="q17" value="Chemical"> Chemical</label>
-                    <label class="option-label"><input type="checkbox" name="q17" value="Falling Object"> Falling Object</label>
-                    <label class="option-label"><input type="checkbox" name="q17" value="Confined Space"> Confined Space</label>
-                    <label class="option-label"><input type="checkbox" name="q17" value="Machine"> Machine</label>
-                    <label class="option-label"><input type="checkbox" name="q17" value="Noise"> Noise</label>
-                    <label class="option-label">
-                        <input type="checkbox" id="q17_other_cb" name="q17" value="อื่นๆ"
-                               onchange="toggleCheckboxOther('q17_other_cb','q17_other')"> อื่นๆ
-                    </label>
-                    <input class="other-input hidden" type="text" id="q17_other"
-                           name="q17_other" placeholder="โปรดระบุอันตรายอื่นๆ">
-                </div>
-            </div>
+<div class="form-group">
+<label>11. บริษัท <span class="req">*</span></label>
+<input type="text" name="q11" required placeholder="ใส่คำตอบ">
+</div>
 
-            <div class="form-group full-width">
-                <label>18. มาตรการควบคุม <span class="required">*</span></label>
-                <textarea name="q18" rows="3" required></textarea>
-            </div>
+<div class="form-group">
+<label>12. จำนวนผู้ปฏิบัติงาน <span class="req">*</span></label>
+<input type="number" name="q12" min="1" required placeholder="ใส่จำนวน">
+</div>
 
-            <div class="form-group full-width">
-                <label>19. เอกสารควบคุมมาตรการ</label>
-                <input type="file" name="q19" accept="image/*,.pdf">
-                <div class="file-hint">เลือกไฟล์ภาพหรือ PDF ได้ 1 ไฟล์</div>
-            </div>
+<div class="form-group full-width">
+<label>13. รายชื่อผู้ปฏิบัติงาน <span class="req">*</span></label>
+<textarea name="q13" rows="3" required placeholder="ใส่รายชื่อผู้ปฏิบัติงาน"></textarea>
+</div>
 
-        </div>
+<div class="form-group full-width">
+<label>14. พื้นที่การทำงาน <span class="req">*</span></label>
 
-        <div class="section-title">PPE & Site Readiness Checklist</div>
+<div class="options-group">
+<label class="option-label">
+<input type="radio" name="q14" value="Production Area" required>
+Production Area
+</label>
+<label class="option-label">
+<input type="radio" name="q14" value="Warehouse"> Warehouse
+</label>
+<label class="option-label">
+<input type="radio" name="q14" value="Roof"> Roof
+</label>
+<label class="option-label">
+<input type="radio" name="q14" value="Maintenance Area"> Maintenance Area
+</label>
+<label class="option-label">
+<input type="radio" name="q14" value="Utility Area"> Utility Area
+</label>
+<label class="option-label">
+<input type="radio" name="q14" value="Confined Space Area"> Confined Space Area
+</label>
+<label class="option-label">
+<input type="radio" name="q14" value="อื่นๆ"
+onchange="toggleRadioOther('q14')"> อื่นๆ
+</label>
 
-        <div class="form-grid">
+<input type="text" id="q14_other" name="q14_other"
+class="other-input hidden" placeholder="โปรดระบุพื้นที่การทำงาน">
+</div>
+</div>
 
-            <div class="form-group full-width">
-                <label>20. PPE ที่ต้องใช้ <span class="required">*</span></label>
-                <div class="options-group">
-                    <label class="option-label"><input type="checkbox" name="q20" value="Safety Helmet"> Safety Helmet</label>
-                    <label class="option-label"><input type="checkbox" name="q20" value="Safety Shoes"> Safety Shoes</label>
-                    <label class="option-label"><input type="checkbox" name="q20" value="Face Shield"> Face Shield</label>
-                    <label class="option-label"><input type="checkbox" name="q20" value="Safety Glasses"> Safety Glasses</label>
-                    <label class="option-label"><input type="checkbox" name="q20" value="Gloves"> Gloves</label>
-                    <label class="option-label"><input type="checkbox" name="q20" value="Full Body Harness"> Full Body Harness</label>
-                    <label class="option-label"><input type="checkbox" name="q20" value="Respirator"> Respirator</label>
-                    <label class="option-label">
-                        <input type="checkbox" id="q20_other_cb" name="q20" value="อื่นๆ"
-                               onchange="toggleCheckboxOther('q20_other_cb','q20_other')"> อื่นๆ
-                    </label>
-                    <input class="other-input hidden" type="text" id="q20_other"
-                           name="q20_other" placeholder="โปรดระบุ PPE อื่นๆ">
-                </div>
-            </div>
+<div class="form-group">
+<label>15. วันที่เริ่มงาน <span class="req">*</span></label>
+<input type="date" name="q15" required>
+</div>
 
-            <div class="form-group full-width">
-                <label>21. มี Work Permit ที่เกี่ยวข้องหรือไม่? <span class="required">*</span></label>
-                <div class="options-group">
-                    <label class="option-label"><input type="radio" name="q21" value="มี" required> มี</label>
-                    <label class="option-label"><input type="radio" name="q21" value="ไม่มี"> ไม่มี</label>
-                </div>
-            </div>
+<div class="form-group">
+<label>16. วันที่สิ้นสุดงาน <span class="req">*</span></label>
+<input type="date" name="q16" required>
+</div>
 
-            <div class="form-group full-width">
-                <label>22. PPE พร้อมใช้งานหรือไม่ <span class="required">*</span></label>
-                <div class="options-group">
-                    <label class="option-label"><input type="radio" name="q22" value="พร้อม" required> พร้อม</label>
-                    <label class="option-label"><input type="radio" name="q22" value="ไม่พร้อม"> ไม่พร้อม</label>
-                </div>
-            </div>
+</div>
 
-            <div class="form-group full-width">
-                <label>23. อุปกรณ์/เครื่องมือผ่านการตรวจสอบหรือไม่ <span class="required">*</span></label>
-                <div class="options-group">
-                    <label class="option-label"><input type="radio" name="q23" value="ผ่าน" required> ผ่าน</label>
-                    <label class="option-label"><input type="radio" name="q23" value="ไม่ผ่าน"> ไม่ผ่าน</label>
-                </div>
-            </div>
+<div class="section-title">อันตรายและการควบคุม</div>
 
-            <div class="form-group full-width">
-                <label>24. มีผู้ควบคุมงานหรือไม่ <span class="required">*</span></label>
-                <div class="options-group">
-                    <label class="option-label"><input type="radio" name="q24" value="มี" required> มี</label>
-                    <label class="option-label"><input type="radio" name="q24" value="ไม่มี"> ไม่มี</label>
-                </div>
-            </div>
+<div class="form-grid">
 
-        </div>
+<div class="form-group full-width">
+<label>17. อันตรายที่คาดว่าจะพบ <span class="req">*</span></label>
 
-        <div class="section-title">ผู้รับผิดชอบการปฏิบัติงาน</div>
+<div class="options-group">
+<label class="option-label">
+<input type="checkbox" name="q17" value="Fire"> Fire
+</label>
+<label class="option-label">
+<input type="checkbox" name="q17" value="Fall from Height"> Fall from Height
+</label>
+<label class="option-label">
+<input type="checkbox" name="q17" value="Electrical"> Electrical
+</label>
+<label class="option-label">
+<input type="checkbox" name="q17" value="Chemical"> Chemical
+</label>
+<label class="option-label">
+<input type="checkbox" name="q17" value="Falling Object"> Falling Object
+</label>
+<label class="option-label">
+<input type="checkbox" name="q17" value="Confined Space"> Confined Space
+</label>
+<label class="option-label">
+<input type="checkbox" name="q17" value="Machine"> Machine
+</label>
+<label class="option-label">
+<input type="checkbox" name="q17" value="Noise"> Noise
+</label>
+<label class="option-label">
+<input type="checkbox" id="q17_other_cb" name="q17" value="อื่นๆ"
+onchange="toggleCheckboxOther('q17_other_cb','q17_other')">
+อื่นๆ
+</label>
 
-        <div class="form-grid">
+<input type="text" id="q17_other" name="q17_other"
+class="other-input hidden" placeholder="โปรดระบุอันตรายเพิ่มเติม">
+</div>
+</div>
 
-            <div class="form-group full-width">
-                <label>25. ชื่อผู้รับผิดชอบ <span class="required">*</span></label>
-                <input type="text" name="q25" required>
-            </div>
+</div>
 
-            <div class="form-group full-width">
-                <label>26. เบอร์ติดต่อ <span class="required">*</span></label>
-                <input type="text" name="q26" required>
-            </div>
+<div class="section-title">PPE & Site Readiness Checklist</div>
 
-            <div class="form-group full-width">
-                <label>27. หมายเหตุเพิ่มเติม</label>
-                <textarea name="q27" rows="3"></textarea>
-            </div>
+<div class="form-grid">
 
-        </div>
+<div class="form-group full-width">
+<label>18. PPE ที่ต้องใช้ <span class="req">*</span></label>
 
-        <button type="submit" class="btn btn-primary btn-submit">
-            ยื่นคำขออนุญาตทำงาน
-        </button>
+<div class="options-group">
+<label class="option-label">
+<input type="checkbox" name="q20" value="Safety Helmet"> Safety Helmet
+</label>
+<label class="option-label">
+<input type="checkbox" name="q20" value="Safety Shoes"> Safety Shoes
+</label>
+<label class="option-label">
+<input type="checkbox" name="q20" value="Face Shield"> Face Shield
+</label>
+<label class="option-label">
+<input type="checkbox" name="q20" value="Safety Glasses"> Safety Glasses
+</label>
+<label class="option-label">
+<input type="checkbox" name="q20" value="Gloves"> Gloves
+</label>
+<label class="option-label">
+<input type="checkbox" name="q20" value="Full Body Harness"> Full Body Harness
+</label>
+<label class="option-label">
+<input type="checkbox" name="q20" value="Respirator"> Respirator
+</label>
+<label class="option-label">
+<input type="checkbox" id="q20_other_cb" name="q20" value="อื่นๆ"
+onchange="toggleCheckboxOther('q20_other_cb','q20_other')">
+อื่นๆ
+</label>
 
-    </form>
+<input type="text" id="q20_other" name="q20_other"
+class="other-input hidden" placeholder="โปรดระบุ PPE อื่นๆ">
+</div>
+</div>
+
+<div class="form-group full-width">
+<label>19. มี Work Permit ที่เกี่ยวข้องหรือไม่?
+<span class="req">*</span></label>
+
+<div class="options-group">
+<label class="option-label">
+<input type="radio" name="q21" value="มี" required> มี
+</label>
+<label class="option-label">
+<input type="radio" name="q21" value="ไม่มี"> ไม่มี
+</label>
+</div>
+</div>
+
+<div class="form-group full-width">
+<label>20. PPE พร้อมใช้งานหรือไม่ <span class="req">*</span></label>
+
+<div class="options-group">
+<label class="option-label">
+<input type="radio" name="q22" value="พร้อม" required> พร้อม
+</label>
+<label class="option-label">
+<input type="radio" name="q22" value="ไม่พร้อม"> ไม่พร้อม
+</label>
+</div>
+</div>
+
+<div class="form-group full-width">
+<label>21. อุปกรณ์/เครื่องมือผ่านการตรวจสอบหรือไม่
+<span class="req">*</span></label>
+
+<div class="options-group">
+<label class="option-label">
+<input type="radio" name="q23" value="ผ่าน" required> ผ่าน
+</label>
+<label class="option-label">
+<input type="radio" name="q23" value="ไม่ผ่าน"> ไม่ผ่าน
+</label>
+</div>
+</div>
+
+<div class="form-group full-width">
+<label>22. มีผู้ควบคุมงานหรือไม่ <span class="req">*</span></label>
+
+<div class="options-group">
+<label class="option-label">
+<input type="radio" name="q24" value="มี" required> มี
+</label>
+<label class="option-label">
+<input type="radio" name="q24" value="ไม่มี"> ไม่มี
+</label>
+</div>
+</div>
+
+</div>
+
+<div class="section-title">ผู้รับผิดชอบการปฏิบัติงาน</div>
+
+<div class="form-grid">
+
+<div class="form-group full-width">
+<label>23. ชื่อผู้รับผิดชอบ <span class="req">*</span></label>
+<input type="text" name="q25" required placeholder="ใส่คำตอบ">
+</div>
+
+<div class="form-group full-width">
+<label>24. เบอร์ติดต่อ <span class="req">*</span></label>
+<input type="text" name="q26" required placeholder="ใส่คำตอบ">
+</div>
+
+<div class="form-group full-width">
+<label>25. หมายเหตุเพิ่มเติม</label>
+<textarea name="q27" rows="2" placeholder="ใส่คำตอบ"></textarea>
+</div>
+
+</div>
+
+<button type="submit" class="btn btn-primary btn-submit">
+ยื่นคำขออนุญาตทำงาน
+</button>
+
+</form>
 </section>
-
-<!-- ==================== TRACKING PAGE ==================== -->
 
 <section id="page-track" class="card-container hidden">
-    <h1 class="page-title">ระบบติดตามสถานะ</h1>
 
-    <div class="notice">
-        ค้นหาด้วยรหัสพนักงาน/ผู้รับเหมา หรือเลขที่ Work Permit
-    </div>
+<h1 class="page-title">ระบบติดตามสถานะ</h1>
 
-    <div class="tab-switch">
-        <button class="tab-btn active" id="tab-emp"
-                onclick="switchTab('emp')">รหัสพนักงาน</button>
-        <button class="tab-btn" id="tab-wp"
-                onclick="switchTab('wp')">เลขที่ WP</button>
-    </div>
+<div class="notice">
+ค้นหาด้วยรหัสพนักงาน/ผู้รับเหมา หรือเลขที่ WP
+</div>
 
-    <div class="form-group">
-        <label for="search-input">ข้อมูลสำหรับค้นหา</label>
-        <input type="text" id="search-input" placeholder="กรอกรหัสพนักงาน/ผู้รับเหมา">
-    </div>
+<div class="tab-switch">
+<button class="tab-btn active" id="tab-emp"
+onclick="switchTab('emp')">รหัสพนักงาน</button>
 
-    <button class="btn btn-primary btn-submit" onclick="checkStatus()">
-        ตรวจสอบสถานะ
-    </button>
+<button class="tab-btn" id="tab-wp"
+onclick="switchTab('wp')">เลขที่คำขอ (WP)</button>
+</div>
 
-    <div id="status-result" class="hidden" style="margin-top:20px"></div>
+<div class="form-group">
+<label>ข้อมูลสำหรับค้นหา</label>
+<input type="text" id="search-input"
+placeholder="กรอกรหัสพนักงาน/ผู้รับเหมา">
+</div>
+
+<button type="button" class="btn btn-primary btn-submit"
+onclick="checkStatus()">ตรวจสอบสถานะ</button>
+
+<div id="status-result" class="hidden"></div>
+
 </section>
-
-<!-- ==================== SAFETY PAGE ==================== -->
 
 <section id="page-safety" class="card-container hidden">
-    <h1 class="page-title">Safety Approval</h1>
 
-    <div class="warning">
-        หน้านี้เป็นต้นแบบสำหรับทดลอง ยังไม่มีระบบล็อกอินและกำหนดสิทธิ์ผู้อนุมัติ
-        จึงไม่ควรใช้อนุมัติ Work Permit จริง
-    </div>
+<h1 class="page-title">Safety Approval</h1>
 
-    <div class="tab-switch">
-        <button class="tab-btn active" id="filter-pending"
-                onclick="setSafetyFilter('Pending')">รอพิจารณา</button>
-        <button class="tab-btn" id="filter-all"
-                onclick="setSafetyFilter('All')">คำขอทั้งหมด</button>
-    </div>
+<div class="warning">
+หน้านี้เป็นต้นแบบ ยังไม่มีระบบล็อกอินหรือสิทธิ์ Safety
+ห้ามใช้อนุมัติคำขอจริงจนกว่าจะเชื่อมฐานข้อมูลและระบบยืนยันตัวตน
+</div>
 
-    <div id="safety-list"></div>
+<div class="tab-switch">
+<button class="tab-btn active" id="filter-pending"
+onclick="setSafetyFilter('Pending')">รอพิจารณา</button>
+
+<button class="tab-btn" id="filter-all"
+onclick="setSafetyFilter('All')">คำขอทั้งหมด</button>
+</div>
+
+<div id="safety-list"></div>
+
 </section>
-
 </main>
 
 <script>
-const STORAGE_KEY = "audi_wp_requests_v2";
-let currentTab = "emp";
-let safetyFilter = "Pending";
+const STORAGE_KEY = 'audi_wp_requests_v2_no_q18';
 
-/* แสดง/ซ่อนช่องกรอกเมื่อเลือกตัวเลือกอื่นๆ */
-function toggleRadioOther(groupName, inputId) {
-    const selected = document.querySelector(
-        'input[name="' + groupName + '"]:checked'
-    );
-
-    const input = document.getElementById(inputId);
-    const show = selected && selected.value === "อื่นๆ";
-
-    input.classList.toggle("hidden", !show);
-    input.required = !!show;
-
-    if (!show) input.value = "";
-}
-
-function toggleCheckboxOther(checkboxId, inputId) {
-    const checkbox = document.getElementById(checkboxId);
-    const input = document.getElementById(inputId);
-
-    input.classList.toggle("hidden", !checkbox.checked);
-    input.required = checkbox.checked;
-
-    if (!checkbox.checked) input.value = "";
-}
-
-/* เมื่อเลือกตัวเลือกปกติ จะซ่อนช่องอื่นๆ ของ radio */
-document.querySelectorAll('input[type="radio"]').forEach(radio => {
-    radio.addEventListener("change", function() {
-        const group = this.name;
-        const otherInput = document.querySelector(
-            'input[name="' + group + '_other"]'
-        );
-
-        if (otherInput && this.value !== "อื่นๆ") {
-            otherInput.value = "";
-            otherInput.required = false;
-            otherInput.classList.add("hidden");
-        }
-    });
-});
+let currentTab = 'emp';
+let safetyFilter = 'Pending';
 
 function getRequests() {
-    try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    } catch (error) {
-        return [];
-    }
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  } catch (e) {
+    return [];
+  }
 }
 
-function saveRequests(requests) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(requests));
+function saveRequests(items) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+}
+
+function nextWPNo() {
+  const now = new Date();
+  const day = String(now.getDate()).padStart(2, '0');
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const key = `audi_wp_seq_${now.getFullYear()}${month}${day}`;
+  const seq = Number(localStorage.getItem(key) || '0') + 1;
+  localStorage.setItem(key, String(seq));
+
+  return `AA_${day}${month}_${String(seq).padStart(3, '0')}`;
 }
 
 function generateWPNo() {
-    const now = new Date();
-    const date = String(now.getDate()).padStart(2, "0") +
-                 String(now.getMonth() + 1).padStart(2, "0");
-
-    const key = "audi_wp_seq_" + now.getFullYear() + date;
-    const next = Number(localStorage.getItem(key) || 0) + 1;
-
-    localStorage.setItem(key, String(next));
-
-    document.getElementById("wp_no").value =
-        "AA_" + date + "_" + String(next).padStart(3, "0");
+  document.getElementById('wp_no').value = nextWPNo();
 }
 
-document.addEventListener("DOMContentLoaded", generateWPNo);
+window.addEventListener('DOMContentLoaded', generateWPNo);
+
+/* ช่องอื่นๆ สำหรับ Radio */
+function toggleRadioOther(name) {
+  const selected = document.querySelector(
+    `input[name="${name}"][value="อื่นๆ"]:checked`
+  );
+
+  const input = document.getElementById(name + '_other');
+
+  if (!input) return;
+
+  const show = Boolean(selected);
+
+  input.classList.toggle('hidden', !show);
+  input.required = show;
+
+  if (!show) input.value = '';
+}
+
+/* ช่องอื่นๆ สำหรับ Checkbox */
+function toggleCheckboxOther(checkboxId, inputId) {
+  const checkbox = document.getElementById(checkboxId);
+  const input = document.getElementById(inputId);
+
+  if (!checkbox || !input) return;
+
+  input.classList.toggle('hidden', !checkbox.checked);
+  input.required = checkbox.checked;
+
+  if (!checkbox.checked) input.value = '';
+}
+
+/* สำรองการแสดงช่องอื่นๆ เผื่อ JavaScript ของหน้าเว็บโหลดช้า */
+document.addEventListener('change', function(event) {
+  const target = event.target;
+
+  if (target.matches('input[type="radio"][name="q5"], input[type="radio"][name="q14"]')) {
+    toggleRadioOther(target.name);
+  }
+
+  if (target.id === 'q8_other_cb') {
+    toggleCheckboxOther('q8_other_cb', 'q8_other');
+  }
+
+  if (target.id === 'q17_other_cb') {
+    toggleCheckboxOther('q17_other_cb', 'q17_other');
+  }
+
+  if (target.id === 'q20_other_cb') {
+    toggleCheckboxOther('q20_other_cb', 'q20_other');
+  }
+});
 
 function switchPage(page) {
-    ["form", "track", "safety"].forEach(name => {
-        document.getElementById("page-" + name)
-            .classList.toggle("hidden", name !== page);
+  ['form', 'track', 'safety'].forEach(function(p) {
+    document.getElementById('page-' + p).classList.toggle('hidden', p !== page);
+    document.getElementById('menu-' + p).classList.toggle('active', p === page);
+  });
 
-        document.getElementById("menu-" + name)
-            .classList.toggle("active", name === page);
-    });
-
-    if (page === "safety") renderSafetyList();
+  if (page === 'safety') renderSafetyList();
 }
 
 function switchTab(type) {
-    currentTab = type;
+  currentTab = type;
 
-    document.getElementById("tab-emp")
-        .classList.toggle("active", type === "emp");
+  document.getElementById('tab-emp').classList.toggle('active', type === 'emp');
+  document.getElementById('tab-wp').classList.toggle('active', type === 'wp');
 
-    document.getElementById("tab-wp")
-        .classList.toggle("active", type === "wp");
+  document.getElementById('search-input').placeholder =
+    type === 'emp'
+      ? 'กรอกรหัสพนักงาน/ผู้รับเหมา'
+      : 'กรอกเลขที่คำขอ เช่น AA_1110_001';
 
-    document.getElementById("search-input").placeholder =
-        type === "emp"
-        ? "กรอกรหัสพนักงาน/ผู้รับเหมา"
-        : "กรอกเลขที่ WP";
-
-    document.getElementById("status-result").classList.add("hidden");
+  document.getElementById('status-result').classList.add('hidden');
 }
 
-function safeText(value) {
-    return String(value ?? "").replace(/[&<>"']/g, char => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-    })[char]);
+function collectFormData(form) {
+  const data = {};
+  const fd = new FormData(form);
+
+  for (const [key, value] of fd.entries()) {
+    if (value instanceof File) {
+      if (value.name) {
+        data[key] = {
+          fileName: value.name,
+          fileSize: value.size,
+          fileType: value.type || 'ไม่ทราบชนิด'
+        };
+      }
+      continue;
+    }
+
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
+      if (!Array.isArray(data[key])) data[key] = [data[key]];
+      data[key].push(value);
+    } else {
+      data[key] = value;
+    }
+  }
+
+  return data;
 }
+
+document.getElementById('workPermitForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const start = this.elements.q15.value;
+  const end = this.elements.q16.value;
+
+  if (start && end && end < start) {
+    alert('วันที่สิ้นสุดงานต้องไม่อยู่ก่อนวันที่เริ่มงาน');
+    return;
+  }
+
+  const requests = getRequests();
+  const wpNo = document.getElementById('wp_no').value || nextWPNo();
+
+  if (requests.some(r => r.wp_no === wpNo)) {
+    alert('เลข WP นี้มีอยู่แล้ว กรุณาลองสร้างเลขใหม่');
+    generateWPNo();
+    return;
+  }
+
+  const data = collectFormData(this);
+
+  const record = {
+    id: (crypto.randomUUID
+      ? crypto.randomUUID()
+      : String(Date.now()) + Math.random().toString(16).slice(2)),
+    wp_no: wpNo,
+    employee_id: data.q3 || '',
+    applicant_email: data.q4 || '',
+    company: data.q1 || '',
+    applicant_name: data.q2 || '',
+    submitted_at: new Date().toISOString(),
+    status: 'Pending',
+    safety_comment: '',
+    reviewed_by: '',
+    reviewed_at: '',
+    form_data: data
+  };
+
+  requests.unshift(record);
+  saveRequests(requests);
+
+  alert(
+    `ส่งคำขอเรียบร้อย\nเลขที่ WP: ${wpNo}\n\n` +
+    'หมายเหตุ: ข้อมูลอยู่ในเบราว์เซอร์เครื่องนี้เท่านั้น ' +
+    'ยังไม่ได้ส่งเข้าฐานข้อมูลออนไลน์'
+  );
+
+  this.reset();
+  document.querySelectorAll('.other-input').forEach(function(input) {
+    input.classList.add('hidden');
+    input.required = false;
+  });
+
+  generateWPNo();
+});
 
 function formatDate(value) {
-    if (!value) return "-";
-    const date = new Date(value);
-    return Number.isNaN(date.getTime())
-        ? value
-        : date.toLocaleString("th-TH");
+  if (!value) return '-';
+
+  const date = new Date(value);
+
+  return Number.isNaN(date.getTime())
+    ? value
+    : date.toLocaleString('th-TH');
 }
 
 function statusLabel(status) {
+  return {
+    Pending: 'รอพิจารณา',
+    Approved: 'อนุมัติแล้ว',
+    Rejected: 'ไม่อนุมัติ',
+    Revision: 'ส่งกลับแก้ไข'
+  }[status] || status;
+}
+
+function safeText(value) {
+  return String(value ?? '').replace(/[&<>"']/g, function(ch) {
     return {
-        Pending: "รอพิจารณา",
-        Approved: "อนุมัติแล้ว",
-        Rejected: "ไม่อนุมัติ",
-        Revision: "ส่งกลับแก้ไข"
-    }[status] || status;
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[ch];
+  });
 }
 
-/* เก็บคำตอบทั้งหมดของแบบฟอร์ม */
-function collectFormData(form) {
-    const data = {};
-    const formData = new FormData(form);
-
-    for (const [key, value] of formData.entries()) {
-        if (value instanceof File) {
-            if (value.name) {
-                data[key] = {
-                    fileName: value.name,
-                    fileSize: value.size,
-                    fileType: value.type
-                };
-            }
-            continue;
-        }
-
-        if (Object.prototype.hasOwnProperty.call(data, key)) {
-            if (!Array.isArray(data[key])) data[key] = [data[key]];
-            data[key].push(value);
-        } else {
-            data[key] = value;
-        }
-    }
-
-    return data;
-}
-
-/* ส่งคำขอ */
-document.getElementById("workPermitForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-
-    const start = this.elements.q15.value;
-    const end = this.elements.q16.value;
-
-    if (end < start) {
-        alert("วันที่สิ้นสุดงานต้องไม่อยู่ก่อนวันที่เริ่มงาน");
-        return;
-    }
-
-    const requests = getRequests();
-    const wpNo = document.getElementById("wp_no").value;
-
-    if (requests.some(item => item.wp_no === wpNo)) {
-        alert("เลขที่ WP ซ้ำ กรุณาสร้างเลขใหม่");
-        generateWPNo();
-        return;
-    }
-
-    const data = collectFormData(this);
-
-    const record = {
-        id: Date.now().toString() + Math.random().toString(16).slice(2),
-        wp_no: wpNo,
-        employee_id: data.q3 || "",
-        applicant_email: data.q4 || "",
-        company: data.q1 || "",
-        applicant_name: data.q2 || "",
-        submitted_at: new Date().toISOString(),
-        status: "Pending",
-        safety_comment: "",
-        reviewed_by: "",
-        reviewed_at: "",
-        form_data: data
-    };
-
-    requests.unshift(record);
-    saveRequests(requests);
-
-    alert(
-        "ส่งคำขอเรียบร้อย\nเลขที่ WP: " + wpNo +
-        "\nสถานะ: รอพิจารณา\n\n" +
-        "ข้อมูลนี้บันทึกไว้ในเบราว์เซอร์เครื่องนี้เท่านั้น"
-    );
-
-    this.reset();
-
-    document.querySelectorAll(".other-input").forEach(input => {
-        input.classList.add("hidden");
-        input.required = false;
-    });
-
-    generateWPNo();
-});
-
-/* ติดตามสถานะ */
 function checkStatus() {
-    const search = document.getElementById("search-input").value.trim();
-    const result = document.getElementById("status-result");
+  const input = document.getElementById('search-input').value.trim();
+  const result = document.getElementById('status-result');
 
-    if (!search) {
-        alert("กรุณากรอกข้อมูลที่ต้องการค้นหา");
-        return;
-    }
+  if (!input) {
+    alert('กรุณากรอกข้อมูลที่ต้องการค้นหา');
+    return;
+  }
 
-    const requests = getRequests();
+  const requests = getRequests();
 
-    const record = requests.find(item => {
-        if (currentTab === "emp") {
-            return String(item.employee_id).toLowerCase() === search.toLowerCase();
-        }
+  const record = requests.find(function(r) {
+    return currentTab === 'emp'
+      ? String(r.employee_id).toLowerCase() === input.toLowerCase()
+      : String(r.wp_no).toLowerCase() === input.toLowerCase();
+  });
 
-        return String(item.wp_no).toLowerCase() === search.toLowerCase();
-    });
+  result.classList.remove('hidden');
 
-    result.classList.remove("hidden");
+  if (!record) {
+    result.innerHTML =
+      '<div class="empty">ไม่พบคำขอในเบราว์เซอร์นี้</div>';
+    return;
+  }
 
-    if (!record) {
-        result.innerHTML = '<div class="empty">ไม่พบคำขอในเบราว์เซอร์นี้</div>';
-        return;
-    }
-
-    result.innerHTML = `
-        <div class="record">
-            <div class="record-head">
-                <strong>${safeText(record.wp_no)}</strong>
-                <span class="status status-${safeText(record.status)}">
-                    ${safeText(statusLabel(record.status))}
-                </span>
-            </div>
-            <p><strong>ชื่อผู้ขอ:</strong> ${safeText(record.applicant_name)}</p>
-            <p><strong>บริษัท:</strong> ${safeText(record.company)}</p>
-            <p><strong>วันที่ยื่น:</strong> ${safeText(formatDate(record.submitted_at))}</p>
-            <p><strong>หมายเหตุจาก Safety:</strong> ${safeText(record.safety_comment || "ไม่มี")}</p>
-        </div>
-    `;
+  result.innerHTML = `
+    <div class="record">
+      <h3>${safeText(record.wp_no)}</h3>
+      <p>สถานะ:
+        <span class="status status-${safeText(record.status)}">
+          ${safeText(statusLabel(record.status))}
+        </span>
+      </p>
+      <p><strong>ผู้ขอ:</strong> ${safeText(record.applicant_name)}</p>
+      <p><strong>บริษัท:</strong> ${safeText(record.company)}</p>
+      <p><strong>วันที่ยื่น:</strong> ${safeText(formatDate(record.submitted_at))}</p>
+      <p><strong>หมายเหตุจาก Safety:</strong>
+        ${safeText(record.safety_comment || 'ไม่มี')}
+      </p>
+      <p><strong>ผู้พิจารณา:</strong>
+        ${safeText(record.reviewed_by || '-')}
+      </p>
+    </div>`;
 }
 
 function setSafetyFilter(filter) {
-    safetyFilter = filter;
+  safetyFilter = filter;
 
-    document.getElementById("filter-pending")
-        .classList.toggle("active", filter === "Pending");
+  document.getElementById('filter-pending')
+    .classList.toggle('active', filter === 'Pending');
 
-    document.getElementById("filter-all")
-        .classList.toggle("active", filter === "All");
+  document.getElementById('filter-all')
+    .classList.toggle('active', filter === 'All');
 
-    renderSafetyList();
+  renderSafetyList();
 }
 
-/* รายการคำขอของ Safety */
 function renderSafetyList() {
-    const container = document.getElementById("safety-list");
-    let requests = getRequests();
+  const container = document.getElementById('safety-list');
+  let requests = getRequests();
 
-    if (safetyFilter === "Pending") {
-        requests = requests.filter(item =>
-            item.status === "Pending" || item.status === "Revision"
-        );
-    }
+  if (safetyFilter === 'Pending') {
+    requests = requests.filter(function(r) {
+      return r.status === 'Pending' || r.status === 'Revision';
+    });
+  }
 
-    if (!requests.length) {
-        container.innerHTML = '<div class="empty">ยังไม่มีคำขอในรายการนี้</div>';
-        return;
-    }
+  if (!requests.length) {
+    container.innerHTML =
+      '<div class="empty">ยังไม่มีคำขอในรายการนี้</div>';
+    return;
+  }
 
-    container.innerHTML = requests.map(record => {
-        const data = record.form_data || {};
+  container.innerHTML = requests.map(function(r) {
+    const data = r.form_data || {};
+    const canReview = r.status === 'Pending' || r.status === 'Revision';
 
-        function value(key) {
-            const item = data[key];
+    const display = function(key) {
+      const value = data[key];
 
-            if (Array.isArray(item)) return item.join(", ");
+      if (Array.isArray(value)) return value.join(', ');
+      if (value && typeof value === 'object') return value.fileName || '-';
 
-            if (item && typeof item === "object") {
-                return item.fileName || "";
-            }
+      return value || '-';
+    };
 
-            return item || "-";
-        }
+    return `
+      <article class="record">
+        <h3>${safeText(r.wp_no)}</h3>
 
-        const canReview =
-            record.status === "Pending" || record.status === "Revision";
+        <p>
+          <span class="status status-${safeText(r.status)}">
+            ${safeText(statusLabel(r.status))}
+          </span>
+        </p>
 
-        return `
-            <article class="record">
-                <div class="record-head">
-                    <div>
-                        <strong>${safeText(record.wp_no)}</strong>
-                        <div class="muted">${safeText(formatDate(record.submitted_at))}</div>
-                    </div>
-                    <span class="status status-${safeText(record.status)}">
-                        ${safeText(statusLabel(record.status))}
-                    </span>
-                </div>
+        <p><strong>บริษัท:</strong> ${safeText(r.company)}</p>
+        <p><strong>ผู้ขอ:</strong> ${safeText(r.applicant_name)}</p>
+        <p><strong>รหัสผู้รับเหมา:</strong> ${safeText(r.employee_id)}</p>
+        <p><strong>อีเมล:</strong> ${safeText(r.applicant_email)}</p>
+        <p><strong>พื้นที่ทำงาน:</strong>
+          ${safeText(display('q14') === 'อื่นๆ'
+            ? display('q14_other')
+            : display('q14'))}
+        </p>
+        <p><strong>วันที่ทำงาน:</strong>
+          ${safeText(display('q15'))} ถึง ${safeText(display('q16'))}
+        </p>
+        <p><strong>จำนวนผู้ปฏิบัติงาน:</strong>
+          ${safeText(display('q12'))}
+        </p>
+        <p><strong>รายชื่อผู้ปฏิบัติงาน:</strong>
+          ${safeText(display('q13'))}
+        </p>
+        <p><strong>อันตราย:</strong>
+          ${safeText(display('q17'))}
+          ${safeText(data.q17_other || '')}
+        </p>
+        <p><strong>PPE:</strong>
+          ${safeText(display('q20'))}
+          ${safeText(data.q20_other || '')}
+        </p>
 
-                <div class="record-grid">
-                    <p><strong>บริษัท:</strong> ${safeText(record.company)}</p>
-                    <p><strong>ชื่อผู้ขอ:</strong> ${safeText(record.applicant_name)}</p>
-                    <p><strong>รหัสผู้รับเหมา:</strong> ${safeText(record.employee_id)}</p>
-                    <p><strong>อีเมล:</strong> ${safeText(record.applicant_email)}</p>
-                    <p><strong>พื้นที่:</strong> ${safeText(value("q14") === "อื่นๆ" ? value("q14_other") : value("q14"))}</p>
-                    <p><strong>วันที่ทำงาน:</strong> ${safeText(value("q15"))} ถึง ${safeText(value("q16"))}</p>
-                    <p><strong>จำนวนคน:</strong> ${safeText(value("q12"))}</p>
-                    <p><strong>อันตราย:</strong> ${safeText(value("q17"))}</p>
-                    <p><strong>มาตรการควบคุม:</strong> ${safeText(value("q18"))}</p>
-                    <p><strong>PPE:</strong> ${safeText(value("q20"))}</p>
-                </div>
+        <details>
+          <summary style="cursor:pointer;color:#0369a1;font-weight:bold">
+            ดูข้อมูลแบบฟอร์มทั้งหมด
+          </summary>
 
-                <hr>
+          ${Object.entries(data)
+            .filter(function(entry) {
+              return entry[0] !== 'wp_no' && entry[1] !== '';
+            })
+            .map(function(entry) {
+              let value = entry[1];
 
-                <details>
-                    <summary style="cursor:pointer;color:#0369a1;font-weight:bold">
-                        ดูข้อมูลแบบฟอร์มทั้งหมด
-                    </summary>
-                    <div style="margin-top:12px">
-                        ${Object.entries(data)
-                            .filter(([key]) => key !== "q9" && key !== "q19")
-                            .map(([key]) => `
-                                <p><strong>${safeText(key)}:</strong> ${safeText(value(key))}</p>
-                            `).join("")}
-                        <p><strong>หลักฐานอบรม:</strong> ${safeText(value("q9"))}</p>
-                        <p><strong>เอกสารควบคุม:</strong> ${safeText(value("q19"))}</p>
-                    </div>
-                </details>
+              if (Array.isArray(value)) value = value.join(', ');
+              else if (value && typeof value === 'object') {
+                value = value.fileName || '';
+              }
 
-                <p><strong>หมายเหตุ Safety:</strong> ${safeText(record.safety_comment || "ไม่มี")}</p>
+              return `<p><strong>${safeText(entry[0])}:</strong>
+                ${safeText(value)}</p>`;
+            }).join('')}
+        </details>
 
-                ${canReview ? `
-                    <div class="form-group" style="margin-top:14px">
-                        <label for="reviewer-${safeText(record.id)}">ชื่อผู้พิจารณา</label>
-                        <input type="text" id="reviewer-${safeText(record.id)}"
-                               placeholder="ชื่อ Safety">
-                    </div>
+        <hr>
 
-                    <div class="form-group" style="margin-top:10px">
-                        <label for="comment-${safeText(record.id)}">หมายเหตุหรือเหตุผล</label>
-                        <textarea id="comment-${safeText(record.id)}" rows="2"
-                                  placeholder="ระบุเหตุผลหรือสิ่งที่ต้องแก้ไข"></textarea>
-                    </div>
+        <p><strong>หมายเหตุ Safety:</strong>
+          ${safeText(r.safety_comment || 'ไม่มี')}
+        </p>
 
-                    <div class="actions">
-                        <button class="btn btn-success"
-                            onclick="reviewRequest('${safeText(record.id)}','Approved')">
-                            อนุมัติ
-                        </button>
+        ${canReview ? `
+          <div class="form-group">
+            <label>ชื่อผู้พิจารณา</label>
+            <input type="text" id="reviewer-${safeText(r.id)}"
+              placeholder="ชื่อ Safety">
+          </div>
 
-                        <button class="btn btn-danger"
-                            onclick="reviewRequest('${safeText(record.id)}','Rejected')">
-                            ไม่อนุมัติ
-                        </button>
+          <div class="form-group">
+            <label>เหตุผล/หมายเหตุ</label>
+            <textarea id="comment-${safeText(r.id)}" rows="3"
+              placeholder="ระบุเหตุผลหรือสิ่งที่ต้องแก้ไข"></textarea>
+          </div>
 
-                        <button class="btn btn-warning"
-                            onclick="reviewRequest('${safeText(record.id)}','Revision')">
-                            ส่งกลับแก้ไข
-                        </button>
-                    </div>
-                ` : `
-                    <p class="muted">
-                        ผู้พิจารณา: ${safeText(record.reviewed_by || "-")}
-                        | เวลาพิจารณา: ${safeText(formatDate(record.reviewed_at))}
-                    </p>
-                `}
-            </article>
-        `;
-    }).join("");
+          <div class="actions">
+            <button class="btn btn-success"
+              onclick="reviewRequest('${safeText(r.id)}','Approved')">
+              อนุมัติ
+            </button>
+
+            <button class="btn btn-danger"
+              onclick="reviewRequest('${safeText(r.id)}','Rejected')">
+              ไม่อนุมัติ
+            </button>
+
+            <button class="btn btn-warning"
+              onclick="reviewRequest('${safeText(r.id)}','Revision')">
+              ส่งกลับแก้ไข
+            </button>
+          </div>
+        ` : `
+          <p class="muted">
+            ผู้พิจารณา: ${safeText(r.reviewed_by || '-')} |
+            เวลา: ${safeText(formatDate(r.reviewed_at))}
+          </p>
+        `}
+      </article>
+    `;
+  }).join('');
 }
 
-/* บันทึกผลการพิจารณา */
 function reviewRequest(id, status) {
-    const requests = getRequests();
-    const record = requests.find(item => item.id === id);
+  const requests = getRequests();
+  const record = requests.find(function(r) {
+    return r.id === id;
+  });
 
-    if (!record) {
-        alert("ไม่พบคำขอ");
-        return;
-    }
+  if (!record) {
+    alert('ไม่พบคำขอ');
+    return;
+  }
 
-    const reviewer = document.getElementById("reviewer-" + id).value.trim();
-    const comment = document.getElementById("comment-" + id).value.trim();
+  const reviewerInput = document.getElementById('reviewer-' + id);
+  const commentInput = document.getElementById('comment-' + id);
 
-    if (!reviewer) {
-        alert("กรุณากรอกชื่อผู้พิจารณา");
-        return;
-    }
+  const reviewer = reviewerInput ? reviewerInput.value.trim() : '';
+  const comment = commentInput ? commentInput.value.trim() : '';
 
-    if ((status === "Rejected" || status === "Revision") && !comment) {
-        alert("กรุณาระบุเหตุผลก่อนดำเนินการ");
-        return;
-    }
+  if (!reviewer) {
+    alert('กรุณาระบุชื่อผู้พิจารณา');
+    return;
+  }
 
-    record.status = status;
-    record.reviewed_by = reviewer;
-    record.reviewed_at = new Date().toISOString();
-    record.safety_comment = comment;
+  if ((status === 'Rejected' || status === 'Revision') && !comment) {
+    alert('กรุณาระบุเหตุผลก่อนดำเนินการ');
+    return;
+  }
 
-    saveRequests(requests);
-    renderSafetyList();
+  record.status = status;
+  record.reviewed_by = reviewer;
+  record.reviewed_at = new Date().toISOString();
+  record.safety_comment = comment;
 
-    alert(
-        "บันทึกผลแล้ว: " + statusLabel(status) +
-        "\n\nนี่เป็นการบันทึกในเบราว์เซอร์เท่านั้น ยังไม่ได้ส่งอีเมลหรือบันทึกออนไลน์"
-    );
+  saveRequests(requests);
+  renderSafetyList();
+
+  alert(
+    'บันทึกผลแล้ว: ' + statusLabel(status) +
+    '\nหมายเหตุ: ยังไม่ได้บันทึกบนฐานข้อมูลออนไลน์หรือส่งอีเมล'
+  );
 }
 </script>
 
