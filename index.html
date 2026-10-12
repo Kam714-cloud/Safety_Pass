@@ -314,97 +314,97 @@ body{display:flex}
 </section>
 <!-- ==================== TRACKING PAGE ==================== -->
 <section id="page-track" class="card-container hidden">
-  <h1 class="page-title">ติดตามสถานะ Work Permit</h1>
+ <h1 class="page-title">ติดตามสถานะ Work Permit</h1>
 
-  <div class="notice">
-    กรอกรหัสพนักงานหรือเลขที่ Work Permit เพื่อค้นหาสถานะคำขอ
-  </div>
+ <div class="notice">
+   กรอกรหัสพนักงานหรือเลขที่ Work Permit เพื่อค้นหาสถานะคำขอ
+ </div>
 
-  <div class="form-group">
-    <label for="tracking-search">รหัสพนักงาน หรือเลขที่ Work Permit</label>
-    <input
-      type="text"
-      id="tracking-search"
-      placeholder="กรอกรหัสพนักงานหรือเลขที่ Work Permit"
-    >
-  </div>
+ <div class="form-group">
+   <label for="tracking-search">รหัสพนักงาน หรือเลขที่ Work Permit</label>
+   <input
+     type="text"
+     id="tracking-search"
+     placeholder="กรอกรหัสพนักงานหรือเลขที่ Work Permit"
+   >
+ </div>
 
-  <div class="actions">
-    <button type="button" class="btn btn-primary" onclick="searchTracking()">
-      ค้นหาสถานะ
-    </button>
-    <button type="button" class="btn btn-warning" onclick="clearTracking()">
-      ล้างข้อมูล
-    </button>
-  </div>
+ <div class="actions">
+   <button type="button" class="btn btn-primary" onclick="searchTracking()">
+     ค้นหาสถานะ
+   </button>
+   <button type="button" class="btn btn-warning" onclick="clearTracking()">
+     ล้างข้อมูล
+   </button>
+ </div>
 
-  <div id="tracking-results">
-    <div class="empty">กรอกข้อมูลเพื่อค้นหาสถานะคำขอ</div>
-  </div>
+ <div id="tracking-results">
+   <div class="empty">กรอกข้อมูลเพื่อค้นหาสถานะคำขอ</div>
+ </div>
 </section>
 
 <!-- ==================== SAFETY APPROVAL PAGE ==================== -->
 <section id="page-safety" class="card-container hidden">
-  <h1 class="page-title">Safety Approval</h1>
+ <h1 class="page-title">Safety Approval</h1>
 
-  <div class="warning">
-    <strong>คำเตือน:</strong>
-    หน้านี้ยังไม่มีระบบยืนยันตัวตนผู้อนุมัติ
-    อย่าใช้การอนุมัติผ่านหน้านี้กับงานจริงจนกว่าจะกำหนดสิทธิ์การเข้าถึงอย่างปลอดภัย
-  </div>
+ <div class="warning">
+   <strong>คำเตือน:</strong>
+   หน้านี้ยังไม่มีระบบยืนยันตัวตนผู้อนุมัติ
+   อย่าใช้การอนุมัติผ่านหน้านี้กับงานจริงจนกว่าจะกำหนดสิทธิ์การเข้าถึงอย่างปลอดภัย
+ </div>
 
-  <div class="tab-switch">
-    <button
-      type="button"
-      class="tab-btn active"
-      id="tab-pending"
-      onclick="filterSafety('Pending')"
-    >
-      รออนุมัติ
-    </button>
+ <div class="tab-switch">
+   <button
+     type="button"
+     class="tab-btn active"
+     id="tab-pending"
+     onclick="filterSafety('Pending')"
+   >
+     รออนุมัติ
+   </button>
 
-    <button
-      type="button"
-      class="tab-btn"
-      id="tab-all"
-      onclick="filterSafety('All')"
-    >
-      คำขอทั้งหมด
-    </button>
-  </div>
+   <button
+     type="button"
+     class="tab-btn"
+     id="tab-all"
+     onclick="filterSafety('All')"
+   >
+     คำขอทั้งหมด
+   </button>
+ </div>
 
-  <div class="form-group">
-    <label for="safety-search">ค้นหาเลขที่ Work Permit หรือชื่อผู้ขอ</label>
-    <input
-      type="text"
-      id="safety-search"
-      placeholder="กรอกเลขที่ Work Permit หรือชื่อผู้ขอ"
-      oninput="renderSafetyRequests()"
-    >
-  </div>
+ <div class="form-group">
+   <label for="safety-search">ค้นหาเลขที่ Work Permit หรือชื่อผู้ขอ</label>
+   <input
+     type="text"
+     id="safety-search"
+     placeholder="กรอกเลขที่ Work Permit หรือชื่อผู้ขอ"
+     oninput="renderSafetyRequests()"
+   >
+ </div>
 
-  <div class="actions">
-    <button
-      type="button"
-      class="btn btn-primary"
-      onclick="loadSafetyRequests()"
-    >
-      โหลดรายการใหม่
-    </button>
-  </div>
+ <div class="actions">
+   <button
+     type="button"
+     class="btn btn-primary"
+     onclick="loadSafetyRequests()"
+   >
+     โหลดรายการใหม่
+   </button>
+ </div>
 
-  <div id="safety-message" class="muted"></div>
-  <div id="safety-results">
-    <div class="empty">กำลังเตรียมรายการคำขอ...</div>
-  </div>
+ <div id="safety-message" class="muted"></div>
+ <div id="safety-results">
+   <div class="empty">กำลังเตรียมรายการคำขอ...</div>
+ </div>
 </section>
 
 </main>
 <script>
 /* =====================================================
-   AUDI WORK PERMIT
-   PART 3/3 - JAVASCRIPT
-   ===================================================== */
+  AUDI WORK PERMIT
+  PART 3/3 - JAVASCRIPT
+  ===================================================== */
 
 const SUPABASE_URL = 'https://oqthxncwleedvccganmg.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_bhnJ7U04RVjyByqFE5bqiQ_Qa_ffBNJ';
@@ -418,726 +418,726 @@ let currentSafetyFilter = 'Pending';
 /* ---------- INITIALIZE ---------- */
 
 document.addEventListener('DOMContentLoaded', async function () {
-  if (window.supabase && window.supabase.createClient) {
-    supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY
-    );
-  } else {
-    showMessage(
-      'safety-message',
-      'ไม่สามารถโหลด Supabase ได้ กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต',
-      true
-    );
-  }
+ if (window.supabase && window.supabase.createClient) {
+   supabaseClient = window.supabase.createClient(
+     SUPABASE_URL,
+     SUPABASE_PUBLISHABLE_KEY
+   );
+ } else {
+   showMessage(
+     'safety-message',
+     'ไม่สามารถโหลด Supabase ได้ กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต',
+     true
+   );
+ }
 
-  setupOtherFields();
-  setupDateValidation();
-  setInitialWPNumber();
+ setupOtherFields();
+ setupDateValidation();
+ setInitialWPNumber();
 
-  const form = document.getElementById('workPermitForm');
+ const form = document.getElementById('workPermitForm');
 
-  if (form) {
-    form.addEventListener('submit', submitWorkPermit);
-  }
+ if (form) {
+   form.addEventListener('submit', submitWorkPermit);
+ }
 });
 
 /* ---------- GENERAL HELPERS ---------- */
 
 function showMessage(elementId, message, isError = false) {
-  const element = document.getElementById(elementId);
+ const element = document.getElementById(elementId);
 
-  if (!element) return;
+ if (!element) return;
 
-  element.textContent = message;
-  element.style.color = isError ? '#b91c1c' : '#166534';
+ element.textContent = message;
+ element.style.color = isError ? '#b91c1c' : '#166534';
 }
 
 function escapeHTML(value) {
-  return String(value ?? '').replace(/[&<>"']/g, function (character) {
-    const map = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    };
+ return String(value ?? '').replace(/[&<>"']/g, function (character) {
+   const map = {
+     '&': '&amp;',
+     '<': '&lt;',
+     '>': '&gt;',
+     '"': '&quot;',
+     "'": '&#39;'
+   };
 
-    return map[character];
-  });
+   return map[character];
+ });
 }
 
 function getTodayString() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
+ const now = new Date();
+ const year = now.getFullYear();
+ const month = String(now.getMonth() + 1).padStart(2, '0');
+ const day = String(now.getDate()).padStart(2, '0');
 
-  return `${year}-${month}-${day}`;
+ return `${year}-${month}-${day}`;
 }
 
 function generateWPNumber() {
-  const now = new Date();
-  const day = String(now.getDate()).padStart(2, '0');
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const dateKey = `${day}${month}`;
+ const now = new Date();
+ const day = String(now.getDate()).padStart(2, '0');
+ const month = String(now.getMonth() + 1).padStart(2, '0');
+ const dateKey = `${day}${month}`;
 
-  const storageKey = `audi_wp_sequence_${now.getFullYear()}_${dateKey}`;
+ const storageKey = `audi_wp_sequence_${now.getFullYear()}_${dateKey}`;
 
-  let sequence = Number(localStorage.getItem(storageKey) || '0');
-  sequence += 1;
+ let sequence = Number(localStorage.getItem(storageKey) || '0');
+ sequence += 1;
 
-  localStorage.setItem(storageKey, String(sequence));
+ localStorage.setItem(storageKey, String(sequence));
 
-  return `AA_${dateKey}_${String(sequence).padStart(3, '0')}`;
+ return `AA_${dateKey}_${String(sequence).padStart(3, '0')}`;
 }
 
 function setInitialWPNumber() {
-  const input = document.getElementById('wp_no');
+ const input = document.getElementById('wp_no');
 
-  if (input && !input.value) {
-    input.value = generateWPNumber();
-  }
+ if (input && !input.value) {
+   input.value = generateWPNumber();
+ }
 }
 
 /* ---------- PAGE NAVIGATION ---------- */
 
 function switchPage(pageName) {
-  const pages = {
-    form: 'page-form',
-    track: 'page-track',
-    safety: 'page-safety'
-  };
+ const pages = {
+   form: 'page-form',
+   track: 'page-track',
+   safety: 'page-safety'
+ };
 
-  Object.keys(pages).forEach(function (key) {
-    const page = document.getElementById(pages[key]);
+ Object.keys(pages).forEach(function (key) {
+   const page = document.getElementById(pages[key]);
 
-    if (page) {
-      page.classList.toggle('hidden', key !== pageName);
-    }
+   if (page) {
+     page.classList.toggle('hidden', key !== pageName);
+   }
 
-    const menu = document.getElementById(`menu-${key}`);
+   const menu = document.getElementById(`menu-${key}`);
 
-    if (menu) {
-      menu.classList.toggle('active', key === pageName);
-    }
-  });
+   if (menu) {
+     menu.classList.toggle('active', key === pageName);
+   }
+ });
 
-  if (pageName === 'safety') {
-    loadSafetyRequests();
-  }
+ if (pageName === 'safety') {
+   loadSafetyRequests();
+ }
 }
 
 /* ---------- OTHER INPUTS ---------- */
 
 function setupOtherFields() {
-  const otherConfigs = [
-    { group: 'q5', checkbox: null, input: 'q5_other' },
-    { group: 'q8', checkbox: 'q8_other_cb', input: 'q8_other' },
-    { group: 'q14', checkbox: null, input: 'q14_other' },
-    { group: 'q17', checkbox: 'q17_other_cb', input: 'q17_other' },
-    { group: 'q20', checkbox: 'q20_other_cb', input: 'q20_other' }
-  ];
+ const otherConfigs = [
+   { group: 'q5', checkbox: null, input: 'q5_other' },
+   { group: 'q8', checkbox: 'q8_other_cb', input: 'q8_other' },
+   { group: 'q14', checkbox: null, input: 'q14_other' },
+   { group: 'q17', checkbox: 'q17_other_cb', input: 'q17_other' },
+   { group: 'q20', checkbox: 'q20_other_cb', input: 'q20_other' }
+ ];
 
-  otherConfigs.forEach(function (config) {
-    const input = document.getElementById(config.input);
+ otherConfigs.forEach(function (config) {
+   const input = document.getElementById(config.input);
 
-    if (!input) return;
+   if (!input) return;
 
-    function updateVisibility() {
-      let checked = false;
+   function updateVisibility() {
+     let checked = false;
 
-      if (config.checkbox) {
-        const checkbox = document.getElementById(config.checkbox);
-        checked = Boolean(checkbox && checkbox.checked);
-      } else {
-        const selected = document.querySelector(
-          `input[name="${config.group}"]:checked`
-        );
+     if (config.checkbox) {
+       const checkbox = document.getElementById(config.checkbox);
+       checked = Boolean(checkbox && checkbox.checked);
+     } else {
+       const selected = document.querySelector(
+         `input[name="${config.group}"]:checked`
+       );
 
-        checked = Boolean(selected && selected.value === 'อื่นๆ');
-      }
+       checked = Boolean(selected && selected.value === 'อื่นๆ');
+     }
 
-      input.classList.toggle('hidden', !checked);
-      input.disabled = !checked;
+     input.classList.toggle('hidden', !checked);
+     input.disabled = !checked;
 
-      if (!checked) {
-        input.value = '';
-      }
-    }
+     if (!checked) {
+       input.value = '';
+     }
+   }
 
-    document.querySelectorAll(
-      `input[name="${config.group}"]`
-    ).forEach(function (element) {
-      element.addEventListener('change', updateVisibility);
-    });
+   document.querySelectorAll(
+     `input[name="${config.group}"]`
+   ).forEach(function (element) {
+     element.addEventListener('change', updateVisibility);
+   });
 
-    if (config.checkbox) {
-      const checkbox = document.getElementById(config.checkbox);
+   if (config.checkbox) {
+     const checkbox = document.getElementById(config.checkbox);
 
-      if (checkbox) {
-        checkbox.addEventListener('change', updateVisibility);
-      }
-    }
+     if (checkbox) {
+       checkbox.addEventListener('change', updateVisibility);
+     }
+   }
 
-    updateVisibility();
-  });
+   updateVisibility();
+ });
 }
 
 /* ---------- DATE VALIDATION ---------- */
 
 function setupDateValidation() {
-  const startDate = document.querySelector('[name="q15"]');
-  const endDate = document.querySelector('[name="q16"]');
+ const startDate = document.querySelector('[name="q15"]');
+ const endDate = document.querySelector('[name="q16"]');
 
-  if (!startDate || !endDate) return;
+ if (!startDate || !endDate) return;
 
-  startDate.addEventListener('change', function () {
-    endDate.min = startDate.value;
+ startDate.addEventListener('change', function () {
+   endDate.min = startDate.value;
 
-    if (endDate.value && endDate.value < startDate.value) {
-      endDate.value = '';
-    }
-  });
+   if (endDate.value && endDate.value < startDate.value) {
+     endDate.value = '';
+   }
+ });
 
-  endDate.addEventListener('change', function () {
-    if (
-      startDate.value &&
-      endDate.value &&
-      endDate.value < startDate.value
-    ) {
-      alert('วันที่สิ้นสุดงานต้องไม่ก่อนวันที่เริ่มงาน');
-      endDate.value = '';
-    }
-  });
+ endDate.addEventListener('change', function () {
+   if (
+     startDate.value &&
+     endDate.value &&
+     endDate.value < startDate.value
+   ) {
+     alert('วันที่สิ้นสุดงานต้องไม่ก่อนวันที่เริ่มงาน');
+     endDate.value = '';
+   }
+ });
 }
 
 /* ---------- COLLECT FORM DATA ---------- */
 
 function collectFormData(form) {
-  const data = {};
-  const elements = Array.from(form.elements);
+ const data = {};
+ const elements = Array.from(form.elements);
 
-  elements.forEach(function (element) {
-    if (!element.name || element.type === 'submit') return;
+ elements.forEach(function (element) {
+   if (!element.name || element.type === 'submit') return;
 
-    if (element.type === 'file') {
-      const file = element.files && element.files[0];
+   if (element.type === 'file') {
+     const file = element.files && element.files[0];
 
-      data[element.name] = file
-        ? {
-            name: file.name,
-            size: file.size,
-            type: file.type,
-            note: 'ไฟล์ยังไม่ได้อัปโหลดขึ้น Supabase Storage'
-          }
-        : null;
+     data[element.name] = file
+       ? {
+           name: file.name,
+           size: file.size,
+           type: file.type,
+           note: 'ไฟล์ยังไม่ได้อัปโหลดขึ้น Supabase Storage'
+         }
+       : null;
 
-      return;
-    }
+     return;
+   }
 
-    if (element.type === 'checkbox') {
-      if (!Array.isArray(data[element.name])) {
-        data[element.name] = [];
-      }
+   if (element.type === 'checkbox') {
+     if (!Array.isArray(data[element.name])) {
+       data[element.name] = [];
+     }
 
-      if (element.checked) {
-        data[element.name].push(element.value);
-      }
+     if (element.checked) {
+       data[element.name].push(element.value);
+     }
 
-      return;
-    }
+     return;
+   }
 
-    if (element.type === 'radio') {
-      if (element.checked) {
-        data[element.name] = element.value;
-      } else if (!(element.name in data)) {
-        data[element.name] = '';
-      }
+   if (element.type === 'radio') {
+     if (element.checked) {
+       data[element.name] = element.value;
+     } else if (!(element.name in data)) {
+       data[element.name] = '';
+     }
 
-      return;
-    }
+     return;
+   }
 
-    data[element.name] = element.value;
-  });
+   data[element.name] = element.value;
+ });
 
-  return data;
+ return data;
 }
 
 /* ---------- SUBMIT WORK PERMIT ---------- */
 
 async function submitWorkPermit(event) {
-  event.preventDefault();
+ event.preventDefault();
 
-  const form = event.currentTarget;
+ const form = event.currentTarget;
 
-  if (!form.reportValidity()) {
-    return;
-  }
+ if (!form.reportValidity()) {
+   return;
+ }
 
-  if (!supabaseClient) {
-    alert('ยังเชื่อมต่อ Supabase ไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ต');
-    return;
-  }
+ if (!supabaseClient) {
+   alert('ยังเชื่อมต่อ Supabase ไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ต');
+   return;
+ }
 
-  const startDate = form.elements.q15.value;
-  const endDate = form.elements.q16.value;
+ const startDate = form.elements.q15.value;
+ const endDate = form.elements.q16.value;
 
-  if (startDate && endDate && endDate < startDate) {
-    alert('วันที่สิ้นสุดงานต้องไม่ก่อนวันที่เริ่มงาน');
-    return;
-  }
+ if (startDate && endDate && endDate < startDate) {
+   alert('วันที่สิ้นสุดงานต้องไม่ก่อนวันที่เริ่มงาน');
+   return;
+ }
 
-  const fileInputs = Array.from(form.querySelectorAll('input[type="file"]'));
+ const fileInputs = Array.from(form.querySelectorAll('input[type="file"]'));
 
-  for (const input of fileInputs) {
-    const file = input.files && input.files[0];
+ for (const input of fileInputs) {
+   const file = input.files && input.files[0];
 
-    if (file && file.size > 10 * 1024 * 1024) {
-      alert(`ไฟล์ ${file.name} มีขนาดเกิน 10MB`);
-      return;
-    }
-  }
+   if (file && file.size > 10 * 1024 * 1024) {
+     alert(`ไฟล์ ${file.name} มีขนาดเกิน 10MB`);
+     return;
+   }
+ }
 
-  const submitButton = form.querySelector('button[type="submit"]');
-  const originalText = submitButton.textContent;
+ const submitButton = form.querySelector('button[type="submit"]');
+ const originalText = submitButton.textContent;
 
-  submitButton.disabled = true;
-  submitButton.textContent = 'กำลังบันทึกคำขอ...';
+ submitButton.disabled = true;
+ submitButton.textContent = 'กำลังบันทึกคำขอ...';
 
-  try {
-    const data = collectFormData(form);
+ try {
+   const data = collectFormData(form);
 
-    const requestRecord = {
-      wp_no: data.wp_no,
-      company: data.q1,
-      employee_id: data.q3,
-      applicant_email: data.q4,
-      applicant_name: data.q2,
-      submitted_at: new Date().toISOString(),
-      status: 'Pending',
-      safety_comment: '',
-      reviewed_by: '',
-      reviewed_at: '',
-      form_data: data
-    };
+   const requestRecord = {
+     wp_no: data.wp_no,
+     company: data.q1,
+     employee_id: data.q3,
+     applicant_email: data.q4,
+     applicant_name: data.q2,
+     submitted_at: new Date().toISOString(),
+     status: 'Pending',
+     safety_comment: '',
+     reviewed_by: '',
+     reviewed_at: null,
+     form_data: data
+   };
 
-    const { data: insertedRows, error } = await supabaseClient
-      .from(TABLE_NAME)
-      .insert(requestRecord)
-      .select('wp_no');
+   const { data: insertedRows, error } = await supabaseClient
+     .from(TABLE_NAME)
+     .insert(requestRecord)
+     .select('wp_no');
 
-    if (error) {
-      console.error('Supabase insert error:', error);
-      alert(
-        'บันทึกคำขอไม่สำเร็จ\n\n' +
-        'โปรดตรวจสอบว่าตาราง work_permit_requests มีคอลัมน์ที่โค้ดใช้งาน ' +
-        'และตั้งค่า RLS policy สำหรับการ INSERT แล้ว\n\n' +
-        'รายละเอียด: ' + error.message
-      );
-      return;
-    }
+   if (error) {
+     console.error('Supabase insert error:', error);
+     alert(
+       'บันทึกคำขอไม่สำเร็จ\n\n' +
+       'โปรดตรวจสอบว่าตาราง work_permit_requests มีคอลัมน์ที่โค้ดใช้งาน ' +
+       'และตั้งค่า RLS policy สำหรับการ INSERT แล้ว\n\n' +
+       'รายละเอียด: ' + error.message
+     );
+     return;
+   }
 
-    const savedWPNo =
-      insertedRows && insertedRows[0]
-        ? insertedRows[0].wp_no
-        : data.wp_no;
+   const savedWPNo =
+     insertedRows && insertedRows[0]
+       ? insertedRows[0].wp_no
+       : data.wp_no;
 
-    alert(
-      'ส่งคำขอสำเร็จ\n' +
-      'เลขที่ Work Permit: ' + savedWPNo
-    );
+   alert(
+     'ส่งคำขอสำเร็จ\n' +
+     'เลขที่ Work Permit: ' + savedWPNo
+   );
 
-    form.reset();
-    setInitialWPNumber();
-    setupOtherFields();
+   form.reset();
+   setInitialWPNumber();
+   setupOtherFields();
 
-  } catch (error) {
-    console.error('Submit error:', error);
-    alert('เกิดข้อผิดพลาดระหว่างส่งคำขอ กรุณาลองใหม่อีกครั้ง');
-  } finally {
-    submitButton.disabled = false;
-    submitButton.textContent = originalText;
-  }
+ } catch (error) {
+   console.error('Submit error:', error);
+   alert('เกิดข้อผิดพลาดระหว่างส่งคำขอ กรุณาลองใหม่อีกครั้ง');
+ } finally {
+   submitButton.disabled = false;
+   submitButton.textContent = originalText;
+ }
 }
 
 /* ---------- TRACKING ---------- */
 
 async function searchTracking() {
-  const searchInput = document.getElementById('tracking-search');
-  const results = document.getElementById('tracking-results');
+ const searchInput = document.getElementById('tracking-search');
+ const results = document.getElementById('tracking-results');
 
-  if (!searchInput || !results) return;
+ if (!searchInput || !results) return;
 
-  const keyword = searchInput.value.trim();
+ const keyword = searchInput.value.trim();
 
-  if (!keyword) {
-    results.innerHTML =
-      '<div class="empty">กรุณากรอกรหัสพนักงานหรือเลขที่ Work Permit</div>';
-    return;
-  }
+ if (!keyword) {
+   results.innerHTML =
+     '<div class="empty">กรุณากรอกรหัสพนักงานหรือเลขที่ Work Permit</div>';
+   return;
+ }
 
-  if (!supabaseClient) {
-    results.innerHTML =
-      '<div class="empty">ยังเชื่อมต่อ Supabase ไม่สำเร็จ</div>';
-    return;
-  }
+ if (!supabaseClient) {
+   results.innerHTML =
+     '<div class="empty">ยังเชื่อมต่อ Supabase ไม่สำเร็จ</div>';
+   return;
+ }
 
-  results.innerHTML = '<div class="empty">กำลังค้นหา...</div>';
+ results.innerHTML = '<div class="empty">กำลังค้นหา...</div>';
 
-  try {
-    /*
-      หมายเหตุ:
-      การค้นหาด้วยรหัสพนักงานเพียงอย่างเดียวอาจเปิดเผยข้อมูลส่วนบุคคล
-      ควรใช้ระบบยืนยันตัวตนและกำหนด RLS ก่อนเปิดใช้งานจริง
-    */
+ try {
+   /*
+     หมายเหตุ:
+     การค้นหาด้วยรหัสพนักงานเพียงอย่างเดียวอาจเปิดเผยข้อมูลส่วนบุคคล
+     ควรใช้ระบบยืนยันตัวตนและกำหนด RLS ก่อนเปิดใช้งานจริง
+   */
 
-    const { data, error } = await supabaseClient
-      .from(TABLE_NAME)
-      .select('wp_no, company, employee_id, applicant_name, submitted_at, status, safety_comment, form_data')
-      .eq('wp_no', keyword)
-      .limit(10);
+   const { data, error } = await supabaseClient
+     .from(TABLE_NAME)
+     .select('wp_no, company, employee_id, applicant_name, submitted_at, status, safety_comment, form_data')
+     .eq('wp_no', keyword)
+     .limit(10);
 
-    if (error) {
-      console.error('Tracking error:', error);
+   if (error) {
+     console.error('Tracking error:', error);
 
-      results.innerHTML =
-        '<div class="empty">ค้นหาไม่สำเร็จ กรุณาตรวจสอบสิทธิ์ RLS และคอลัมน์ในตาราง Supabase</div>';
+     results.innerHTML =
+       '<div class="empty">ค้นหาไม่สำเร็จ กรุณาตรวจสอบสิทธิ์ RLS และคอลัมน์ในตาราง Supabase</div>';
 
-      return;
-    }
+     return;
+   }
 
-    const records = data || [];
+   const records = data || [];
 
-    if (!records.length) {
-      results.innerHTML =
-        '<div class="empty">ไม่พบรายการ กรุณาตรวจสอบเลขที่ Work Permit</div>';
+   if (!records.length) {
+     results.innerHTML =
+       '<div class="empty">ไม่พบรายการ กรุณาตรวจสอบเลขที่ Work Permit</div>';
 
-      return;
-    }
+     return;
+   }
 
-    results.innerHTML = records.map(function (record) {
-      return `
-        <article class="record">
-          <h3>${escapeHTML(record.wp_no)}</h3>
-          <p>
-            <strong>ชื่อผู้ขอ:</strong>
-            ${escapeHTML(record.applicant_name || '-')}
-          </p>
-          <p>
-            <strong>บริษัท:</strong>
-            ${escapeHTML(record.company || '-')}
-          </p>
-          <p>
-            <strong>วันที่ยื่น:</strong>
-            ${escapeHTML(
-              record.submitted_at
-                ? new Date(record.submitted_at).toLocaleString('th-TH')
-                : '-'
-            )}
-          </p>
-          <p>
-            <strong>สถานะ:</strong>
-            <span class="status status-${escapeHTML(record.status || 'Pending')}">
-              ${escapeHTML(record.status || 'Pending')}
-            </span>
-          </p>
-          <p>
-            <strong>หมายเหตุจาก Safety:</strong>
-            ${escapeHTML(record.safety_comment || '-')}
-          </p>
-        </article>
-      `;
-    }).join('');
+   results.innerHTML = records.map(function (record) {
+     return `
+       <article class="record">
+         <h3>${escapeHTML(record.wp_no)}</h3>
+         <p>
+           <strong>ชื่อผู้ขอ:</strong>
+           ${escapeHTML(record.applicant_name || '-')}
+         </p>
+         <p>
+           <strong>บริษัท:</strong>
+           ${escapeHTML(record.company || '-')}
+         </p>
+         <p>
+           <strong>วันที่ยื่น:</strong>
+           ${escapeHTML(
+             record.submitted_at
+               ? new Date(record.submitted_at).toLocaleString('th-TH')
+               : '-'
+           )}
+         </p>
+         <p>
+           <strong>สถานะ:</strong>
+           <span class="status status-${escapeHTML(record.status || 'Pending')}">
+             ${escapeHTML(record.status || 'Pending')}
+           </span>
+         </p>
+         <p>
+           <strong>หมายเหตุจาก Safety:</strong>
+           ${escapeHTML(record.safety_comment || '-')}
+         </p>
+       </article>
+     `;
+   }).join('');
 
-  } catch (error) {
-    console.error('Tracking exception:', error);
-    results.innerHTML =
-      '<div class="empty">เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง</div>';
-  }
+ } catch (error) {
+   console.error('Tracking exception:', error);
+   results.innerHTML =
+     '<div class="empty">เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง</div>';
+ }
 }
 
 function clearTracking() {
-  const input = document.getElementById('tracking-search');
-  const results = document.getElementById('tracking-results');
+ const input = document.getElementById('tracking-search');
+ const results = document.getElementById('tracking-results');
 
-  if (input) input.value = '';
+ if (input) input.value = '';
 
-  if (results) {
-    results.innerHTML =
-      '<div class="empty">กรอกข้อมูลเพื่อค้นหาสถานะคำขอ</div>';
-  }
+ if (results) {
+   results.innerHTML =
+     '<div class="empty">กรอกข้อมูลเพื่อค้นหาสถานะคำขอ</div>';
+ }
 }
 
 /* ---------- SAFETY APPROVAL LIST ---------- */
 
 async function loadSafetyRequests() {
-  const results = document.getElementById('safety-results');
+ const results = document.getElementById('safety-results');
 
-  if (!results) return;
+ if (!results) return;
 
-  if (!supabaseClient) {
-    results.innerHTML =
-      '<div class="empty">ยังเชื่อมต่อ Supabase ไม่สำเร็จ</div>';
-    return;
-  }
+ if (!supabaseClient) {
+   results.innerHTML =
+     '<div class="empty">ยังเชื่อมต่อ Supabase ไม่สำเร็จ</div>';
+   return;
+ }
 
-  results.innerHTML = '<div class="empty">กำลังโหลดรายการ...</div>';
+ results.innerHTML = '<div class="empty">กำลังโหลดรายการ...</div>';
 
-  try {
-    const { data, error } = await supabaseClient
-      .from(TABLE_NAME)
-      .select('wp_no, company, employee_id, applicant_email, applicant_name, submitted_at, status, safety_comment, reviewed_by, reviewed_at, form_data')
-      .order('submitted_at', { ascending: false });
+ try {
+   const { data, error } = await supabaseClient
+     .from(TABLE_NAME)
+     .select('wp_no, company, employee_id, applicant_email, applicant_name, submitted_at, status, safety_comment, reviewed_by, reviewed_at, form_data')
+     .order('submitted_at', { ascending: false });
 
-    if (error) {
-      console.error('Safety list error:', error);
+   if (error) {
+     console.error('Safety list error:', error);
 
-      results.innerHTML =
-        '<div class="empty">โหลดรายการไม่สำเร็จ กรุณาตรวจสอบตารางและสิทธิ์ RLS</div>';
+     results.innerHTML =
+       '<div class="empty">โหลดรายการไม่สำเร็จ กรุณาตรวจสอบตารางและสิทธิ์ RLS</div>';
 
-      return;
-    }
+     return;
+   }
 
-    allSafetyRequests = data || [];
-    renderSafetyRequests();
+   allSafetyRequests = data || [];
+   renderSafetyRequests();
 
-  } catch (error) {
-    console.error('Safety load exception:', error);
+ } catch (error) {
+   console.error('Safety load exception:', error);
 
-    results.innerHTML =
-      '<div class="empty">เกิดข้อผิดพลาดระหว่างโหลดรายการ</div>';
-  }
+   results.innerHTML =
+     '<div class="empty">เกิดข้อผิดพลาดระหว่างโหลดรายการ</div>';
+ }
 }
 
 function filterSafety(filter) {
-  currentSafetyFilter = filter;
+ currentSafetyFilter = filter;
 
-  const pendingTab = document.getElementById('tab-pending');
-  const allTab = document.getElementById('tab-all');
+ const pendingTab = document.getElementById('tab-pending');
+ const allTab = document.getElementById('tab-all');
 
-  if (pendingTab) {
-    pendingTab.classList.toggle('active', filter === 'Pending');
-  }
+ if (pendingTab) {
+   pendingTab.classList.toggle('active', filter === 'Pending');
+ }
 
-  if (allTab) {
-    allTab.classList.toggle('active', filter === 'All');
-  }
+ if (allTab) {
+   allTab.classList.toggle('active', filter === 'All');
+ }
 
-  renderSafetyRequests();
+ renderSafetyRequests();
 }
 
 function renderSafetyRequests() {
-  const results = document.getElementById('safety-results');
-  const searchInput = document.getElementById('safety-search');
+ const results = document.getElementById('safety-results');
+ const searchInput = document.getElementById('safety-search');
 
-  if (!results) return;
+ if (!results) return;
 
-  const keyword = searchInput
-    ? searchInput.value.trim().toLowerCase()
-    : '';
+ const keyword = searchInput
+   ? searchInput.value.trim().toLowerCase()
+   : '';
 
-  let records = allSafetyRequests.slice();
+ let records = allSafetyRequests.slice();
 
-  if (currentSafetyFilter === 'Pending') {
-    records = records.filter(function (record) {
-      return (record.status || 'Pending') === 'Pending';
-    });
-  }
+ if (currentSafetyFilter === 'Pending') {
+   records = records.filter(function (record) {
+     return (record.status || 'Pending') === 'Pending';
+   });
+ }
 
-  if (keyword) {
-    records = records.filter(function (record) {
-      return [
-        record.wp_no,
-        record.applicant_name,
-        record.company,
-        record.employee_id
-      ].some(function (value) {
-        return String(value || '').toLowerCase().includes(keyword);
-      });
-    });
-  }
+ if (keyword) {
+   records = records.filter(function (record) {
+     return [
+       record.wp_no,
+       record.applicant_name,
+       record.company,
+       record.employee_id
+     ].some(function (value) {
+       return String(value || '').toLowerCase().includes(keyword);
+     });
+   });
+ }
 
-  if (!records.length) {
-    results.innerHTML =
-      '<div class="empty">ไม่พบรายการคำขอ</div>';
-    return;
-  }
+ if (!records.length) {
+   results.innerHTML =
+     '<div class="empty">ไม่พบรายการคำขอ</div>';
+   return;
+ }
 
-  results.innerHTML = records.map(function (record) {
-    const status = record.status || 'Pending';
+ results.innerHTML = records.map(function (record) {
+   const status = record.status || 'Pending';
 
-    const details = record.form_data || {};
+   const details = record.form_data || {};
 
-    const actionButtons = status === 'Pending'
-      ? `
-        <div class="actions">
-          <button
-            type="button"
-            class="btn btn-success"
-            onclick="reviewRequest('${escapeHTML(record.wp_no)}','Approved')"
-          >
-            อนุมัติ
-          </button>
-          <button
-            type="button"
-            class="btn btn-danger"
-            onclick="reviewRequest('${escapeHTML(record.wp_no)}','Rejected')"
-          >
-            ไม่อนุมัติ
-          </button>
-          <button
-            type="button"
-            class="btn btn-warning"
-            onclick="reviewRequest('${escapeHTML(record.wp_no)}','Revision')"
-          >
-            ขอแก้ไข
-          </button>
-        </div>
-      `
-      : '';
+   const actionButtons = status === 'Pending'
+     ? `
+       <div class="actions">
+         <button
+           type="button"
+           class="btn btn-success"
+           onclick="reviewRequest('${escapeHTML(record.wp_no)}','Approved')"
+         >
+           อนุมัติ
+         </button>
+         <button
+           type="button"
+           class="btn btn-danger"
+           onclick="reviewRequest('${escapeHTML(record.wp_no)}','Rejected')"
+         >
+           ไม่อนุมัติ
+         </button>
+         <button
+           type="button"
+           class="btn btn-warning"
+           onclick="reviewRequest('${escapeHTML(record.wp_no)}','Revision')"
+         >
+           ขอแก้ไข
+         </button>
+       </div>
+     `
+     : '';
 
-    return `
-      <article class="record">
-        <h3>${escapeHTML(record.wp_no)}</h3>
+   return `
+     <article class="record">
+       <h3>${escapeHTML(record.wp_no)}</h3>
 
-        <p>
-          <strong>ผู้ขอ:</strong>
-          ${escapeHTML(record.applicant_name || '-')}
-        </p>
+       <p>
+         <strong>ผู้ขอ:</strong>
+         ${escapeHTML(record.applicant_name || '-')}
+       </p>
 
-        <p>
-          <strong>บริษัท:</strong>
-          ${escapeHTML(record.company || '-')}
-        </p>
+       <p>
+         <strong>บริษัท:</strong>
+         ${escapeHTML(record.company || '-')}
+       </p>
 
-        <p>
-          <strong>รหัสพนักงาน:</strong>
-          ${escapeHTML(record.employee_id || '-')}
-        </p>
+       <p>
+         <strong>รหัสพนักงาน:</strong>
+         ${escapeHTML(record.employee_id || '-')}
+       </p>
 
-        <p>
-          <strong>วันที่ยื่น:</strong>
-          ${escapeHTML(
-            record.submitted_at
-              ? new Date(record.submitted_at).toLocaleString('th-TH')
-              : '-'
-          )}
-        </p>
+       <p>
+         <strong>วันที่ยื่น:</strong>
+         ${escapeHTML(
+           record.submitted_at
+             ? new Date(record.submitted_at).toLocaleString('th-TH')
+             : '-'
+         )}
+       </p>
 
-        <p>
-          <strong>สถานะ:</strong>
-          <span class="status status-${escapeHTML(status)}">
-            ${escapeHTML(status)}
-          </span>
-        </p>
+       <p>
+         <strong>สถานะ:</strong>
+         <span class="status status-${escapeHTML(status)}">
+           ${escapeHTML(status)}
+         </span>
+       </p>
 
-        <p>
-          <strong>แผนก:</strong>
-          ${escapeHTML(details.q5 || '-')}
-        </p>
+       <p>
+         <strong>แผนก:</strong>
+         ${escapeHTML(details.q5 || '-')}
+       </p>
 
-        <p>
-          <strong>พื้นที่ทำงาน:</strong>
-          ${escapeHTML(details.q14 || '-')}
-        </p>
+       <p>
+         <strong>พื้นที่ทำงาน:</strong>
+         ${escapeHTML(details.q14 || '-')}
+       </p>
 
-        <p>
-          <strong>วันที่เริ่มงาน:</strong>
-          ${escapeHTML(details.q15 || '-')}
-        </p>
+       <p>
+         <strong>วันที่เริ่มงาน:</strong>
+         ${escapeHTML(details.q15 || '-')}
+       </p>
 
-        <p>
-          <strong>วันที่สิ้นสุดงาน:</strong>
-          ${escapeHTML(details.q16 || '-')}
-        </p>
+       <p>
+         <strong>วันที่สิ้นสุดงาน:</strong>
+         ${escapeHTML(details.q16 || '-')}
+       </p>
 
-        <p>
-          <strong>หมายเหตุจาก Safety:</strong>
-          ${escapeHTML(record.safety_comment || '-')}
-        </p>
+       <p>
+         <strong>หมายเหตุจาก Safety:</strong>
+         ${escapeHTML(record.safety_comment || '-')}
+       </p>
 
-        ${actionButtons}
-      </article>
-    `;
-  }).join('');
+       ${actionButtons}
+     </article>
+   `;
+ }).join('');
 }
 
 /* ---------- REVIEW REQUEST ---------- */
 
 async function reviewRequest(wpNo, newStatus) {
-  /*
-    สำคัญ:
-    ฟังก์ชันนี้ยังไม่มีระบบยืนยันตัวตนผู้อนุมัติ
-    อย่าเปิดให้ผู้ใช้ทั่วไปเข้าถึงการ UPDATE ตารางในระบบจริง
-    ต้องใช้ Supabase Auth และ RLS ที่จำกัดเฉพาะผู้อนุมัติ
-  */
+ /*
+   สำคัญ:
+   ฟังก์ชันนี้ยังไม่มีระบบยืนยันตัวตนผู้อนุมัติ
+   อย่าเปิดให้ผู้ใช้ทั่วไปเข้าถึงการ UPDATE ตารางในระบบจริง
+   ต้องใช้ Supabase Auth และ RLS ที่จำกัดเฉพาะผู้อนุมัติ
+ */
 
-  if (!supabaseClient) {
-    alert('ยังเชื่อมต่อ Supabase ไม่สำเร็จ');
-    return;
-  }
+ if (!supabaseClient) {
+   alert('ยังเชื่อมต่อ Supabase ไม่สำเร็จ');
+   return;
+ }
 
-  const allowedStatuses = ['Approved', 'Rejected', 'Revision'];
+ const allowedStatuses = ['Approved', 'Rejected', 'Revision'];
 
-  if (!allowedStatuses.includes(newStatus)) {
-    alert('สถานะไม่ถูกต้อง');
-    return;
-  }
+ if (!allowedStatuses.includes(newStatus)) {
+   alert('สถานะไม่ถูกต้อง');
+   return;
+ }
 
-  const comment = prompt(
-    'กรอกหมายเหตุหรือเหตุผลประกอบการพิจารณา (ถ้ามี):',
-    ''
-  );
+ const comment = prompt(
+   'กรอกหมายเหตุหรือเหตุผลประกอบการพิจารณา (ถ้ามี):',
+   ''
+ );
 
-  if (comment === null) return;
+ if (comment === null) return;
 
-  const confirmAction = confirm(
-    `ยืนยันเปลี่ยนสถานะ Work Permit ${wpNo} เป็น ${newStatus} หรือไม่?`
-  );
+ const confirmAction = confirm(
+   `ยืนยันเปลี่ยนสถานะ Work Permit ${wpNo} เป็น ${newStatus} หรือไม่?`
+ );
 
-  if (!confirmAction) return;
+ if (!confirmAction) return;
 
-  try {
-    const { data, error } = await supabaseClient
-      .from(TABLE_NAME)
-      .update({
-        status: newStatus,
-        safety_comment: comment.trim(),
-        reviewed_at: new Date().toISOString()
-      })
-      .eq('wp_no', wpNo)
-      .select('wp_no');
+ try {
+   const { data, error } = await supabaseClient
+     .from(TABLE_NAME)
+     .update({
+       status: newStatus,
+       safety_comment: comment.trim(),
+       reviewed_at: new Date().toISOString()
+     })
+     .eq('wp_no', wpNo)
+     .select('wp_no');
 
-    if (error) {
-      console.error('Review update error:', error);
+   if (error) {
+     console.error('Review update error:', error);
 
-      alert(
-        'อัปเดตสถานะไม่สำเร็จ\n' +
-        'กรุณาตรวจสอบคอลัมน์และ RLS policy ของ Supabase\n\n' +
-        error.message
-      );
+     alert(
+       'อัปเดตสถานะไม่สำเร็จ\n' +
+       'กรุณาตรวจสอบคอลัมน์และ RLS policy ของ Supabase\n\n' +
+       error.message
+     );
 
-      return;
-    }
+     return;
+   }
 
-    if (!data || !data.length) {
-      alert(
-        'ไม่มีรายการถูกแก้ไข อาจเกิดจาก RLS policy ไม่อนุญาต ' +
-        'หรือไม่พบเลขที่ Work Permit นี้'
-      );
+   if (!data || !data.length) {
+     alert(
+       'ไม่มีรายการถูกแก้ไข อาจเกิดจาก RLS policy ไม่อนุญาต ' +
+       'หรือไม่พบเลขที่ Work Permit นี้'
+     );
 
-      return;
-    }
+     return;
+   }
 
-    alert('อัปเดตสถานะเรียบร้อยแล้ว');
+   alert('อัปเดตสถานะเรียบร้อยแล้ว');
 
-    await loadSafetyRequests();
+   await loadSafetyRequests();
 
-  } catch (error) {
-    console.error('Review exception:', error);
-    alert('เกิดข้อผิดพลาดระหว่างอัปเดตสถานะ');
-  }
+ } catch (error) {
+   console.error('Review exception:', error);
+   alert('เกิดข้อผิดพลาดระหว่างอัปเดตสถานะ');
+ }
 }
 </script>
 
