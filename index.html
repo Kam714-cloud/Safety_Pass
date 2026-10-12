@@ -722,10 +722,11 @@ async function submitWorkPermit(event) {
      form_data: data
    };
 
-   const { data: insertedRows, error } = await supabaseClient
+   // Do not chain .select() after INSERT: public/anon has no SELECT policy,
+   // and requesting returned rows can trigger an RLS violation.
+   const { error } = await supabaseClient
      .from(TABLE_NAME)
-     .insert(requestRecord)
-     .select('wp_no');
+     .insert(requestRecord);
 
    if (error) {
      console.error('Supabase insert error:', error);
@@ -738,14 +739,9 @@ async function submitWorkPermit(event) {
      return;
    }
 
-   const savedWPNo =
-     insertedRows && insertedRows[0]
-       ? insertedRows[0].wp_no
-       : data.wp_no;
-
    alert(
      'ส่งคำขอสำเร็จ\n' +
-     'เลขที่ Work Permit: ' + savedWPNo
+     'เลขที่ Work Permit: ' + data.wp_no
    );
 
    form.reset();
