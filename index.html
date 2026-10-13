@@ -1113,12 +1113,6 @@ async function reviewRequest(wpNo, newStatus) {
      return;
    }
 
-   if (!data || !data.length) {
-     alert(
-       'ไม่มีรายการถูกแก้ไข อาจเกิดจาก RLS policy ไม่อนุญาต ' +
-       'หรือไม่พบเลขที่ Work Permit นี้'
-     );
-
      return;
    }
 
