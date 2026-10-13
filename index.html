@@ -1094,7 +1094,7 @@ async function reviewRequest(wpNo, newStatus) {
 
  if (!confirmAction) return;
 
- try {
+try {
     const { data, error } = await supabaseClient.rpc('approve_work_permit', {
         target_wp_no: wpNo,
         new_status: newStatus,
