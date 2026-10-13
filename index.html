@@ -484,16 +484,6 @@ function generateWPNumber() {
  return `AA_${dateKey}_${randomSuffix}`;
 }
 
- const storageKey = `audi_wp_sequence_${now.getFullYear()}_${dateKey}`;
-
- let sequence = Number(localStorage.getItem(storageKey) || '0');
- sequence += 1;
-
- localStorage.setItem(storageKey, String(sequence));
-
- return `AA_${dateKey}_${String(sequence).padStart(3, '0')}`;
-}
-
 function setInitialWPNumber() {
  const input = document.getElementById('wp_no');
 
