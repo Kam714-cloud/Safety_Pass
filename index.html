@@ -479,6 +479,10 @@ function generateWPNumber() {
  const day = String(now.getDate()).padStart(2, '0');
  const month = String(now.getMonth() + 1).padStart(2, '0');
  const dateKey = `${day}${month}`;
+ // สุ่มเลข 4 หลักต่อท้าย เพื่อป้องกันไม่ให้เลขชนกับที่มีใน Supabase
+ const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+ return `AA_${dateKey}_${randomSuffix}`;
+}
 
  const storageKey = `audi_wp_sequence_${now.getFullYear()}_${dateKey}`;
 
