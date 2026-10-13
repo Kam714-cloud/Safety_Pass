@@ -1095,7 +1095,7 @@ async function reviewRequest(wpNo, newStatus) {
  if (!confirmAction) return;
 
  try {
-   const { data, error } = await supabase
+   const { data, error } = await supabaseClient
      .from(TABLE_NAME)
      .update({
        status: newStatus,
