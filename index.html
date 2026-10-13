@@ -215,7 +215,6 @@ body{display:flex}
 
 <div class="section-title">อันตรายและการควบคุม</div>
 <div class="form-grid">
-
 <div class="form-group full-width">
 <label>17. อันตรายที่คาดว่าจะพบ <span class="req">*</span></label>
 <div class="options-group">
@@ -342,7 +341,6 @@ body{display:flex}
    <div class="empty">กรอกข้อมูลเพื่อค้นหาสถานะคำขอ</div>
  </div>
 </section>
-
 <!-- ==================== SAFETY APPROVAL PAGE ==================== -->
 <section id="page-safety" class="card-container hidden">
  <h1 class="page-title">Safety Approval</h1>
@@ -611,7 +609,6 @@ function setupDateValidation() {
    }
  });
 }
-
 /* ---------- COLLECT FORM DATA ---------- */
 
 function collectFormData(form) {
@@ -787,7 +784,6 @@ async function searchTracking() {
      การค้นหาด้วยรหัสพนักงานเพียงอย่างเดียวอาจเปิดเผยข้อมูลส่วนบุคคล
      ควรใช้ระบบยืนยันตัวตนและกำหนด RLS ก่อนเปิดใช้งานจริง
    */
-
    const { data, error } = await supabaseClient
      .from(TABLE_NAME)
      .select('wp_no, company, employee_id, applicant_name, submitted_at, status, safety_comment, form_data')
@@ -905,7 +901,6 @@ async function loadSafetyRequests() {
      '<div class="empty">เกิดข้อผิดพลาดระหว่างโหลดรายการ</div>';
  }
 }
-
 function filterSafety(filter) {
  currentSafetyFilter = filter;
 
@@ -1089,7 +1084,7 @@ async function reviewRequest(wpNo, newStatus) {
  if (comment === null) return;
 
  const confirmAction = confirm(
-   ยืนยันเปลี่ยนสถานะ Work Permit ${wpNo} เป็น ${newStatus} หรือไม่?
+   `ยืนยันเปลี่ยนสถานะ Work Permit ${wpNo} เป็น ${newStatus} หรือไม่?`
  );
 
  if (!confirmAction) return;
