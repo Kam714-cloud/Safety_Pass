@@ -344,61 +344,68 @@ body{display:flex}
 <!-- ==================== SAFETY APPROVAL PAGE ==================== -->
 <section id="page-safety" class="card-container hidden">
  <h1 class="page-title">Safety Approval</h1>
-
- <div class="warning">
-   <strong>คำเตือน:</strong>
-   หน้านี้ยังไม่มีระบบยืนยันตัวตนผู้อนุมัติ
-   อย่าใช้การอนุมัติผ่านหน้านี้กับงานจริงจนกว่าจะกำหนดสิทธิ์การเข้าถึงอย่างปลอดภัย
+ 
+ <!-- กล่องกรอกรหัส PIN (จะแสดงขึ้นมาก่อนถ้ายังไม่ได้ยืนยันตัวตน) -->
+ <div id="safety-auth-box" class="card-container" style="background: #f8fafc; border: 1px dashed #cbd5e1; margin-bottom: 20px;">
+   <h3 style="margin-top: 0; color: #0369a1;">🔒 กรุณากรอกรหัส PIN ผู้อำนวยความสะดวกด้านความปลอดภัย</h3>
+   <p class="muted">หน้านี้จำกัดสิทธิ์เฉพาะเจ้าหน้าที่ Safety เท่านั้น กรุณากรอกรหัสผ่านเพื่อเข้าใช้งาน</p>
+   <div class="form-group" style="margin-top: 15px;">
+     <label for="safety-pin-input">รหัส PIN 4 หลัก</label>
+     <input type="password" id="safety-pin-input" placeholder="••••" maxlength="4" style="max-width: 200px;">
+   </div>
+   <div class="actions" style="margin-top: 15px;">
+     <button type="button" class="btn btn-primary" onclick="verifySafetyPin()">ยืนยันรหัส PIN</button>
+   </div>
+   <div id="safety-auth-error" class="muted" style="color: #dc2626; margin-top: 10px; font-weight: bold;"></div>
  </div>
 
- <div class="tab-switch">
-   <button
-     type="button"
-     class="tab-btn active"
-     id="tab-pending"
-     onclick="filterSafety('Pending')"
-   >
-     รออนุมัติ
-   </button>
-
-   <button
-     type="button"
-     class="tab-btn"
-     id="tab-all"
-     onclick="filterSafety('All')"
-   >
-     คำขอทั้งหมด
-   </button>
- </div>
-
- <div class="form-group">
-   <label for="safety-search">ค้นหาเลขที่ Work Permit หรือชื่อผู้ขอ</label>
-   <input
-     type="text"
-     id="safety-search"
-     placeholder="กรอกเลขที่ Work Permit หรือชื่อผู้ขอ"
-     oninput="renderSafetyRequests()"
-   >
- </div>
-
- <div class="actions">
-   <button
-     type="button"
-     class="btn btn-primary"
-     onclick="loadSafetyRequests()"
-   >
-     โหลดรายการใหม่
-   </button>
- </div>
-
- <div id="safety-message" class="muted"></div>
- <div id="safety-results">
-   <div class="empty">กำลังเตรียมรายการคำขอ...</div>
+ <!-- เนื้อหาหน้า Safety (จะถูกซ่อนไว้จนกว่าจะกรอก PIN ถูกต้อง) -->
+ <div id="safety-content-area" class="hidden">
+   <div class="warning">
+     <strong>ระบบจัดการความปลอดภัย:</strong> ตรวจสอบและพิจารณาอนุมัติคำขอ Work Permit
+   </div>
+   <div class="tab-switch">
+     <button type="button" class="tab-btn active" id="tab-pending" onclick="filterSafety('Pending')">รออนุมัติ</button>
+     <button type="button" class="tab-btn" id="tab-all" onclick="filterSafety('All')">คำขอทั้งหมด</button>
+   </div>
+   <div class="form-group">
+     <label for="safety-search">ค้นหาเลขที่ Work Permit หรือชื่อผู้ขอ</label>
+     <input type="text" id="safety-search" placeholder="กรอกเลขที่ Work Permit หรือชื่อผู้ขอ" oninput="renderSafetyRequests()">
+   </div>
+   <div class="actions">
+     <button type="button" class="btn btn-primary" onclick="loadSafetyRequests()">โหลดรายการใหม่</button>
+   </div>
+   <div id="safety-message" class="muted"></div>
+   <div id="safety-results">
+     <div class="empty">กำลังเตรียมรายการคำขอ...</div>
+   </div>
  </div>
 </section>
 
 </main>
 <script>
+ /* ---------- SAFETY PIN AUTHENTICATION ---------- */
+const CORRECT_SAFETY_PIN = '7185';
+
+function verifySafetyPin() {
+  const pinInput = document.getElementById('safety-pin-input');
+  const errorDiv = document.getElementById('safety-auth-error');
+  const authBox = document.getElementById('safety-auth-box');
+  const contentArea = document.getElementById('safety-content-area');
+
+  if (!pinInput) return;
+
+  if (pinInput.value === CORRECT_SAFETY_PIN) {
+    // ถ้ารหัสถูกต้อง ซ่อนกล่องกรอกรหัส แล้วแสดงเนื้อหา Safety และโหลดข้อมูล
+    if (authBox) authBox.classList.add('hidden');
+    if (contentArea) contentArea.classList.remove('hidden');
+    loadSafetyRequests();
+  } else {
+    if (errorDiv) errorDiv.textContent = 'รหัส PIN ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง';
+    pinInput.value = '';
+    pinInput.focus();
+  }
+}
 /* =====================================================
   AUDI WORK PERMIT
   PART 3/3 - JAVASCRIPT
