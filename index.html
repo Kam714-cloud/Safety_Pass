@@ -1095,15 +1095,11 @@ async function reviewRequest(wpNo, newStatus) {
  if (!confirmAction) return;
 
  try {
-   const { data, error } = await supabaseClient
-     .from(TABLE_NAME)
-     .update({
-       status: newStatus,
-       safety_comment: comment.trim(),
-       reviewed_at: new Date().toISOString()
-     })
-     .eq('wp_no', wpNo)
-     .select('wp_no');
+  const { data, error } = await supabaseClient.rpc('approve_work_permit', {
+    target_wp_no: wpNo,
+    new_status: newStatus,
+    admin_comment: comment.trim()
+});
 
    if (error) {
      console.error('Review update error:', error);
