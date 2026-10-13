@@ -704,7 +704,46 @@ async function submitWorkPermit(event) {
 
  try {
    const data = collectFormData(form);
+const uploadedFiles = [];
 
+for (const input of fileInputs) {
+    const file = input.files?.[0];
+
+    if (!file) continue;
+
+    const allowedTypes = [
+        'application/pdf',
+        'image/jpeg',
+        'image/png'
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+        throw new Error('รองรับเฉพาะไฟล์ PDF, JPG และ PNG');
+    }
+
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const filePath = `${crypto.randomUUID()}/${safeName}`;
+
+    const { data: uploadData, error: uploadError } =
+        await supabaseClient.storage
+            .from('work_permit_file')
+            .upload(filePath, file, {
+                contentType: file.type,
+                upsert: false
+            });
+
+    if (uploadError) {
+        throw new Error('อัปโหลดไฟล์ไม่สำเร็จ: ' + uploadError.message);
+    }
+
+    uploadedFiles.push({
+        field: input.name || input.id,
+        name: file.name,
+        path: uploadData.path
+    });
+}
+
+data.attachments = uploadedFiles;
    const requestRecord = {
      wp_no: data.wp_no,
      company: data.q1,
