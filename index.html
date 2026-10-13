@@ -1089,32 +1089,42 @@ async function reviewRequest(wpNo, newStatus) {
  if (comment === null) return;
 
  const confirmAction = confirm(
-   `ยืนยันเปลี่ยนสถานะ Work Permit ${wpNo} เป็น ${newStatus} หรือไม่?`
+   ยืนยันเปลี่ยนสถานะ Work Permit ${wpNo} เป็น ${newStatus} หรือไม่?
  );
 
  if (!confirmAction) return;
 
-try {
-    const { data, error } = await supabaseClient.rpc('approve_work_permit', {
-        target_wp_no: wpNo,
-        new_status: newStatus,
-        admin_comment: comment.trim()
-    });
+ try {
+   const { data, error } = await supabaseClient
+     .from(TABLE_NAME)
+     .update({
+       status: newStatus,
+       safety_comment: comment.trim(),
+       reviewed_at: new Date().toISOString()
+     })
+     .eq('wp_no', wpNo)
+     .select('wp_no');
 
-    if (error) {
-        console.error('Review update error:', error);
-        alert('อัปเดตสถานะไม่สำเร็จ\n' + error.message);
-        return;
-    }
+   if (error) {
+     console.error('Review update error:', error);
 
-    alert(`อัปเดตสถานะเป็น "${newStatus}" เรียบร้อยแล้ว`);
-    loadSafetyRequests();
+     alert(
+       'อัปเดตสถานะไม่สำเร็จ\n' +
+       'กรุณาตรวจสอบคอลัมน์และ RLS policy ของ Supabase\n\n' +
+       error.message
+     );
 
-} catch (err) {
-    console.error('Unexpected error:', err);
-    alert('เกิดข้อผิดพลาดระหว่างอัปเดตสถานะ');
-}
+     return;
+   }
 
+   if (!data || !data.length) {
+     alert(
+       'ไม่มีรายการถูกแก้ไข อาจเกิดจาก RLS policy ไม่อนุญาต ' +
+       'หรือไม่พบเลขที่ Work Permit นี้'
+     );
+
+     return;
+   }
 
    alert('อัปเดตสถานะเรียบร้อยแล้ว');
 
