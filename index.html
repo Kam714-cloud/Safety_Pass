@@ -122,7 +122,7 @@ body{display:flex}
 <label class="option-label"><input type="radio" name="q5" value="Warehouse"> Warehouse</label>
 <label class="option-label"><input type="radio" name="q5" value="Engineering"> Engineering</label>
 <label class="option-label"><input type="radio" name="q5" value="QC"> QC</label>
-<label class="option-label"><input type="radio" name="q5" value="อื่นๆ"> อื่นๆ</label>
+<label class="option-label"><input type="radio" name="q5" value="Other"> Other</label>
 <input type="text" id="q5_other" name="q5_other" class="other-input hidden" placeholder="โปรดระบุแผนก">
 </div>
 </div>
@@ -153,7 +153,7 @@ body{display:flex}
 <label class="option-label"><input type="checkbox" name="q8" value="Hot Work"> Hot Work</label>
 <label class="option-label"><input type="checkbox" name="q8" value="Electrical Work"> Electrical Work</label>
 <label class="option-label"><input type="checkbox" name="q8" value="Forklift"> Forklift</label>
-<label class="option-label"><input type="checkbox" id="q8_other_cb" name="q8" value="อื่นๆ"> อื่นๆ</label>
+<label class="option-label"><input type="checkbox" id="q8_other_cb" name="q8" value="Other"> Other</label>
 <input type="text" id="q8_other" name="q8_other" class="other-input hidden" placeholder="โปรดระบุใบรับรอง">
 </div>
 </div>
@@ -197,7 +197,7 @@ body{display:flex}
 <label class="option-label"><input type="radio" name="q14" value="Maintenance Area"> Maintenance Area</label>
 <label class="option-label"><input type="radio" name="q14" value="Utility Area"> Utility Area</label>
 <label class="option-label"><input type="radio" name="q14" value="Confined Space Area"> Confined Space Area</label>
-<label class="option-label"><input type="radio" name="q14" value="อื่นๆ"> อื่นๆ</label>
+<label class="option-label"><input type="radio" name="q14" value="Other"> Other</label>
 <input type="text" id="q14_other" name="q14_other" class="other-input hidden" placeholder="โปรดระบุพื้นที่การทำงาน">
 </div>
 </div>
@@ -226,7 +226,7 @@ body{display:flex}
 <label class="option-label"><input type="checkbox" name="q17" value="Confined Space"> Confined Space</label>
 <label class="option-label"><input type="checkbox" name="q17" value="Machine"> Machine</label>
 <label class="option-label"><input type="checkbox" name="q17" value="Noise"> Noise</label>
-<label class="option-label"><input type="checkbox" id="q17_other_cb" name="q17" value="อื่นๆ"> อื่นๆ</label>
+<label class="option-label"><input type="checkbox" id="q17_other_cb" name="q17" value="Other"> Other</label>
 <input type="text" id="q17_other" name="q17_other" class="other-input hidden" placeholder="โปรดระบุอันตรายเพิ่มเติม">
 </div>
 </div>
@@ -251,7 +251,7 @@ body{display:flex}
 <label class="option-label"><input type="checkbox" name="q20" value="Gloves"> Gloves</label>
 <label class="option-label"><input type="checkbox" name="q20" value="Full Body Harness"> Full Body Harness</label>
 <label class="option-label"><input type="checkbox" name="q20" value="Respirator"> Respirator</label>
-<label class="option-label"><input type="checkbox" id="q20_other_cb" name="q20" value="อื่นๆ"> อื่นๆ</label>
+<label class="option-label"><input type="checkbox" id="q20_other_cb" name="q20" value="Other"> Other</label>
 <input type="text" id="q20_other" name="q20_other" class="other-input hidden" placeholder="โปรดระบุ PPE อื่นๆ">
 </div>
 </div>
@@ -396,7 +396,6 @@ function verifySafetyPin() {
   if (!pinInput) return;
 
   if (pinInput.value === CORRECT_SAFETY_PIN) {
-    // ถ้ารหัสถูกต้อง ซ่อนกล่องกรอกรหัส แล้วแสดงเนื้อหา Safety และโหลดข้อมูล
     if (authBox) authBox.classList.add('hidden');
     if (contentArea) contentArea.classList.remove('hidden');
     loadSafetyRequests();
@@ -406,10 +405,6 @@ function verifySafetyPin() {
     pinInput.focus();
   }
 }
-/* =====================================================
-  AUDI WORK PERMIT
-  PART 3/3 - JAVASCRIPT
-  ===================================================== */
 
 const SUPABASE_URL = 'https://oqthxncwleedvccganmg.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_bhnJ7U04RVjyByqFE5bqiQ_Qa_ffBNJ';
@@ -486,7 +481,6 @@ function generateWPNumber() {
  const day = String(now.getDate()).padStart(2, '0');
  const month = String(now.getMonth() + 1).padStart(2, '0');
  const dateKey = `${day}${month}`;
- // สุ่มเลข 4 หลักต่อท้าย เพื่อป้องกันไม่ให้เลขชนกับที่มีใน Supabase
  const randomSuffix = Math.floor(1000 + Math.random() * 9000);
  return `AA_${dateKey}_${randomSuffix}`;
 }
@@ -554,7 +548,7 @@ function setupOtherFields() {
          `input[name="${config.group}"]:checked`
        );
 
-       checked = Boolean(selected && selected.value === 'อื่นๆ');
+       checked = Boolean(selected && selected.value === 'Other');
      }
 
      input.classList.toggle('hidden', !checked);
@@ -610,6 +604,7 @@ function setupDateValidation() {
    }
  });
 }
+
 /* ---------- COLLECT FORM DATA ---------- */
 
 function collectFormData(form) {
@@ -705,46 +700,46 @@ async function submitWorkPermit(event) {
 
  try {
    const data = collectFormData(form);
-const uploadedFiles = [];
+   const uploadedFiles = [];
 
-for (const input of fileInputs) {
-    const file = input.files?.[0];
+   for (const input of fileInputs) {
+       const file = input.files?.[0];
 
-    if (!file) continue;
+       if (!file) continue;
 
-    const allowedTypes = [
-        'application/pdf',
-        'image/jpeg',
-        'image/png'
-    ];
+       const allowedTypes = [
+           'application/pdf',
+           'image/jpeg',
+           'image/png'
+       ];
 
-    if (!allowedTypes.includes(file.type)) {
-        throw new Error('รองรับเฉพาะไฟล์ PDF, JPG และ PNG');
-    }
+       if (!allowedTypes.includes(file.type)) {
+           throw new Error('รองรับเฉพาะไฟล์ PDF, JPG และ PNG');
+       }
 
-    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-    const filePath = `${crypto.randomUUID()}/${safeName}`;
+       const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+       const filePath = `${crypto.randomUUID()}/${safeName}`;
 
-    const { data: uploadData, error: uploadError } =
-        await supabaseClient.storage
-            .from('work_permit_file')
-            .upload(filePath, file, {
-                contentType: file.type,
-                upsert: false
-            });
+       const { data: uploadData, error: uploadError } =
+           await supabaseClient.storage
+               .from('work_permit_file')
+               .upload(filePath, file, {
+                   contentType: file.type,
+                   upsert: false
+               });
 
-    if (uploadError) {
-        throw new Error('อัปโหลดไฟล์ไม่สำเร็จ: ' + uploadError.message);
-    }
+       if (uploadError) {
+           throw new Error('อัปโหลดไฟล์ไม่สำเร็จ: ' + uploadError.message);
+       }
 
-    uploadedFiles.push({
-        field: input.name || input.id,
-        name: file.name,
-        path: uploadData.path
-    });
-}
+       uploadedFiles.push({
+           field: input.name || input.id,
+           name: file.name,
+           path: uploadData.path
+       });
+   }
 
-data.attachments = uploadedFiles;
+   data.attachments = uploadedFiles;
    const requestRecord = {
      wp_no: data.wp_no,
      company: data.q1,
@@ -759,8 +754,6 @@ data.attachments = uploadedFiles;
      form_data: data
    };
 
-   // Do not chain .select() after INSERT: public/anon has no SELECT policy,
-   // and requesting returned rows can trigger an RLS violation.
    const { error } = await supabaseClient
      .from(TABLE_NAME)
      .insert(requestRecord);
@@ -819,11 +812,6 @@ async function searchTracking() {
  results.innerHTML = '<div class="empty">กำลังค้นหา...</div>';
 
  try {
-   /*
-     หมายเหตุ:
-     การค้นหาด้วยรหัสพนักงานเพียงอย่างเดียวอาจเปิดเผยข้อมูลส่วนบุคคล
-     ควรใช้ระบบยืนยันตัวตนและกำหนด RLS ก่อนเปิดใช้งานจริง
-   */
    const { data, error } = await supabaseClient
      .from(TABLE_NAME)
      .select('wp_no, company, employee_id, applicant_name, submitted_at, status, safety_comment, form_data')
@@ -832,10 +820,8 @@ async function searchTracking() {
 
    if (error) {
      console.error('Tracking error:', error);
-
      results.innerHTML =
        '<div class="empty">ค้นหาไม่สำเร็จ กรุณาตรวจสอบสิทธิ์ RLS และคอลัมน์ในตาราง Supabase</div>';
-
      return;
    }
 
@@ -844,7 +830,6 @@ async function searchTracking() {
    if (!records.length) {
      results.innerHTML =
        '<div class="empty">ไม่พบรายการ กรุณาตรวจสอบเลขที่ Work Permit</div>';
-
      return;
    }
 
@@ -924,10 +909,8 @@ async function loadSafetyRequests() {
 
    if (error) {
      console.error('Safety list error:', error);
-
      results.innerHTML =
        '<div class="empty">โหลดรายการไม่สำเร็จ กรุณาตรวจสอบตารางและสิทธิ์ RLS</div>';
-
      return;
    }
 
@@ -936,11 +919,11 @@ async function loadSafetyRequests() {
 
  } catch (error) {
    console.error('Safety load exception:', error);
-
    results.innerHTML =
      '<div class="empty">เกิดข้อผิดพลาดระหว่างโหลดรายการ</div>';
  }
 }
+
 function filterSafety(filter) {
  currentSafetyFilter = filter;
 
@@ -997,7 +980,6 @@ function renderSafetyRequests() {
 
  results.innerHTML = records.map(function (record) {
    const status = record.status || 'Pending';
-
    const details = record.form_data || {};
 
    const actionButtons = status === 'Pending'
@@ -1097,13 +1079,6 @@ function renderSafetyRequests() {
 /* ---------- REVIEW REQUEST ---------- */
 
 async function reviewRequest(wpNo, newStatus) {
- /*
-   สำคัญ:
-   ฟังก์ชันนี้ยังไม่มีระบบยืนยันตัวตนผู้อนุมัติ
-   อย่าเปิดให้ผู้ใช้ทั่วไปเข้าถึงการ UPDATE ตารางในระบบจริง
-   ต้องใช้ Supabase Auth และ RLS ที่จำกัดเฉพาะผู้อนุมัติ
- */
-
  if (!supabaseClient) {
    alert('ยังเชื่อมต่อ Supabase ไม่สำเร็จ');
    return;
@@ -1142,13 +1117,11 @@ async function reviewRequest(wpNo, newStatus) {
 
    if (error) {
      console.error('Review update error:', error);
-
      alert(
        'อัปเดตสถานะไม่สำเร็จ\n' +
        'กรุณาตรวจสอบคอลัมน์และ RLS policy ของ Supabase\n\n' +
        error.message
      );
-
      return;
    }
 
@@ -1157,12 +1130,10 @@ async function reviewRequest(wpNo, newStatus) {
        'ไม่มีรายการถูกแก้ไข อาจเกิดจาก RLS policy ไม่อนุญาต ' +
        'หรือไม่พบเลขที่ Work Permit นี้'
      );
-
      return;
    }
 
    alert('อัปเดตสถานะเรียบร้อยแล้ว');
-
    await loadSafetyRequests();
 
  } catch (error) {
