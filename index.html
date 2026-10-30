@@ -300,9 +300,9 @@ body{display:flex}
 </main>
 
 <script>
-// ==================== CONFIG SUPABASE (แก้ไข URL ที่ถูกต้องแล้ว) ====================
+// ==================== CONFIG SUPABASE (ใส่ค่า URL และ Key ฉบับสมบูรณ์แล้ว) ====================
 const SUPABASE_URL = 'https://oqthxncwleedvccganmg.supabase.co'; 
-const SUPABASE_ANON_KEY = 'sb_publishable_bhnJ7U04RVjyByQe5bqiQ_Qa_ff...'; 
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9xdGh4bmN3bGVlZHZjY2dhbm1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE3OTg1MjgsImV4cCI6MjEwNzM3NDUyOH0.MoUfyFmt7CstiF61r3ubD4mdjY_a8QlHGvZ8SCzmlE0'; 
 
 let sbClient = window.supabase;
 let db = sbClient.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
