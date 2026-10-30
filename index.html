@@ -9,7 +9,7 @@
 *{box-sizing:border-box;font-family:Arial,Tahoma,sans-serif}
 body{margin:0;background:#f0f4f8;color:#1e293b}
 
-/* ===== LOGIN OVERLAY (ล็อคหน้าเว็บทั้งหมดไว้ก่อน) ===== */
+/* ===== SCREEN 0: LOGIN OVERLAY (ล็อคหน้าแรกสำหรับบัญชี Safety หลัก) ===== */
 #app-login-screen{
   position:fixed;
   top:0;left:0;width:100vw;height:100vh;
@@ -62,6 +62,7 @@ input[readonly]{background:#f1f5f9;color:#0284c7;font-weight:bold}
 .btn-submit{width:100%;margin-top:24px}
 .record{border:1px solid #cbd5e1;border-radius:9px;padding:18px;margin-top:15px;background:#fff}
 .checklist-box{background:#f8fafc;padding:15px;border-radius:8px;border:1px solid #cbd5e1;margin-top:10px}
+.approval-box{background:#f0f9ff;border:1px solid #7dd3fc;padding:15px;border-radius:8px;margin-top:15px}
 .status{display:inline-block;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:bold}
 .status-Pending{background:#fef3c7;color:#92400e}
 .status-Approved{background:#dcfce7;color:#166534}
@@ -80,29 +81,23 @@ body{display:flex}
 </head>
 <body>
 
-<!-- ==================== SCREEN 0: LOGIN OVERLAY (ล็อคหน้าแรก) ==================== -->
+<!-- ==================== SCREEN 0: LOGIN OVERLAY ==================== -->
 <div id="app-login-screen">
   <div class="login-card">
     <h2>SAFE PASS</h2>
-    <p class="sub">Smart Work Permit & Safety Digital Passport</p>
+    <p class="sub">Smart Work Permit System</p>
     
     <form onsubmit="handleGlobalLogin(event)">
       <div class="form-group" style="margin-bottom:15px;">
-        <label>อีเมลผู้ใช้งาน (Email) <span class="req">*</span></label>
-        <input type="email" id="app_email" placeholder="กรอกอีเมลของคุณ" required>
+        <label>อีเมลระบบ จป. (Email) <span class="req">*</span></label>
+        <input type="email" id="app_email" value="safety@company.com" required readonly>
       </div>
       <div class="form-group" style="margin-bottom:20px;">
-        <label>รหัสผ่าน (Password) <span class="req">*</span></label>
+        <label>รหัสผ่านเข้าใช้ระบบ (Password) <span class="req">*</span></label>
         <input type="password" id="app_password" placeholder="••••••••" required>
       </div>
-      <button type="submit" class="btn btn-primary" style="width:100%; padding:14px; font-size:16px;">เข้าสู่ระบบ</button>
+      <button type="submit" class="btn btn-primary" style="width:100%; padding:14px; font-size:16px;">เข้าสู่ระบบ จป.</button>
     </form>
-    
-    <div style="margin-top:20px; padding-top:15px; border-top:1px solid #e2e8f0; font-size:12px; color:#64748b; text-align:left;">
-      <strong>💡 บัญชีทดสอบระบบ:</strong><br>
-      • จป. : <code>safety@company.com</code><br>
-      • ผู้ขออนุญาตทั่วไป : <code>user@company.com</code>
-    </div>
   </div>
 </div>
 
@@ -119,9 +114,9 @@ body{display:flex}
 
 <main class="main-content">
 
-  <!-- แถบแสดงชื่อผู้ล็อกอิน และปุ่มออกจากระบบ -->
+  <!-- แถบแสดงสถานะระบบ -->
   <div class="user-bar">
-    <div>👤 ผู้ใช้งาน: <strong id="logged-user-email">user@company.com</strong> (<span id="logged-user-role">Safety</span>)</div>
+    <div>👤 บัญชีเข้าใช้งาน: <strong>safety@company.com</strong> ( Safety System )</div>
     <button class="btn btn-danger" style="padding:6px 12px; font-size:13px;" onclick="handleGlobalLogout()">ออกจากระบบ</button>
   </div>
 
@@ -154,7 +149,7 @@ body{display:flex}
         </div>
         <div class="form-group">
           <label>1.4 อีเมลติดต่อ <span class="req">*</span></label>
-          <input type="email" id="applicant_email_input" name="applicant_email" required placeholder="name@company.com">
+          <input type="email" name="applicant_email" required placeholder="name@company.com">
         </div>
         <div class="form-group">
           <label>1.5 แผนก <span class="req">*</span></label>
@@ -254,7 +249,7 @@ body{display:flex}
   <section id="page-safety" class="card-container hidden">
     <h1 class="page-title">🛡️ พิจารณาอนุมัติสำหรับ จป.</h1>
     <div class="notice">
-      ส่วนนี้สำหรับเจ้าหน้าที่ความปลอดภัย (Safety Officer) ตรวจสอบรายละเอียดและอนุมัติเอกสาร[cite: 1, 2]
+      เจ้าหน้าที่ความปลอดภัย (Safety Officer) สามารถตรวจสอบรายละเอียด พร้อมระบุชื่อและรหัสพนักงานก่อนกดอนุมัติ[cite: 1, 2]
     </div>
     <div id="safety-requests-list"></div>
   </section>
@@ -262,58 +257,23 @@ body{display:flex}
 </main>
 
 <script>
-let currentUser = null;
+let isLoggedIn = false;
 
-// ฟังก์ชันเข้าสู่ระบบหลัก (GLOBAL LOGIN)
 function handleGlobalLogin(event) {
   event.preventDefault();
-  const email = document.getElementById('app_email').value;
-
-  // ตรวจสอบ Role จากอีเมล
-  let role = 'General User';
-  if (email.includes('safety')) {
-    role = 'Safety Officer (จป.)';
-  }
-
-  currentUser = { email: email, role: role };
-
-  // อัปเดตการแสดงผลส่วนหัว
-  document.getElementById('logged-user-email').innerText = currentUser.email;
-  document.getElementById('logged-user-role').innerText = currentUser.role;
-  document.getElementById('applicant_email_input').value = currentUser.email;
-
-  // ซ่อนหน้าล็อกอิน
+  isLoggedIn = true;
   document.getElementById('app-login-screen').classList.add('hidden');
-
-  // ตรวจสอบสิทธิ์ปุ่มเมนู Safety
-  const safetyBtn = document.getElementById('menu-safety');
-  if (role !== 'Safety Officer (จป.)') {
-    safetyBtn.style.opacity = '0.5';
-  } else {
-    safetyBtn.style.opacity = '1';
-  }
-
-  // เข้าสู่หน้าแรก (ยื่นคำขอ)
   switchPage('form');
-  alert(`เข้าสู่ระบบสำเร็จในฐานะ: ${currentUser.role}`);
+  alert("เข้าสู่ระบบเรียบร้อยแล้ว!");
 }
 
-// ฟังก์ชันออกจากระบบ
 function handleGlobalLogout() {
-  currentUser = null;
+  isLoggedIn = false;
   document.getElementById('app-login-screen').classList.remove('hidden');
-  document.getElementById('app_email').value = '';
   document.getElementById('app_password').value = '';
 }
 
-// สลับหน้าแท็บ
 function switchPage(pageId) {
-  // หากพยายามเข้าแท็บ Safety แต่ไม่ใช่ จป.
-  if (pageId === 'safety' && currentUser && currentUser.role !== 'Safety Officer (จป.)') {
-    alert('⚠️ สิทธิ์ไม่ถูกต้อง: แท็บนี้สำหรับเจ้าหน้าที่ จป. เท่านั้น');
-    return;
-  }
-
   document.getElementById('page-form').classList.add('hidden');
   document.getElementById('page-track').classList.add('hidden');
   document.getElementById('page-safety').classList.add('hidden');
@@ -330,7 +290,6 @@ function switchPage(pageId) {
   }
 }
 
-// แสดง/ซ่อน Checklist งานเสี่ยงสูง
 function handleWorkTypeChange() {
   const type = document.getElementById('work_type').value;
   document.getElementById('checklist-hotwork').classList.add('hidden');
@@ -344,16 +303,13 @@ function handleWorkTypeChange() {
   else if (type === 'Electrical') document.getElementById('checklist-electrical').classList.remove('hidden');
 }
 
-// ส่งแบบฟอร์ม
 function submitWorkPermit(event) {
   event.preventDefault();
   alert("ส่งคำขอใบอนุญาตทำงานเรียบร้อยแล้ว!");
   document.getElementById('workPermitForm').reset();
-  document.getElementById('applicant_email_input').value = currentUser ? currentUser.email : '';
   switchPage('track');
 }
 
-// ค้นหาในแท็บ 2
 function searchWorkPermit() {
   const val = document.getElementById('search_wp').value;
   const resDiv = document.getElementById('track-result');
@@ -370,7 +326,7 @@ function searchWorkPermit() {
   `;
 }
 
-// โหลดรายการสำหรับ จป. ในแท็บ 3
+// แสดงรายการขออนุมัติ + ช่องระบุชื่อและรหัสพนักงานของ จป. ผู้อนุมัติ[cite: 1]
 function loadSafetyRequests() {
   const listDiv = document.getElementById('safety-requests-list');
   listDiv.innerHTML = `
@@ -379,20 +335,45 @@ function loadSafetyRequests() {
       <p><strong>บริษัท/ผู้ขอ:</strong> บริษัท ไทยคอนสตรัคชั่น จำกัด (นายสมชาย)</p>
       <p><strong>ประเภทงาน:</strong> งานความร้อน (Hot Work)</p>
       <p><strong>ผู้ปฏิบัติงาน:</strong> นายสมชาย ใจดี (ผ่านเกณฑ์ Safety Passport)</p>
-      <p><strong>สถานะ:</strong> <span class="status status-Pending">รออนุมัติ</span></p>
-      <p><strong>ไฟล์แนบ:</strong> <a href="#" target="_blank">ดาวน์โหลดเอกสาร JSA/หลักฐาน</a></p>
-      <div style="margin-top:15px; display:flex; gap:10px;">
-        <button class="btn btn-success" onclick="approveRequest('WP-2026-001', 'Approved')">อนุมัติ (Approve)</button>
-        <button class="btn btn-danger" onclick="approveRequest('WP-2026-001', 'Rejected')">ไม่อนุมัติ (Reject)</button>
+      <p><strong>ไฟล์แนบ:</strong> <a href="#" target="_blank">ดาวน์โหลดเอกสาร JSA/หลักฐาน</a>[cite: 1]</p>
+      <p><strong>สถานะปัจจุบัน:</strong> <span class="status status-Pending">รออนุมัติ</span></p>
+      
+      <!-- ส่วนกรอกข้อมูลผู้อนุมัติเฉพาะบุคคล -->
+      <div class="approval-box">
+        <h4 style="margin-top:0; color:#0369a1;">✍️ ข้อมูลเจ้าหน้าที่ความปลอดภัย (ผู้อนุมัติคำขอ)[cite: 1]</h4>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>ชื่อ-นามสกุล จป. ผู้อนุมัติ <span class="req">*</span>[cite: 1]</label>
+            <input type="text" id="reviewer_name_WP-2026-001" placeholder="เช่น นายอนันต์ ปลอดภัย">
+          </div>
+          <div class="form-group">
+            <label>รหัสพนักงาน จป. <span class="req">*</span>[cite: 1]</label>
+            <input type="text" id="reviewer_id_WP-2026-001" placeholder="เช่น SAF-009">
+          </div>
+        </div>
+        <div style="margin-top:15px; display:flex; gap:10px;">
+          <button class="btn btn-success" onclick="approveRequest('WP-2026-001', 'Approved')">อนุมัติ (Approve)</button>
+          <button class="btn btn-danger" onclick="approveRequest('WP-2026-001', 'Rejected')">ไม่อนุมัติ (Reject)</button>
+        </div>
       </div>
     </div>
   `;
 }
 
-// กดอนุมัติ/ไม่อนุมัติ
+// บันทึกการอนุมัติพร้อมชื่อและรหัสพนักงาน[cite: 1]
 function approveRequest(wpNo, actionStatus) {
+  const reviewerName = document.getElementById(`reviewer_name_${wpNo}`).value.trim();
+  const reviewerId = document.getElementById(`reviewer_id_${wpNo}`).value.trim();
+
+  if (!reviewerName || !reviewerId) {
+    alert("⚠️ กรุณากรอก 'ชื่อ-นามสกุล' และ 'รหัสพนักงาน' ของผู้อนุมัติให้ครบถ้วนก่อนดำเนินการครับ");
+    return;
+  }
+
   const statusLabel = actionStatus === 'Approved' ? 'อนุมัติ' : 'ไม่อนุมัติ';
-  alert(`ดำเนินการ [${statusLabel}] คำขอเลขที่ ${wpNo} เรียบร้อยแล้ว\nบันทึกชื่อผู้อนุมัติ: ${currentUser.email}`);
+  
+  alert(`✅ ดำเนินการ [${statusLabel}] คำขอเลขที่ ${wpNo} เรียบร้อยแล้ว!\n\n📌 ข้อมูลผู้อนุมัติที่บันทึก:\n• ชื่อผู้อนุมัติ: ${reviewerName}\n• รหัสพนักงาน จป.: ${reviewerId}\n• วันเวลาที่อนุมัติ: ${new Date().toLocaleString('th-TH')}`);
+  
   document.getElementById(`req-${wpNo}`).style.display = 'none';
 }
 </script>
