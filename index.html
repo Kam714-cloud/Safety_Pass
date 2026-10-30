@@ -9,7 +9,7 @@
 *{box-sizing:border-box;font-family:Arial,Tahoma,sans-serif}
 body{margin:0;background:#f0f4f8;color:#1e293b}
 
-/* ===== LOGIN OVERLAY (ล็อคหน้าเว็บทั้งหมดไว้ก่อน) ===== */
+/* ===== LOGIN & SIGNUP OVERLAY (หน้าสลับเข้าสู่ระบบ / สมัครสมาชิก) ===== */
 #app-login-screen{
   position:fixed;
   top:0;left:0;width:100vw;height:100vh;
@@ -31,6 +31,7 @@ body{margin:0;background:#f0f4f8;color:#1e293b}
 }
 .login-card h2{color:#0284c7;margin-top:0;font-size:26px;margin-bottom:6px}
 .login-card p.sub{color:#64748b;font-size:13px;margin-bottom:25px}
+.toggle-link{color:#0284c7;font-weight:bold;cursor:pointer;text-decoration:underline;margin-top:15px;display:inline-block;font-size:14px}
 
 /* ===== MAIN SYSTEM LAYOUT ===== */
 .sidebar{background:#0f172a;color:white;padding:15px}
@@ -62,6 +63,7 @@ input[readonly]{background:#f1f5f9;color:#0284c7;font-weight:bold}
 .btn-submit{width:100%;margin-top:24px}
 .record{border:1px solid #cbd5e1;border-radius:9px;padding:18px;margin-top:15px;background:#fff}
 .checklist-box{background:#f8fafc;padding:15px;border-radius:8px;border:1px solid #cbd5e1;margin-top:10px}
+.approval-box{background:#f0f9ff;border:1px solid #7dd3fc;padding:15px;border-radius:8px;margin-top:15px}
 .status{display:inline-block;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:bold}
 .status-Pending{background:#fef3c7;color:#92400e}
 .status-Approved{background:#dcfce7;color:#166534}
@@ -80,29 +82,51 @@ body{display:flex}
 </head>
 <body>
 
-<!-- ==================== SCREEN 0: LOGIN OVERLAY (ล็อคหน้าแรก) ==================== -->
+<!-- ==================== LOGIN / SIGNUP OVERLAY ==================== -->
 <div id="app-login-screen">
   <div class="login-card">
     <h2>SAFE PASS</h2>
     <p class="sub">Smart Work Permit & Safety Digital Passport</p>
     
-    <form onsubmit="handleGlobalLogin(event)">
-      <div class="form-group" style="margin-bottom:15px;">
-        <label>อีเมลผู้ใช้งาน (Email) <span class="req">*</span></label>
-        <input type="email" id="app_email" placeholder="กรอกอีเมลของคุณ" required>
-      </div>
-      <div class="form-group" style="margin-bottom:20px;">
-        <label>รหัสผ่าน (Password) <span class="req">*</span></label>
-        <input type="password" id="app_password" placeholder="••••••••" required>
-      </div>
-      <button type="submit" class="btn btn-primary" style="width:100%; padding:14px; font-size:16px;">เข้าสู่ระบบ</button>
-    </form>
-    
-    <div style="margin-top:20px; padding-top:15px; border-top:1px solid #e2e8f0; font-size:12px; color:#64748b; text-align:left;">
-      <strong>💡 บัญชีทดสอบระบบ:</strong><br>
-      • จป. : <code>safety@company.com</code><br>
-      • ผู้ขออนุญาตทั่วไป : <code>user@company.com</code>
+    <!-- ฟอร์มที่ 1: เข้าสู่ระบบ (LOGIN) -->
+    <div id="login-form-container">
+      <form onsubmit="handleGlobalLogin(event)">
+        <div class="form-group" style="margin-bottom:15px;">
+          <label>อีเมลผู้ใช้งาน (Email) <span class="req">*</span></label>
+          <input type="email" id="app_email" placeholder="กรอกอีเมลของคุณ" required>
+        </div>
+        <div class="form-group" style="margin-bottom:20px;">
+          <label>รหัสผ่าน (Password) <span class="req">*</span></label>
+          <input type="password" id="app_password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; padding:14px; font-size:16px;">เข้าสู่ระบบ</button>
+      </form>
+      <span class="toggle-link" onclick="toggleAuthMode('signup')">ยังไม่มีบัญชี? สมัครสมาชิกที่นี่</span>
     </div>
+
+    <!-- ฟอร์มที่ 2: สมัครสมาชิก (SIGN UP) -->
+    <div id="signup-form-container" class="hidden">
+      <form onsubmit="handleGlobalSignUp(event)">
+        <div class="form-group" style="margin-bottom:15px;">
+          <label>อีเมลสมัครใช้งาน (Email) <span class="req">*</span></label>
+          <input type="email" id="signup_email" placeholder="example@company.com" required>
+        </div>
+        <div class="form-group" style="margin-bottom:15px;">
+          <label>ตั้งรหัสผ่าน (Password) <span class="req">*</span></label>
+          <input type="password" id="signup_password" placeholder="อย่างน้อย 6 หลัก" minlength="6" required>
+        </div>
+        <div class="form-group" style="margin-bottom:20px;">
+          <label>ประเภทบัญชี / สิทธิ์ใช้งาน <span class="req">*</span></label>
+          <select id="signup_role" required>
+            <option value="General User">ผู้ขออนุญาตทั่วไป / ผู้รับเหมา</option>
+            <option value="Safety Officer (จป.)">เจ้าหน้าที่ความปลอดภัย (จป.)</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-success" style="width:100%; padding:14px; font-size:16px;">ยืนยันการสมัครสมาชิก</button>
+      </form>
+      <span class="toggle-link" onclick="toggleAuthMode('login')">มีบัญชีอยู่แล้ว? กลับไปหน้าเข้าสู่ระบบ</span>
+    </div>
+
   </div>
 </div>
 
@@ -119,9 +143,9 @@ body{display:flex}
 
 <main class="main-content">
 
-  <!-- แถบแสดงชื่อผู้ล็อกอิน และปุ่มออกจากระบบ -->
+  <!-- แถบแสดงผู้ใช้งานปัจจุบัน -->
   <div class="user-bar">
-    <div>👤 ผู้ใช้งาน: <strong id="logged-user-email">user@company.com</strong> (<span id="logged-user-role">Safety</span>)</div>
+    <div>👤 ผู้ใช้งาน: <strong id="logged-user-email">-</strong> (<span id="logged-user-role">-</span>)</div>
     <button class="btn btn-danger" style="padding:6px 12px; font-size:13px;" onclick="handleGlobalLogout()">ออกจากระบบ</button>
   </div>
 
@@ -129,7 +153,7 @@ body{display:flex}
   <section id="page-form" class="card-container">
     <h1 class="page-title">ยื่นคำขอใบอนุญาตทำงาน (Work Permit)</h1>
     <div class="notice">
-      <strong>ข้อแนะนำ:</strong> กรุณากรอกข้อมูลและอัปโหลดหลักฐานความปลอดภัยให้ครบถ้วนก่อนยื่นคำขอ[cite: 2]
+      <strong>ข้อแนะนำ:</strong> กรุณากรอกข้อมูลและอัปโหลดหลักฐานความปลอดภัยให้ครบถ้วนก่อนยื่นคำขอ
     </div>
     
     <form id="workPermitForm" onsubmit="submitWorkPermit(event)">
@@ -173,7 +197,7 @@ body{display:flex}
       <div class="section-title">2. ประเภทงานและมาตรการตรวจเฉพาะ (High-Risk Work)</div>
       <div class="form-grid">
         <div class="form-group full-width">
-          <label>2.1 เลือกประเภทงานเสี่ยงสูง <span class="req">*</span>[cite: 1]</label>
+          <label>2.1 เลือกประเภทงานเสี่ยงสูง <span class="req">*</span></label>
           <select id="work_type" name="work_type" required onchange="handleWorkTypeChange()">
             <option value="">-- กรุณาเลือกประเภทงาน --</option>
             <option value="General">งานทั่วไป (General Work)</option>
@@ -220,7 +244,7 @@ body{display:flex}
       <div class="section-title">3. Safety Digital Passport & อัปโหลดหลักฐาน</div>
       <div class="form-grid">
         <div class="form-group full-width">
-          <label>3.1 เลือกผู้ปฏิบัติงาน <span class="req">*</span>[cite: 1]</label>
+          <label>3.1 เลือกผู้ปฏิบัติงาน <span class="req">*</span></label>
           <select id="worker_select" name="worker_name" required>
             <option value="">-- เลือกรายชื่อผู้ปฏิบัติงานจากฐานข้อมูล --</option>
             <option value="นายสมชาย ใจดี (สถานะ: ปกติ)">นายสมชาย ใจดี (รหัส: W001)</option>
@@ -228,7 +252,7 @@ body{display:flex}
           </select>
         </div>
         <div class="form-group full-width">
-          <label>3.2 แนบไฟล์เอกสารความปลอดภัย / JSA <span class="req">*</span>[cite: 1]</label>
+          <label>3.2 แนบไฟล์เอกสารความปลอดภัย / JSA <span class="req">*</span></label>
           <input type="file" id="work_permit_file" name="work_permit_file" required>
         </div>
       </div>
@@ -254,7 +278,7 @@ body{display:flex}
   <section id="page-safety" class="card-container hidden">
     <h1 class="page-title">🛡️ พิจารณาอนุมัติสำหรับ จป.</h1>
     <div class="notice">
-      ส่วนนี้สำหรับเจ้าหน้าที่ความปลอดภัย (Safety Officer) ตรวจสอบรายละเอียดและอนุมัติเอกสาร[cite: 1, 2]
+      ส่วนนี้สำหรับเจ้าหน้าที่ความปลอดภัย (Safety Officer) ตรวจสอบรายละเอียด พร้อมกรอกชื่อและรหัสพนักงานของผู้อนุมัติก่อนกดบันทึก
     </div>
     <div id="safety-requests-list"></div>
   </section>
@@ -263,54 +287,91 @@ body{display:flex}
 
 <script>
 let currentUser = null;
+// ฐานข้อมูลผู้ใช้จำลองในระบบ
+let userDatabase = [
+  { email: 'safety@company.com', password: '123', role: 'Safety Officer (จป.)' },
+  { email: 'user@company.com', password: '123', role: 'General User' }
+];
 
-// ฟังก์ชันเข้าสู่ระบบหลัก (GLOBAL LOGIN)
+// สลับฟอร์มระหว่าง Login และ Signup
+function toggleAuthMode(mode) {
+  if (mode === 'signup') {
+    document.getElementById('login-form-container').classList.add('hidden');
+    document.getElementById('signup-form-container').classList.remove('hidden');
+  } else {
+    document.getElementById('signup-form-container').classList.add('hidden');
+    document.getElementById('login-form-container').classList.remove('hidden');
+  }
+}
+
+// ระบบเข้าสู่ระบบ
 function handleGlobalLogin(event) {
   event.preventDefault();
   const email = document.getElementById('app_email').value;
+  const password = document.getElementById('app_password').value;
 
-  // ตรวจสอบ Role จากอีเมล
-  let role = 'General User';
-  if (email.includes('safety')) {
-    role = 'Safety Officer (จป.)';
+  const foundUser = userDatabase.find(u => u.email === email && u.password === password);
+
+  if (foundUser) {
+    currentUser = foundUser;
+    loginSuccess();
+  } else {
+    // ถ้าไม่เจอใน DB จำลอง ให้สร้าง Role อัตโนมัติตามรูปแบบอีเมล
+    let role = email.includes('safety') ? 'Safety Officer (จป.)' : 'General User';
+    currentUser = { email: email, role: role };
+    loginSuccess();
   }
+}
 
-  currentUser = { email: email, role: role };
+// ระบบสมัครสมาชิกใหม่
+function handleGlobalSignUp(event) {
+  event.preventDefault();
+  const email = document.getElementById('signup_email').value;
+  const password = document.getElementById('signup_password').value;
+  const role = document.getElementById('signup_role').value;
 
-  // อัปเดตการแสดงผลส่วนหัว
+  // บันทึกเข้า DB จำลอง
+  userDatabase.push({ email, password, role });
+  currentUser = { email, role };
+
+  alert(`🎉 สมัครสมาชิกสำเร็จ!\nยินดีต้อนรับ: ${email}\nสิทธิ์การใช้งาน: ${role}`);
+  
+  // ล้างค่าฟอร์ม
+  document.getElementById('signup_email').value = '';
+  document.getElementById('signup_password').value = '';
+
+  loginSuccess();
+}
+
+// การทำงานเมื่อเข้าสู่ระบบผ่าน
+function loginSuccess() {
   document.getElementById('logged-user-email').innerText = currentUser.email;
   document.getElementById('logged-user-role').innerText = currentUser.role;
   document.getElementById('applicant_email_input').value = currentUser.email;
 
-  // ซ่อนหน้าล็อกอิน
   document.getElementById('app-login-screen').classList.add('hidden');
 
-  // ตรวจสอบสิทธิ์ปุ่มเมนู Safety
   const safetyBtn = document.getElementById('menu-safety');
-  if (role !== 'Safety Officer (จป.)') {
+  if (currentUser.role !== 'Safety Officer (จป.)') {
     safetyBtn.style.opacity = '0.5';
   } else {
     safetyBtn.style.opacity = '1';
   }
 
-  // เข้าสู่หน้าแรก (ยื่นคำขอ)
   switchPage('form');
-  alert(`เข้าสู่ระบบสำเร็จในฐานะ: ${currentUser.role}`);
 }
 
-// ฟังก์ชันออกจากระบบ
+// ออกจากระบบ
 function handleGlobalLogout() {
   currentUser = null;
   document.getElementById('app-login-screen').classList.remove('hidden');
-  document.getElementById('app_email').value = '';
-  document.getElementById('app_password').value = '';
+  toggleAuthMode('login');
 }
 
 // สลับหน้าแท็บ
 function switchPage(pageId) {
-  // หากพยายามเข้าแท็บ Safety แต่ไม่ใช่ จป.
   if (pageId === 'safety' && currentUser && currentUser.role !== 'Safety Officer (จป.)') {
-    alert('⚠️ สิทธิ์ไม่ถูกต้อง: แท็บนี้สำหรับเจ้าหน้าที่ จป. เท่านั้น');
+    alert('⚠️ สิทธิ์ไม่ถูกต้อง: แท็บพิจารณาอนุมัตินี้สำหรับเจ้าหน้าที่ จป. เท่านั้นครับ');
     return;
   }
 
@@ -330,7 +391,7 @@ function switchPage(pageId) {
   }
 }
 
-// แสดง/ซ่อน Checklist งานเสี่ยงสูง
+// แสดง/ซ่อน Checklist
 function handleWorkTypeChange() {
   const type = document.getElementById('work_type').value;
   document.getElementById('checklist-hotwork').classList.add('hidden');
@@ -344,7 +405,6 @@ function handleWorkTypeChange() {
   else if (type === 'Electrical') document.getElementById('checklist-electrical').classList.remove('hidden');
 }
 
-// ส่งแบบฟอร์ม
 function submitWorkPermit(event) {
   event.preventDefault();
   alert("ส่งคำขอใบอนุญาตทำงานเรียบร้อยแล้ว!");
@@ -353,7 +413,6 @@ function submitWorkPermit(event) {
   switchPage('track');
 }
 
-// ค้นหาในแท็บ 2
 function searchWorkPermit() {
   const val = document.getElementById('search_wp').value;
   const resDiv = document.getElementById('track-result');
@@ -370,7 +429,6 @@ function searchWorkPermit() {
   `;
 }
 
-// โหลดรายการสำหรับ จป. ในแท็บ 3
 function loadSafetyRequests() {
   const listDiv = document.getElementById('safety-requests-list');
   listDiv.innerHTML = `
@@ -379,20 +437,43 @@ function loadSafetyRequests() {
       <p><strong>บริษัท/ผู้ขอ:</strong> บริษัท ไทยคอนสตรัคชั่น จำกัด (นายสมชาย)</p>
       <p><strong>ประเภทงาน:</strong> งานความร้อน (Hot Work)</p>
       <p><strong>ผู้ปฏิบัติงาน:</strong> นายสมชาย ใจดี (ผ่านเกณฑ์ Safety Passport)</p>
-      <p><strong>สถานะ:</strong> <span class="status status-Pending">รออนุมัติ</span></p>
       <p><strong>ไฟล์แนบ:</strong> <a href="#" target="_blank">ดาวน์โหลดเอกสาร JSA/หลักฐาน</a></p>
-      <div style="margin-top:15px; display:flex; gap:10px;">
-        <button class="btn btn-success" onclick="approveRequest('WP-2026-001', 'Approved')">อนุมัติ (Approve)</button>
-        <button class="btn btn-danger" onclick="approveRequest('WP-2026-001', 'Rejected')">ไม่อนุมัติ (Reject)</button>
+      <p><strong>สถานะปัจจุบัน:</strong> <span class="status status-Pending">รออนุมัติ</span></p>
+      
+      <div class="approval-box">
+        <h4 style="margin-top:0; color:#0369a1;">✍️ ข้อมูลเจ้าหน้าที่ความปลอดภัย (ผู้อนุมัติคำขอ)</h4>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>ชื่อ-นามสกุล จป. ผู้อนุมัติ <span class="req">*</span></label>
+            <input type="text" id="reviewer_name_WP-2026-001" placeholder="เช่น นายอนันต์ ปลอดภัย">
+          </div>
+          <div class="form-group">
+            <label>รหัสพนักงาน จป. <span class="req">*</span></label>
+            <input type="text" id="reviewer_id_WP-2026-001" placeholder="เช่น SAF-009">
+          </div>
+        </div>
+        <div style="margin-top:15px; display:flex; gap:10px;">
+          <button class="btn btn-success" onclick="approveRequest('WP-2026-001', 'Approved')">อนุมัติ (Approve)</button>
+          <button class="btn btn-danger" onclick="approveRequest('WP-2026-001', 'Rejected')">ไม่อนุมัติ (Reject)</button>
+        </div>
       </div>
     </div>
   `;
 }
 
-// กดอนุมัติ/ไม่อนุมัติ
 function approveRequest(wpNo, actionStatus) {
+  const reviewerName = document.getElementById(`reviewer_name_${wpNo}`).value.trim();
+  const reviewerId = document.getElementById(`reviewer_id_${wpNo}`).value.trim();
+
+  if (!reviewerName || !reviewerId) {
+    alert("⚠️ กรุณากรอก 'ชื่อ-นามสกุล' และ 'รหัสพนักงาน' ของผู้อนุมัติให้ครบถ้วนก่อนกดอนุมัติครับ");
+    return;
+  }
+
   const statusLabel = actionStatus === 'Approved' ? 'อนุมัติ' : 'ไม่อนุมัติ';
-  alert(`ดำเนินการ [${statusLabel}] คำขอเลขที่ ${wpNo} เรียบร้อยแล้ว\nบันทึกชื่อผู้อนุมัติ: ${currentUser.email}`);
+  
+  alert(`✅ ดำเนินการ [${statusLabel}] คำขอเลขที่ ${wpNo} เรียบร้อยแล้ว!\n\n📌 ข้อมูลผู้อนุมัติที่บันทึก:\n• ชื่อผู้อนุมัติ: ${reviewerName}\n• รหัสพนักงาน จป.: ${reviewerId}\n• บัญชีที่ดำเนินการ: ${currentUser.email}\n• วันเวลา: ${new Date().toLocaleString('th-TH')}`);
+  
   document.getElementById(`req-${wpNo}`).style.display = 'none';
 }
 </script>
