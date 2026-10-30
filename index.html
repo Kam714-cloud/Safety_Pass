@@ -9,7 +9,7 @@
 *{box-sizing:border-box;font-family:Arial,Tahoma,sans-serif}
 body{margin:0;background:#f0f4f8;color:#1e293b}
 
-/* ===== LOGIN & SIGNUP OVERLAY (หน้าสลับเข้าสู่ระบบ / สมัครสมาชิก) ===== */
+/* ===== LOGIN / SIGNUP OVERLAY ===== */
 #app-login-screen{
   position:fixed;
   top:0;left:0;width:100vw;height:100vh;
@@ -19,15 +19,17 @@ body{margin:0;background:#f0f4f8;color:#1e293b}
   align-items:center;
   z-index:9999;
   padding:20px;
+  overflow-y:auto;
 }
 .login-card{
   background:white;
   width:100%;
-  max-width:420px;
+  max-width:440px;
   padding:35px 30px;
   border-radius:16px;
   box-shadow:0 20px 25px -5px rgba(0,0,0,0.3);
   text-align:center;
+  margin:auto;
 }
 .login-card h2{color:#0284c7;margin-top:0;font-size:26px;margin-bottom:6px}
 .login-card p.sub{color:#64748b;font-size:13px;margin-bottom:25px}
@@ -104,9 +106,17 @@ body{display:flex}
       <span class="toggle-link" onclick="toggleAuthMode('signup')">ยังไม่มีบัญชี? สมัครสมาชิกที่นี่</span>
     </div>
 
-    <!-- ฟอร์มที่ 2: สมัครสมาชิก (SIGN UP) -->
+    <!-- ฟอร์มที่ 2: สมัครสมาชิก (SIGN UP - เพิ่มชื่อและรหัสพนักงานแล้ว) -->
     <div id="signup-form-container" class="hidden">
       <form onsubmit="handleGlobalSignUp(event)">
+        <div class="form-group" style="margin-bottom:15px;">
+          <label>ชื่อ-นามสกุล <span class="req">*</span></label>
+          <input type="text" id="signup_fullname" placeholder="กรอกชื่อ-นามสกุล" required>
+        </div>
+        <div class="form-group" style="margin-bottom:15px;">
+          <label>รหัสพนักงาน / รหัสผู้รับเหมา <span class="req">*</span></label>
+          <input type="text" id="signup_empid" placeholder="เช่น EMP-102 หรือ CON-05" required>
+        </div>
         <div class="form-group" style="margin-bottom:15px;">
           <label>อีเมลสมัครใช้งาน (Email) <span class="req">*</span></label>
           <input type="email" id="signup_email" placeholder="example@company.com" required>
@@ -145,7 +155,7 @@ body{display:flex}
 
   <!-- แถบแสดงผู้ใช้งานปัจจุบัน -->
   <div class="user-bar">
-    <div>👤 ผู้ใช้งาน: <strong id="logged-user-email">-</strong> (<span id="logged-user-role">-</span>)</div>
+    <div>👤 ผู้ใช้งาน: <strong id="logged-user-name">-</strong> (<span id="logged-user-role">-</span>)</div>
     <button class="btn btn-danger" style="padding:6px 12px; font-size:13px;" onclick="handleGlobalLogout()">ออกจากระบบ</button>
   </div>
 
@@ -170,11 +180,11 @@ body{display:flex}
         </div>
         <div class="form-group">
           <label>1.2 ชื่อ-นามสกุล ผู้ขออนุญาต <span class="req">*</span></label>
-          <input type="text" name="applicant_name" required placeholder="ชื่อ-นามสกุล">
+          <input type="text" id="applicant_name_input" name="applicant_name" required placeholder="ชื่อ-นามสกุล">
         </div>
         <div class="form-group">
           <label>1.3 รหัสพนักงาน/ผู้รับเหมา <span class="req">*</span></label>
-          <input type="text" name="employee_id" required placeholder="กรอกรหัส">
+          <input type="text" id="employee_id_input" name="employee_id" required placeholder="กรอกรหัส">
         </div>
         <div class="form-group">
           <label>1.4 อีเมลติดต่อ <span class="req">*</span></label>
@@ -287,13 +297,11 @@ body{display:flex}
 
 <script>
 let currentUser = null;
-// ฐานข้อมูลผู้ใช้จำลองในระบบ
 let userDatabase = [
-  { email: 'safety@company.com', password: '123', role: 'Safety Officer (จป.)' },
-  { email: 'user@company.com', password: '123', role: 'General User' }
+  { fullname: 'นายสมศักดิ์ ปลอดภัย', empid: 'SAF-001', email: 'safety@company.com', password: '123', role: 'Safety Officer (จป.)' },
+  { fullname: 'นายสมชาย ใจดี', empid: 'EMP-101', email: 'user@company.com', password: '123', role: 'General User' }
 ];
 
-// สลับฟอร์มระหว่าง Login และ Signup
 function toggleAuthMode(mode) {
   if (mode === 'signup') {
     document.getElementById('login-form-container').classList.add('hidden');
@@ -304,7 +312,6 @@ function toggleAuthMode(mode) {
   }
 }
 
-// ระบบเข้าสู่ระบบ
 function handleGlobalLogin(event) {
   event.preventDefault();
   const email = document.getElementById('app_email').value;
@@ -314,40 +321,43 @@ function handleGlobalLogin(event) {
 
   if (foundUser) {
     currentUser = foundUser;
-    loginSuccess();
   } else {
-    // ถ้าไม่เจอใน DB จำลอง ให้สร้าง Role อัตโนมัติตามรูปแบบอีเมล
     let role = email.includes('safety') ? 'Safety Officer (จป.)' : 'General User';
-    currentUser = { email: email, role: role };
-    loginSuccess();
+    currentUser = { fullname: email.split('@')[0], empid: 'TEMP-01', email: email, role: role };
   }
+  loginSuccess();
 }
 
-// ระบบสมัครสมาชิกใหม่
 function handleGlobalSignUp(event) {
   event.preventDefault();
-  const email = document.getElementById('signup_email').value;
+  const fullname = document.getElementById('signup_fullname').value.trim();
+  const empid = document.getElementById('signup_empid').value.trim();
+  const email = document.getElementById('signup_email').value.trim();
   const password = document.getElementById('signup_password').value;
   const role = document.getElementById('signup_role').value;
 
-  // บันทึกเข้า DB จำลอง
-  userDatabase.push({ email, password, role });
-  currentUser = { email, role };
+  currentUser = { fullname, empid, email, password, role };
+  userDatabase.push(currentUser);
 
-  alert(`🎉 สมัครสมาชิกสำเร็จ!\nยินดีต้อนรับ: ${email}\nสิทธิ์การใช้งาน: ${role}`);
+  alert(`🎉 สมัครสมาชิกสำเร็จ!\nชื่อ: ${fullname} (${empid})\nอีเมล: ${email}\nสิทธิ์การใช้งาน: ${role}`);
   
-  // ล้างค่าฟอร์ม
+  // ล้างฟอร์ม
+  document.getElementById('signup_fullname').value = '';
+  document.getElementById('signup_empid').value = '';
   document.getElementById('signup_email').value = '';
   document.getElementById('signup_password').value = '';
 
   loginSuccess();
 }
 
-// การทำงานเมื่อเข้าสู่ระบบผ่าน
 function loginSuccess() {
-  document.getElementById('logged-user-email').innerText = currentUser.email;
+  document.getElementById('logged-user-name').innerText = `${currentUser.fullname} (${currentUser.empid})`;
   document.getElementById('logged-user-role').innerText = currentUser.role;
-  document.getElementById('applicant_email_input').value = currentUser.email;
+  
+  // เติมข้อมูลลงฟอร์มยื่นคำขออัตโนมัติ
+  document.getElementById('applicant_name_input').value = currentUser.fullname || '';
+  document.getElementById('employee_id_input').value = currentUser.empid || '';
+  document.getElementById('applicant_email_input').value = currentUser.email || '';
 
   document.getElementById('app-login-screen').classList.add('hidden');
 
@@ -361,14 +371,12 @@ function loginSuccess() {
   switchPage('form');
 }
 
-// ออกจากระบบ
 function handleGlobalLogout() {
   currentUser = null;
   document.getElementById('app-login-screen').classList.remove('hidden');
   toggleAuthMode('login');
 }
 
-// สลับหน้าแท็บ
 function switchPage(pageId) {
   if (pageId === 'safety' && currentUser && currentUser.role !== 'Safety Officer (จป.)') {
     alert('⚠️ สิทธิ์ไม่ถูกต้อง: แท็บพิจารณาอนุมัตินี้สำหรับเจ้าหน้าที่ จป. เท่านั้นครับ');
@@ -391,7 +399,6 @@ function switchPage(pageId) {
   }
 }
 
-// แสดง/ซ่อน Checklist
 function handleWorkTypeChange() {
   const type = document.getElementById('work_type').value;
   document.getElementById('checklist-hotwork').classList.add('hidden');
@@ -409,7 +416,11 @@ function submitWorkPermit(event) {
   event.preventDefault();
   alert("ส่งคำขอใบอนุญาตทำงานเรียบร้อยแล้ว!");
   document.getElementById('workPermitForm').reset();
-  document.getElementById('applicant_email_input').value = currentUser ? currentUser.email : '';
+  if (currentUser) {
+    document.getElementById('applicant_name_input').value = currentUser.fullname || '';
+    document.getElementById('employee_id_input').value = currentUser.empid || '';
+    document.getElementById('applicant_email_input').value = currentUser.email || '';
+  }
   switchPage('track');
 }
 
@@ -431,6 +442,9 @@ function searchWorkPermit() {
 
 function loadSafetyRequests() {
   const listDiv = document.getElementById('safety-requests-list');
+  const defaultReviewerName = currentUser && currentUser.role === 'Safety Officer (จป.)' ? currentUser.fullname : '';
+  const defaultReviewerId = currentUser && currentUser.role === 'Safety Officer (จป.)' ? currentUser.empid : '';
+
   listDiv.innerHTML = `
     <div class="record" id="req-WP-2026-001">
       <p><strong>เลขที่ใบอนุญาต:</strong> WP-2026-001</p>
@@ -445,11 +459,11 @@ function loadSafetyRequests() {
         <div class="form-grid">
           <div class="form-group">
             <label>ชื่อ-นามสกุล จป. ผู้อนุมัติ <span class="req">*</span></label>
-            <input type="text" id="reviewer_name_WP-2026-001" placeholder="เช่น นายอนันต์ ปลอดภัย">
+            <input type="text" id="reviewer_name_WP-2026-001" value="${defaultReviewerName}" placeholder="เช่น นายอนันต์ ปลอดภัย">
           </div>
           <div class="form-group">
             <label>รหัสพนักงาน จป. <span class="req">*</span></label>
-            <input type="text" id="reviewer_id_WP-2026-001" placeholder="เช่น SAF-009">
+            <input type="text" id="reviewer_id_WP-2026-001" value="${defaultReviewerId}" placeholder="เช่น SAF-009">
           </div>
         </div>
         <div style="margin-top:15px; display:flex; gap:10px;">
@@ -472,7 +486,7 @@ function approveRequest(wpNo, actionStatus) {
 
   const statusLabel = actionStatus === 'Approved' ? 'อนุมัติ' : 'ไม่อนุมัติ';
   
-  alert(`✅ ดำเนินการ [${statusLabel}] คำขอเลขที่ ${wpNo} เรียบร้อยแล้ว!\n\n📌 ข้อมูลผู้อนุมัติที่บันทึก:\n• ชื่อผู้อนุมัติ: ${reviewerName}\n• รหัสพนักงาน จป.: ${reviewerId}\n• บัญชีที่ดำเนินการ: ${currentUser.email}\n• วันเวลา: ${new Date().toLocaleString('th-TH')}`);
+  alert(`✅ ดำเนินการ [${statusLabel}] คำขอเลขที่ ${wpNo} เรียบร้อยแล้ว!\n\n📌 ข้อมูลผู้อนุมัติที่บันทึก:\n• ชื่อผู้อนุมัติ: ${reviewerName}\n• รหัสพนักงาน จป.: ${reviewerId}\n• บัญชีผู้ใช้งาน: ${currentUser.email}\n• วันเวลา: ${new Date().toLocaleString('th-TH')}`);
   
   document.getElementById(`req-${wpNo}`).style.display = 'none';
 }
