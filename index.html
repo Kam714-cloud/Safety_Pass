@@ -253,7 +253,7 @@ body{display:flex}
           <select id="worker_select" name="worker_name" required>
             <option value="">-- เลือกรายชื่อผู้ปฏิบัติงานจากฐานข้อมูล --</option>
             <option value="นายสมชาย ใจดี (สถานะ: ปกติ)">นายสมชาย ใจดี (รหัส: W001)</option>
-            <option value="นายวิชัย ปลอดภัย (สถานะ: ผ่านอบรมที่สูง)">นายวิชัย ปลอดภัย (รหัส: W002)</option>
+            <option value="นายวิชัย ปลดภัย (สถานะ: ผ่านอบรมที่สูง)">นายวิชัย ปลอดภัย (รหัส: W002)</option>
           </select>
         </div>
         <div class="form-group full-width">
@@ -308,7 +308,6 @@ let sbClient = window.supabase;
 let db = sbClient.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let currentUser = null;
 
-// สลับฟอร์ม Login / Signup
 function toggleAuthMode(mode) {
   if (mode === 'signup') {
     document.getElementById('login-form-container').classList.add('hidden');
@@ -319,7 +318,7 @@ function toggleAuthMode(mode) {
   }
 }
 
-// 🔐 เข้าสู่ระบบด้วย Supabase Auth (ปรับแก้ให้ทนทาน เข้าใช้งานได้แน่นอน)
+// 🔐 เข้าสู่ระบบด้วย Supabase Auth (ดึงข้อมูล Profile จาก Supabase จริง)
 async function handleGlobalLogin(event) {
   event.preventDefault();
   const email = document.getElementById('app_email').value.trim();
@@ -330,11 +329,9 @@ async function handleGlobalLogin(event) {
   btn.innerText = 'กำลังตรวจสอบ...';
 
   try {
-    // 1. เข้าสู่ระบบผ่าน Supabase Auth
     const { data, error } = await db.auth.signInWithPassword({ email, password });
     if (error) throw error;
 
-    // 2. ดึงข้อมูล Profile (ใช้ maybeSingle เพื่อไม่ให้ค้างถ้าหา Profile ไม่พบ)
     let profile = null;
     try {
       const { data: profData } = await db
@@ -347,7 +344,6 @@ async function handleGlobalLogin(event) {
       console.warn('Profile fetch warning:', pErr);
     }
 
-    // 3. กำหนดค่าผู้ใช้งานปัจจุบัน
     currentUser = {
       id: data.user.id,
       email: data.user.email,
@@ -368,7 +364,7 @@ async function handleGlobalLogin(event) {
   }
 }
 
-// 📝 สมัครสมาชิกและบันทึกข้อมูลลง Supabase
+// 📝 สมัครสมาชิกพร้อมบันทึกสิทธิ์ Role ลงตาราง profiles (ใช้ upsert กันสิทธิ์หลุด)
 async function handleGlobalSignUp(event) {
   event.preventDefault();
   const fullname = document.getElementById('signup_fullname').value.trim();
@@ -386,13 +382,14 @@ async function handleGlobalSignUp(event) {
     if (error) throw error;
 
     if (data?.user) {
-      const { error: profileError } = await db.from('profiles').insert([{
+      const { error: profileError } = await db.from('profiles').upsert([{
         id: data.user.id,
         fullname: fullname,
         employee_id: empid,
         role: role,
         updated_at: new Date()
-      }]);
+      }], { onConflict: 'id' });
+
       if (profileError) console.warn('Profile Insert Warning:', profileError.message);
     }
 
@@ -463,7 +460,6 @@ function handleWorkTypeChange() {
   else if (type === 'Electrical') document.getElementById('checklist-electrical').classList.remove('hidden');
 }
 
-// 📤 บันทึกยื่นคำขอ Work Permit ลงตารางฐานข้อมูลจริง
 async function submitWorkPermit(event) {
   event.preventDefault();
   const btn = document.getElementById('btn-submit-form');
@@ -493,7 +489,6 @@ async function submitWorkPermit(event) {
   }
 }
 
-// 🔍 ค้นหาคำขอจากฐานข้อมูล Supabase
 async function searchWorkPermit() {
   const wpNo = document.getElementById('search_wp').value.trim();
   const email = document.getElementById('search_email').value.trim();
@@ -531,7 +526,6 @@ async function searchWorkPermit() {
   `;
 }
 
-// 🛡️ ดึงรายการคำขอทั้งหมดจาก Supabase
 async function loadSafetyRequests() {
   const listDiv = document.getElementById('safety-requests-list');
   listDiv.innerHTML = '<p>กำลังดึงรายการคำขอจากฐานข้อมูล...</p>';
@@ -575,7 +569,6 @@ async function loadSafetyRequests() {
   `).join('');
 }
 
-// ✍️ บันทึกการอนุมัติลง Supabase
 async function approveRequest(id, actionStatus) {
   const reviewerName = document.getElementById(`reviewer_name_${id}`).value.trim();
   const reviewerId = document.getElementById(`reviewer_id_${id}`).value.trim();
