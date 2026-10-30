@@ -307,8 +307,8 @@ body{display:flex}
 
 <script>
 // ==================== CONFIG SUPABASE ====================
-const SUPABASE_URL = 'YOUR_SUPABASE_URL'; // ใส่ URL ของคุณ
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'; // ใส่ Anon Key ของคุณ
+const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co'; // 👈 เปลี่ยนตรงนี้เป็น Project URL ของคุณ
+const SUPABASE_ANON_KEY = 'sb_publishable_bhnJ7U04RVjyByQe5bqiQ_Qa_ff...'; // 👈 ใส่ Publishable Key จากรูปของคุณเรียบร้อยแล้ว
 
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let currentUser = null;
@@ -335,12 +335,9 @@ async function handleGlobalLogin(event) {
   btn.innerText = 'กำลังตรวจสอบ...';
 
   try {
-    // 1. ตรวจสอบอีเมลและรหัสผ่านกับ Supabase Auth
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
     if (error) throw error;
 
-    // 2. ดึงข้อมูล Profile เพิ่มเติมจากตาราง profiles
     const { data: profile } = await supabase
       .from('profiles')
       .select('*')
@@ -380,11 +377,9 @@ async function handleGlobalSignUp(event) {
   btn.innerText = 'กำลังบันทึกข้อมูล...';
 
   try {
-    // 1. สร้างบัญชีผู้ใช้ใน Supabase Auth
     const { data, error } = await supabase.auth.signUp({ email, password });
     if (error) throw error;
 
-    // 2. บันทึกรายละเอียดชื่อ/รหัสพนักงาน/บทบาท ลงตาราง profiles
     if (data.user) {
       await supabase.from('profiles').insert([{
         id: data.user.id,
@@ -490,7 +485,6 @@ async function submitWorkPermit(event) {
       created_at: new Date()
     };
 
-    // ส่งข้อมูลลง Supabase ตาราง work_permit_requests
     const { error } = await supabase.from('work_permit_requests').insert([payload]);
     if (error) throw error;
 
@@ -518,7 +512,6 @@ async function searchWorkPermit() {
 
   resDiv.innerHTML = '<p>กำลังค้นหาข้อมูล...</p>';
 
-  // ค้นหาใน Supabase โดยต้องตรงทั้ง wp_no AND applicant_email
   const { data, error } = await supabase
     .from('work_permit_requests')
     .select('*')
@@ -607,7 +600,6 @@ async function approveRequest(id, actionStatus) {
     return;
   }
 
-  // อัปเดตตาราง work_permit_requests
   const { error } = await supabase
     .from('work_permit_requests')
     .update({
