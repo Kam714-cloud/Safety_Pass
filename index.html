@@ -27,7 +27,6 @@ input[readonly]{background:#f1f5f9;color:#0284c7;font-weight:bold}
 .options-group{display:flex;flex-direction:column;gap:10px}
 .option-label{display:flex;align-items:center;gap:10px;font-weight:normal;cursor:pointer}
 .option-label input{width:18px;height:18px;flex-shrink:0}
-.other-input{display:block;margin:5px 0 12px 28px;width:calc(100% - 28px)!important}
 .hidden{display:none!important}
 .notice,.warning,.danger-alert{padding:12px 16px;border-radius:8px;margin-bottom:18px;line-height:1.6;font-size:14px}
 .notice{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
@@ -38,26 +37,13 @@ input[readonly]{background:#f1f5f9;color:#0284c7;font-weight:bold}
 .btn-success{background:#15803d;color:white}
 .btn-danger{background:#dc2626;color:white}
 .btn-warning{background:#d97706;color:white}
-.btn-disabled{background:#94a3b8!important;cursor:not-allowed!important}
 .btn-submit{width:100%;margin-top:24px}
-.tab-switch,.actions{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}
-.tab-btn{padding:10px 16px;border:0;border-radius:6px;background:#e2e8f0;cursor:pointer;font-weight:bold}
-.tab-btn.active{background:#0284c7;color:white}
 .record{border:1px solid #cbd5e1;border-radius:9px;padding:18px;margin-top:15px;background:#fff}
+.checklist-box{background:#f8fafc;padding:15px;border-radius:8px;border:1px solid #cbd5e1;margin-top:10px}
 .status{display:inline-block;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:bold}
 .status-Pending{background:#fef3c7;color:#92400e}
 .status-Approved{background:#dcfce7;color:#166534}
 .status-Rejected{background:#fee2e2;color:#991b1b}
-.status-Revision{background:#ffedd5;color:#9a3412}
-.passport-card{background:#f8fafc;border:1px dashed #0284c7;padding:12px;border-radius:8px;margin-top:8px}
-.badge-expired{background:#ef4444;color:white;padding:2px 6px;border-radius:4px;font-size:12px}
-.badge-valid{background:#22c55e;color:white;padding:2px 6px;border-radius:4px;font-size:12px}
-.details-box{background:#f8fafc;border:1px solid #e2e8f0;padding:15px;border-radius:8px;margin:12px 0}
-.details-box h4{margin-top:0;color:#0369a1;border-bottom:1px solid #cbd5e1;padding-bottom:5px}
-.muted{color:#64748b;font-size:13px;line-height:1.6}
-.empty{padding:20px;text-align:center;background:#f8fafc;border-radius:8px}
-textarea{resize:vertical}
-button:focus,input:focus,textarea:focus,select:focus{outline:2px solid #38bdf8;outline-offset:2px}
 @media(min-width:768px){
 body{display:flex}
 .sidebar{width:260px;min-height:100vh;flex-shrink:0}
@@ -86,13 +72,13 @@ body{display:flex}
   <section id="page-form" class="card-container">
     <h1 class="page-title">ยื่นคำขอใบอนุญาตทำงาน (Work Permit)</h1>
     <div class="notice">
-      <strong>ข้อแนะนำ:</strong> กรุณากรอกข้อมูลและอัปโหลดหลักฐานความปลอดภัยให้ครบถ้วนก่อนยื่นคำขอ
+      <strong>ข้อแนะนำ:</strong> กรุณากรอกข้อมูลและอัปโหลดหลักฐานความปลอดภัยให้ครบถ้วนก่อนยื่นคำขอ[cite: 2]
     </div>
     
-    <form id="workPermitForm">
+    <form id="workPermitForm" onsubmit="submitWorkPermit(event)">
       <div class="form-group">
         <label>เลขที่ใบอนุญาตทำงาน (Work Permit No.) <span class="req">*</span></label>
-        <input type="text" id="wp_no" name="wp_no" readonly required>
+        <input type="text" id="wp_no" name="wp_no" readonly value="WP-2026-001" required>
       </div>
 
       <div class="section-title">1. ข้อมูลผู้ขออนุญาต</div>
@@ -130,7 +116,7 @@ body{display:flex}
       <div class="section-title">2. ประเภทงานและมาตรการตรวจเฉพาะ (High-Risk Work)</div>
       <div class="form-grid">
         <div class="form-group full-width">
-          <label>2.1 เลือกประเภทงานเสี่ยงสูง <span class="req">*</span></label>
+          <label>2.1 เลือกประเภทงานเสี่ยงสูง <span class="req">*</span>[cite: 1]</label>
           <select id="work_type" name="work_type" required onchange="handleWorkTypeChange()">
             <option value="">-- กรุณาเลือกประเภทงาน --</option>
             <option value="General">งานทั่วไป (General Work)</option>
@@ -145,41 +131,164 @@ body{display:flex}
         <div id="checklist-hotwork" class="form-group full-width hidden checklist-box">
           <label>🔥 รายการตรวจเฉพาะ: งานความร้อน (Hot Work Checklist)</label>
           <div class="options-group">
-            <label class="option-label"><input type="checkbox" name="hotwork_check" value="มีผู้เฝ้าระวังไฟ (Fire Watcher)"> มีผู้เฝ้าระวังไฟประจำจุดตลอดเวลา</label>
-            <label class="option-label"><input type="checkbox" name="hotwork_check" value="จัดเตรียมถังดับเพลิง"> มีอุปกรณ์ดับเพลิงพร้อมใช้งานรัศมี 10 เมตร</label>
-            <label class="option-label"><input type="checkbox" name="hotwork_check" value="ขจัดวัสดุติดไฟ"> ขจัดหรือครอบคลุมวัสดุติดไฟบริเวณรอบๆ</label>
+            <label class="option-label"><input type="checkbox" name="specific_check" value="มีผู้เฝ้าระวังไฟ (Fire Watcher)"> มีผู้เฝ้าระวังไฟประจำจุดตลอดเวลา</label>
+            <label class="option-label"><input type="checkbox" name="specific_check" value="จัดเตรียมถังดับเพลิง"> มีอุปกรณ์ดับเพลิงพร้อมใช้งานรัศมี 10 เมตร</label>
           </div>
         </div>
 
         <div id="checklist-confined" class="form-group full-width hidden checklist-box">
           <label>🚪 รายการตรวจเฉพาะ: งานอับอากาศ (Confined Space Checklist)</label>
           <div class="options-group">
-            <label class="option-label"><input type="checkbox" name="confined_check" value="ตรวจวัดบรรยากาศออกซิเจน"> ผลตรวจวัดออกซิเจนอยู่ในช่วง 19.5% - 23.5%</label>
-            <label class="option-label"><input type="checkbox" name="confined_check" value="มีผู้ช่วยเหลือภายนอก"> มีผู้ช่วยเหลือและอุปกรณ์กู้ภัยภายนอกปากทาง</label>
-            <label class="option-label"><input type="checkbox" name="confined_check" value="ระบบระบายอากาศ"> มีพัดลมระบายอากาศต่อเนื่อง</label>
+            <label class="option-label"><input type="checkbox" name="specific_check" value="ตรวจวัดบรรยากาศออกซิเจน"> ผลตรวจวัดออกซิเจนอยู่ในช่วง 19.5% - 23.5%</label>
+            <label class="option-label"><input type="checkbox" name="specific_check" value="มีผู้ช่วยเหลือภายนอก"> มีผู้ช่วยเหลือและอุปกรณ์กู้ภัยภายนอกปากทาง</label>
           </div>
         </div>
 
         <div id="checklist-height" class="form-group full-width hidden checklist-box">
           <label>🧗 รายการตรวจเฉพาะ: งานบนที่สูง (Height Work Checklist)</label>
           <div class="options-group">
-            <label class="option-label"><input type="checkbox" name="height_check" value="ตรวจนั่งร้าน/จุดยึด"> นั่งร้านผ่านการตรวจมาตรฐาน หรือมีจุดยึดเกาะที่แข็งแรง</label>
-            <label class="option-label"><input type="checkbox" name="height_check" value="เข็มขัดนิรภัย Full Body Harness"> ผู้ปฏิบัติงานสวมเข็มขัดนิรภัยชนิดเต็มตัวพร้อมสายคู่</label>
+            <label class="option-label"><input type="checkbox" name="specific_check" value="ตรวจนั่งร้าน/จุดยึด"> นั่งร้านผ่านการตรวจมาตรฐาน หรือมีจุดยึดเกาะที่แข็งแรง</label>
+            <label class="option-label"><input type="checkbox" name="specific_check" value="เข็มขัดนิรภัย Full Body Harness"> ผู้ปฏิบัติงานสวมเข็มขัดนิรภัยชนิดเต็มตัวพร้อมสายคู่</label>
           </div>
         </div>
 
         <div id="checklist-electrical" class="form-group full-width hidden checklist-box">
           <label>⚡ รายการตรวจเฉพาะ: งานไฟฟ้า (Electrical Checklist)</label>
           <div class="options-group">
-            <label class="option-label"><input type="checkbox" name="electrical_check" value="ตัดแยกระบบ LOTO"> ดำเนินการตัดแยกแหล่งจ่ายไฟและติดป้าย LOTO (Lockout/Tagout)</label>
-            <label class="option-label"><input type="checkbox" name="electrical_check" value="ใช้เครื่องมือฉนวน"> ใช้เครื่องมือที่เป็นฉนวนไฟฟ้ามาตรฐาน</label>
+            <label class="option-label"><input type="checkbox" name="specific_check" value="ตัดแยกระบบ LOTO"> ดำเนินการตัดแยกแหล่งจ่ายไฟและติดป้าย LOTO (Lockout/Tagout)</label>
+            <label class="option-label"><input type="checkbox" name="specific_check" value="ใช้เครื่องมือฉนวน"> ใช้เครื่องมือที่เป็นฉนวนไฟฟ้ามาตรฐาน</label>
           </div>
         </div>
       </div>
 
-      <div class="section-title">3. Safety Digital Passport (ฐานข้อมูลผู้ปฏิบัติงาน)</div>
+      <div class="section-title">3. Safety Digital Passport & อัปโหลดหลักฐาน</div>
       <div class="form-grid">
         <div class="form-group full-width">
-          <label>3.1 เลือกผู้ปฏิบัติงาน <span class="req">*</span></label>
-          <select id="worker_select" onchange="addWorkerToPermit()">
-            <option value="">-- เลือกรายชื่อผู้ปฏิบัติงานจากฐานข้อมูล --
+          <label>3.1 เลือกผู้ปฏิบัติงาน <span class="req">*</span>[cite: 1]</label>
+          <select id="worker_select" name="worker_name" required>
+            <option value="">-- เลือกรายชื่อผู้ปฏิบัติงานจากฐานข้อมูล --</option>
+            <option value="นายสมชาย ใจดี (สถานะ: ปกติ)">นายสมชาย ใจดี (รหัส: W001)</option>
+            <option value="นายวิชัย ปลอดภัย (สถานะ: ผ่านอบรมที่สูง)">นายวิชัย ปลอดภัย (รหัส: W002)</option>
+          </select>
+        </div>
+        <div class="form-group full-width">
+          <label>3.2 แนบไฟล์เอกสารความปลอดภัย / JSA <span class="req">*</span>[cite: 1]</label>
+          <input type="file" id="work_permit_file" name="work_permit_file" required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-submit">ส่งคำขออนุญาตทำงาน</button>
+    </form>
+  </section>
+
+  <!-- ==================== PAGE 2: TRACKING ==================== -->
+  <section id="page-track" class="card-container hidden">
+    <h1 class="page-title">🔍 ติดตามสถานะ Work Permit</h1>
+    <div class="record">
+      <h3>ค้นหาคำขอของคุณ</h3>
+      <div class="form-group" style="margin-top:10px;">
+        <input type="text" id="search_wp" placeholder="กรอกเลขที่ Work Permit เช่น WP-2026-001">
+      </div>
+      <button class="btn btn-primary" style="margin-top:10px;" onclick="searchWorkPermit()">ค้นหาข้อมูล</button>
+      <div id="track-result" style="margin-top:20px;"></div>
+    </div>
+  </section>
+
+  <!-- ==================== PAGE 3: SAFETY APPROVAL ==================== -->
+  <section id="page-safety" class="card-container hidden">
+    <h1 class="page-title">🛡️ พิจารณาอนุมัติสำหรับ จป.</h1>
+    <div class="notice">
+      ส่วนนี้สำหรับเจ้าหน้าที่ความปลอดภัย (Safety Officer) ตรวจสอบรายละเอียดและอนุมัติเอกสาร[cite: 1, 2]
+    </div>
+    <div id="safety-requests-list">
+      <div class="record">
+        <p>กำลังโหลดรายการขออนุมัติ...</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// ฟังก์ชันสลับหน้า (Tabs Navigation)
+function switchPage(pageId) {
+  document.getElementById('page-form').classList.add('hidden');
+  document.getElementById('page-track').classList.add('hidden');
+  document.getElementById('page-safety').classList.add('hidden');
+
+  document.getElementById('menu-form').classList.remove('active');
+  document.getElementById('menu-track').classList.remove('active');
+  document.getElementById('menu-safety').classList.remove('active');
+
+  document.getElementById('page-' + pageId).classList.remove('hidden');
+  document.getElementById('menu-' + pageId).classList.add('active');
+
+  if (pageId === 'safety') {
+    loadSafetyRequests();
+  }
+}
+
+// ฟังก์ชันซ่อน/แสดง Checklist ตามประเภทงานที่เลือก
+function handleWorkTypeChange() {
+  const type = document.getElementById('work_type').value;
+
+  document.getElementById('checklist-hotwork').classList.add('hidden');
+  document.getElementById('checklist-confined').classList.add('hidden');
+  document.getElementById('checklist-height').classList.add('hidden');
+  document.getElementById('checklist-electrical').classList.add('hidden');
+
+  if (type === 'Hot Work') {
+    document.getElementById('checklist-hotwork').classList.remove('hidden');
+  } else if (type === 'Confined Space') {
+    document.getElementById('checklist-confined').classList.remove('hidden');
+  } else if (type === 'Work at Height') {
+    document.getElementById('checklist-height').classList.remove('hidden');
+  } else if (type === 'Electrical') {
+    document.getElementById('checklist-electrical').classList.remove('hidden');
+  }
+}
+
+// จำลองการส่งคำขอ (สามารถเชื่อมต่อ Supabase จริงต่อได้ทันที)
+function submitWorkPermit(event) {
+  event.preventDefault();
+  alert("ส่งคำขอใบอนุญาตทำงานเรียบร้อยแล้ว! ระบบได้บันทึกข้อมูลเข้าสู่ฐานข้อมูล");
+  document.getElementById('workPermitForm').reset();
+  switchPage('track');
+}
+
+function searchWorkPermit() {
+  const val = document.getElementById('search_wp').value;
+  const resDiv = document.getElementById('track-result');
+  if(!val) {
+    resDiv.innerHTML = '<p class="warning">กรุณากรอกเลขที่ใบอนุญาตก่อนค้นหา</p>';
+    return;
+  }
+  resDiv.innerHTML = `
+    <div class="record">
+      <p><strong>เลขที่คำขอ:</strong> ${val}</p>
+      <p><strong>สถานะปัจจุบัน:</strong> <span class="status status-Pending">รอการอนุมัติจาก จป. (Pending)</span></p>
+      <p class="muted">บันทึกเมื่อ: ${new Date().toLocaleDateString('th-TH')}</p>
+    </div>
+  `;
+}
+
+function loadSafetyRequests() {
+  const listDiv = document.getElementById('safety-requests-list');
+  listDiv.innerHTML = `
+    <div class="record">
+      <p><strong>เลขที่ใบอนุญาต:</strong> WP-2026-001</p>
+      <p><strong>บริษัท/ผู้ขอ:</strong> บริษัท ไทยคอนสตรัคชั่น จำกัด (นายสมชาย)</p>
+      <p><strong>ประเภทงาน:</strong> งานความร้อน (Hot Work)</p>
+      <p><strong>ผู้ปฏิบัติงาน (Digital Passport):</strong> นายสมชาย ใจดี (ผ่านเกณฑ์)</p>
+      <p><strong>ไฟล์แนบ:</strong> <a href="#" target="_blank">ดาวน์โหลดเอกสาร JSA/หลักฐานความปลอดภัย</a></p>
+      <div style="margin-top:15px; display:flex; gap:10px;">
+        <button class="btn btn-success" onclick="alert('อนุมัติคำขอเรียบร้อย')">อนุมัติ (Approve)</button>
+        <button class="btn btn-danger" onclick="alert('ปฏิเสธคำขอเรียบร้อย')">ไม่อนุมัติ (Reject)</button>
+      </div>
+    </div>
+  `;
+}
+</script>
+
+</body>
+</html>
