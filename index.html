@@ -3,11 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SAFE PASS: Smart Work Permit & Safety Digital Passport</title>
+<title>SAFE PASS: Smart Work Permit System</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;font-family:Arial,Tahoma,sans-serif}
 body{margin:0;background:#f0f4f8;color:#1e293b}
+
+/* ===== LOGIN OVERLAY (ล็อคหน้าเว็บทั้งหมดไว้ก่อน) ===== */
+#app-login-screen{
+  position:fixed;
+  top:0;left:0;width:100vw;height:100vh;
+  background:#0f172a;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  padding:20px;
+}
+.login-card{
+  background:white;
+  width:100%;
+  max-width:420px;
+  padding:35px 30px;
+  border-radius:16px;
+  box-shadow:0 20px 25px -5px rgba(0,0,0,0.3);
+  text-align:center;
+}
+.login-card h2{color:#0284c7;margin-top:0;font-size:26px;margin-bottom:6px}
+.login-card p.sub{color:#64748b;font-size:13px;margin-bottom:25px}
+
+/* ===== MAIN SYSTEM LAYOUT ===== */
 .sidebar{background:#0f172a;color:white;padding:15px}
 .sidebar h2{color:#38bdf8;text-align:center;font-size:20px;margin-bottom:5px}
 .sidebar p.sub-title{text-align:center;color:#94a3b8;font-size:12px;margin-top:0;margin-bottom:20px}
@@ -19,7 +44,7 @@ body{margin:0;background:#f0f4f8;color:#1e293b}
 .page-title{text-align:center;font-size:24px;margin-bottom:25px;color:#0f172a}
 .section-title{color:#0369a1;font-size:18px;font-weight:bold;border-left:5px solid #0284c7;padding-left:12px;margin:28px 0 18px}
 .form-grid{display:grid;grid-template-columns:1fr;gap:18px}
-.form-group{min-width:0}
+.form-group{min-width:0;text-align:left}
 label{display:block;font-weight:bold;margin-bottom:8px;line-height:1.5}
 .req{color:red}
 input[type=text],input[type=email],input[type=number],input[type=date],input[type=file],input[type=password],textarea,select{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px;background:white}
@@ -41,7 +66,8 @@ input[readonly]{background:#f1f5f9;color:#0284c7;font-weight:bold}
 .status-Pending{background:#fef3c7;color:#92400e}
 .status-Approved{background:#dcfce7;color:#166534}
 .status-Rejected{background:#fee2e2;color:#991b1b}
-.login-box{max-width:400px;margin:30px auto;padding:25px;border:1px solid #cbd5e1;border-radius:12px;background:#f8fafc}
+.user-bar{background:#0f172a;color:white;padding:10px 15px;display:flex;justify-content:space-between;align-items:center;border-radius:8px;margin-bottom:15px}
+
 @media(min-width:768px){
 body{display:flex}
 .sidebar{width:260px;min-height:100vh;flex-shrink:0}
@@ -54,23 +80,56 @@ body{display:flex}
 </head>
 <body>
 
+<!-- ==================== SCREEN 0: LOGIN OVERLAY (ล็อคหน้าแรก) ==================== -->
+<div id="app-login-screen">
+  <div class="login-card">
+    <h2>SAFE PASS</h2>
+    <p class="sub">Smart Work Permit & Safety Digital Passport</p>
+    
+    <form onsubmit="handleGlobalLogin(event)">
+      <div class="form-group" style="margin-bottom:15px;">
+        <label>อีเมลผู้ใช้งาน (Email) <span class="req">*</span></label>
+        <input type="email" id="app_email" placeholder="กรอกอีเมลของคุณ" required>
+      </div>
+      <div class="form-group" style="margin-bottom:20px;">
+        <label>รหัสผ่าน (Password) <span class="req">*</span></label>
+        <input type="password" id="app_password" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%; padding:14px; font-size:16px;">เข้าสู่ระบบ</button>
+    </form>
+    
+    <div style="margin-top:20px; padding-top:15px; border-top:1px solid #e2e8f0; font-size:12px; color:#64748b; text-align:left;">
+      <strong>💡 บัญชีทดสอบระบบ:</strong><br>
+      • จป. : <code>safety@company.com</code><br>
+      • ผู้ขออนุญาตทั่วไป : <code>user@company.com</code>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SIDEBAR MENU ==================== -->
 <aside class="sidebar">
   <h2>SAFE PASS</h2>
   <p class="sub-title">Smart Work Permit System</p>
   <nav class="sidebar-menu">
-    <button type="button" class="menu-item active" id="menu-form" onclick="switchPage('form')">📝 ยื่นคำขอ Work Permit (แท็บ 1)</button>
-    <button type="button" class="menu-item" id="menu-track" onclick="switchPage('track')">🔍 ติดตามสถานะ (แท็บ 2)</button>
-    <button type="button" class="menu-item" id="menu-safety" onclick="switchPage('safety')">🛡️ พิจารณาอนุมัติ (จป.) (แท็บ 3)</button>
+    <button type="button" class="menu-item active" id="menu-form" onclick="switchPage('form')">📝 ยื่นคำขอ Work Permit</button>
+    <button type="button" class="menu-item" id="menu-track" onclick="switchPage('track')">🔍 ติดตามสถานะ</button>
+    <button type="button" class="menu-item" id="menu-safety" onclick="switchPage('safety')">🛡️ พิจารณาอนุมัติ (จป.)</button>
   </nav>
 </aside>
 
 <main class="main-content">
 
-  <!-- ==================== TAB 1: FORM (สำหรับผู้ขอทั่วไป) ==================== -->
+  <!-- แถบแสดงชื่อผู้ล็อกอิน และปุ่มออกจากระบบ -->
+  <div class="user-bar">
+    <div>👤 ผู้ใช้งาน: <strong id="logged-user-email">user@company.com</strong> (<span id="logged-user-role">Safety</span>)</div>
+    <button class="btn btn-danger" style="padding:6px 12px; font-size:13px;" onclick="handleGlobalLogout()">ออกจากระบบ</button>
+  </div>
+
+  <!-- ==================== PAGE 1: FORM ==================== -->
   <section id="page-form" class="card-container">
     <h1 class="page-title">ยื่นคำขอใบอนุญาตทำงาน (Work Permit)</h1>
     <div class="notice">
-      <strong>ข้อแนะนำ:</strong> แท็บที่ 1 และ 2 สามารถใช้งานได้ทั่วไปโดยไม่ต้องเข้าสู่ระบบ
+      <strong>ข้อแนะนำ:</strong> กรุณากรอกข้อมูลและอัปโหลดหลักฐานความปลอดภัยให้ครบถ้วนก่อนยื่นคำขอ[cite: 2]
     </div>
     
     <form id="workPermitForm" onsubmit="submitWorkPermit(event)">
@@ -95,7 +154,7 @@ body{display:flex}
         </div>
         <div class="form-group">
           <label>1.4 อีเมลติดต่อ <span class="req">*</span></label>
-          <input type="email" name="applicant_email" required placeholder="name@company.com">
+          <input type="email" id="applicant_email_input" name="applicant_email" required placeholder="name@company.com">
         </div>
         <div class="form-group">
           <label>1.5 แผนก <span class="req">*</span></label>
@@ -114,7 +173,7 @@ body{display:flex}
       <div class="section-title">2. ประเภทงานและมาตรการตรวจเฉพาะ (High-Risk Work)</div>
       <div class="form-grid">
         <div class="form-group full-width">
-          <label>2.1 เลือกประเภทงานเสี่ยงสูง <span class="req">*</span></label>
+          <label>2.1 เลือกประเภทงานเสี่ยงสูง <span class="req">*</span>[cite: 1]</label>
           <select id="work_type" name="work_type" required onchange="handleWorkTypeChange()">
             <option value="">-- กรุณาเลือกประเภทงาน --</option>
             <option value="General">งานทั่วไป (General Work)</option>
@@ -161,7 +220,7 @@ body{display:flex}
       <div class="section-title">3. Safety Digital Passport & อัปโหลดหลักฐาน</div>
       <div class="form-grid">
         <div class="form-group full-width">
-          <label>3.1 เลือกผู้ปฏิบัติงาน <span class="req">*</span></label>
+          <label>3.1 เลือกผู้ปฏิบัติงาน <span class="req">*</span>[cite: 1]</label>
           <select id="worker_select" name="worker_name" required>
             <option value="">-- เลือกรายชื่อผู้ปฏิบัติงานจากฐานข้อมูล --</option>
             <option value="นายสมชาย ใจดี (สถานะ: ปกติ)">นายสมชาย ใจดี (รหัส: W001)</option>
@@ -169,7 +228,7 @@ body{display:flex}
           </select>
         </div>
         <div class="form-group full-width">
-          <label>3.2 แนบไฟล์เอกสารความปลอดภัย / JSA <span class="req">*</span></label>
+          <label>3.2 แนบไฟล์เอกสารความปลอดภัย / JSA <span class="req">*</span>[cite: 1]</label>
           <input type="file" id="work_permit_file" name="work_permit_file" required>
         </div>
       </div>
@@ -178,7 +237,7 @@ body{display:flex}
     </form>
   </section>
 
-  <!-- ==================== TAB 2: TRACKING ==================== -->
+  <!-- ==================== PAGE 2: TRACKING ==================== -->
   <section id="page-track" class="card-container hidden">
     <h1 class="page-title">🔍 ติดตามสถานะ Work Permit</h1>
     <div class="record">
@@ -191,39 +250,13 @@ body{display:flex}
     </div>
   </section>
 
-  <!-- ==================== TAB 3: SAFETY APPROVAL (เฉพาะผู้มีบัญชี จป.) ==================== -->
+  <!-- ==================== PAGE 3: SAFETY APPROVAL ==================== -->
   <section id="page-safety" class="card-container hidden">
     <h1 class="page-title">🛡️ พิจารณาอนุมัติสำหรับ จป.</h1>
-
-    <!-- 1. หน้าล็อกอิน (แสดงเมื่อยังไม่ได้ล็อกอิน) -->
-    <div id="safety-login-box" class="login-box">
-      <h3 style="text-align:center; margin-top:0;">🔒 เข้าสู่ระบบสำหรับ จป.</h3>
-      <p style="text-align:center; color:#64748b; font-size:13px;">กรุณากรอกอีเมลและรหัสผ่านที่สมัครใช้งานระบบ</p>
-      <form onsubmit="handleSafetyLogin(event)">
-        <div class="form-group" style="margin-bottom:15px;">
-          <label>อีเมล (Email) <span class="req">*</span></label>
-          <input type="email" id="login_email" placeholder="safety@company.com" required>
-        </div>
-        <div class="form-group" style="margin-bottom:20px;">
-          <label>รหัสผ่าน (Password) <span class="req">*</span></label>
-          <input type="password" id="login_password" placeholder="••••••••" required>
-        </div>
-        <button type="submit" class="btn btn-primary" style="width:100%;">เข้าสู่ระบบ</button>
-      </form>
+    <div class="notice">
+      ส่วนนี้สำหรับเจ้าหน้าที่ความปลอดภัย (Safety Officer) ตรวจสอบรายละเอียดและอนุมัติเอกสาร[cite: 1, 2]
     </div>
-
-    <!-- 2. หน้าแดชบอร์ดรายการรออนุมัติ (แสดงเมื่อล็อกอินผ่าน) -->
-    <div id="safety-dashboard" class="hidden">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
-        <span>เจ้าหน้าที่ความปลอดภัย: <strong id="current-user-email"></strong></span>
-        <button class="btn btn-danger" style="padding:6px 12px; font-size:13px;" onclick="handleSafetyLogout()">ออกจากระบบ</button>
-      </div>
-
-      <div class="notice">
-        รายการใบอนุญาตทำงานทั้งหมดที่<strong>รอการอนุมัติ (Pending)</strong> จาก จป.
-      </div>
-      <div id="safety-requests-list"></div>
-    </div>
+    <div id="safety-requests-list"></div>
   </section>
 
 </main>
@@ -231,8 +264,56 @@ body{display:flex}
 <script>
 let currentUser = null;
 
+// ฟังก์ชันเข้าสู่ระบบหลัก (GLOBAL LOGIN)
+function handleGlobalLogin(event) {
+  event.preventDefault();
+  const email = document.getElementById('app_email').value;
+
+  // ตรวจสอบ Role จากอีเมล
+  let role = 'General User';
+  if (email.includes('safety')) {
+    role = 'Safety Officer (จป.)';
+  }
+
+  currentUser = { email: email, role: role };
+
+  // อัปเดตการแสดงผลส่วนหัว
+  document.getElementById('logged-user-email').innerText = currentUser.email;
+  document.getElementById('logged-user-role').innerText = currentUser.role;
+  document.getElementById('applicant_email_input').value = currentUser.email;
+
+  // ซ่อนหน้าล็อกอิน
+  document.getElementById('app-login-screen').classList.add('hidden');
+
+  // ตรวจสอบสิทธิ์ปุ่มเมนู Safety
+  const safetyBtn = document.getElementById('menu-safety');
+  if (role !== 'Safety Officer (จป.)') {
+    safetyBtn.style.opacity = '0.5';
+  } else {
+    safetyBtn.style.opacity = '1';
+  }
+
+  // เข้าสู่หน้าแรก (ยื่นคำขอ)
+  switchPage('form');
+  alert(`เข้าสู่ระบบสำเร็จในฐานะ: ${currentUser.role}`);
+}
+
+// ฟังก์ชันออกจากระบบ
+function handleGlobalLogout() {
+  currentUser = null;
+  document.getElementById('app-login-screen').classList.remove('hidden');
+  document.getElementById('app_email').value = '';
+  document.getElementById('app_password').value = '';
+}
+
 // สลับหน้าแท็บ
 function switchPage(pageId) {
+  // หากพยายามเข้าแท็บ Safety แต่ไม่ใช่ จป.
+  if (pageId === 'safety' && currentUser && currentUser.role !== 'Safety Officer (จป.)') {
+    alert('⚠️ สิทธิ์ไม่ถูกต้อง: แท็บนี้สำหรับเจ้าหน้าที่ จป. เท่านั้น');
+    return;
+  }
+
   document.getElementById('page-form').classList.add('hidden');
   document.getElementById('page-track').classList.add('hidden');
   document.getElementById('page-safety').classList.add('hidden');
@@ -244,42 +325,9 @@ function switchPage(pageId) {
   document.getElementById('page-' + pageId).classList.remove('hidden');
   document.getElementById('menu-' + pageId).classList.add('active');
 
-  // ถ้าเปลี่ยนมาแท็บ 3 (จป.) ให้เช็กสถานะการล็อกอิน
   if (pageId === 'safety') {
-    checkSafetyAuth();
-  }
-}
-
-// ตรวจสิทธิ์การเข้าแท็บ 3
-function checkSafetyAuth() {
-  const loginBox = document.getElementById('safety-login-box');
-  const dashboard = document.getElementById('safety-dashboard');
-
-  if (currentUser) {
-    loginBox.classList.add('hidden');
-    dashboard.classList.remove('hidden');
-    document.getElementById('current-user-email').innerText = currentUser.email;
     loadSafetyRequests();
-  } else {
-    loginBox.classList.remove('hidden');
-    dashboard.classList.add('hidden');
   }
-}
-
-// ล็อกอินเข้าสู่ระบบ จป.
-function handleSafetyLogin(event) {
-  event.preventDefault();
-  const email = document.getElementById('login_email').value;
-  currentUser = { email: email };
-  alert('เข้าสู่ระบบ จป. สำเร็จ!');
-  checkSafetyAuth();
-}
-
-// ออกจากระบบ
-function handleSafetyLogout() {
-  currentUser = null;
-  alert('ออกจากระบบเรียบร้อยแล้ว');
-  checkSafetyAuth();
 }
 
 // แสดง/ซ่อน Checklist งานเสี่ยงสูง
@@ -301,6 +349,7 @@ function submitWorkPermit(event) {
   event.preventDefault();
   alert("ส่งคำขอใบอนุญาตทำงานเรียบร้อยแล้ว!");
   document.getElementById('workPermitForm').reset();
+  document.getElementById('applicant_email_input').value = currentUser ? currentUser.email : '';
   switchPage('track');
 }
 
@@ -321,7 +370,7 @@ function searchWorkPermit() {
   `;
 }
 
-// โหลดรายการคำขอที่รออนุมัติในแท็บ 3
+// โหลดรายการสำหรับ จป. ในแท็บ 3
 function loadSafetyRequests() {
   const listDiv = document.getElementById('safety-requests-list');
   listDiv.innerHTML = `
@@ -343,7 +392,7 @@ function loadSafetyRequests() {
 // กดอนุมัติ/ไม่อนุมัติ
 function approveRequest(wpNo, actionStatus) {
   const statusLabel = actionStatus === 'Approved' ? 'อนุมัติ' : 'ไม่อนุมัติ';
-  alert(`ดำเนินการ [${statusLabel}] คำขอเลขที่ ${wpNo} เรียบร้อยแล้ว (บันทึกผู้อนุมัติ: ${currentUser.email})`);
+  alert(`ดำเนินการ [${statusLabel}] คำขอเลขที่ ${wpNo} เรียบร้อยแล้ว\nบันทึกชื่อผู้อนุมัติ: ${currentUser.email}`);
   document.getElementById(`req-${wpNo}`).style.display = 'none';
 }
 </script>
