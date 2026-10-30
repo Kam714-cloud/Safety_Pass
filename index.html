@@ -88,9 +88,9 @@ body{display:flex}
 <div id="app-login-screen">
   <div class="login-card">
     <h2>SAFE PASS</h2>
-    <p class="sub">Smart Work Permit & Safety Digital Passport</p>
+    <p class="sub">Smart Work Permit System</p>
     
-    <!-- ฟอร์มที่ 1: เข้าสู่ระบบ (LOGIN) -->
+    <!-- ฟอร์มเข้าสู่ระบบ (LOGIN) -->
     <div id="login-form-container">
       <form onsubmit="handleGlobalLogin(event)">
         <div class="form-group" style="margin-bottom:15px;">
@@ -101,12 +101,12 @@ body{display:flex}
           <label>รหัสผ่าน (Password) <span class="req">*</span></label>
           <input type="password" id="app_password" placeholder="••••••••" required>
         </div>
-        <button type="submit" class="btn btn-primary" style="width:100%; padding:14px; font-size:16px;">เข้าสู่ระบบ</button>
+        <button type="submit" id="btn-login" class="btn btn-primary" style="width:100%; padding:14px; font-size:16px;">เข้าสู่ระบบ</button>
       </form>
       <span class="toggle-link" onclick="toggleAuthMode('signup')">ยังไม่มีบัญชี? สมัครสมาชิกที่นี่</span>
     </div>
 
-    <!-- ฟอร์มที่ 2: สมัครสมาชิก (SIGN UP) -->
+    <!-- ฟอร์มสมัครสมาชิก (SIGN UP) -->
     <div id="signup-form-container" class="hidden">
       <form onsubmit="handleGlobalSignUp(event)">
         <div class="form-group" style="margin-bottom:15px;">
@@ -132,7 +132,7 @@ body{display:flex}
             <option value="Safety Officer (จป.)">เจ้าหน้าที่ความปลอดภัย (จป.)</option>
           </select>
         </div>
-        <button type="submit" class="btn btn-success" style="width:100%; padding:14px; font-size:16px;">ยืนยันการสมัครสมาชิก</button>
+        <button type="submit" id="btn-signup" class="btn btn-success" style="width:100%; padding:14px; font-size:16px;">ยืนยันการสมัครสมาชิก</button>
       </form>
       <span class="toggle-link" onclick="toggleAuthMode('login')">มีบัญชีอยู่แล้ว? กลับไปหน้าเข้าสู่ระบบ</span>
     </div>
@@ -159,7 +159,7 @@ body{display:flex}
     <button class="btn btn-danger" style="padding:6px 12px; font-size:13px;" onclick="handleGlobalLogout()">ออกจากระบบ</button>
   </div>
 
-  <!-- ==================== PAGE 1: FORM ==================== -->
+  <!-- PAGE 1: FORM -->
   <section id="page-form" class="card-container">
     <h1 class="page-title">ยื่นคำขอใบอนุญาตทำงาน (Work Permit)</h1>
     <div class="notice">
@@ -176,7 +176,7 @@ body{display:flex}
       <div class="form-grid">
         <div class="form-group full-width">
           <label>1.1 ชื่อบริษัท / สังกัด <span class="req">*</span></label>
-          <input type="text" name="company" required placeholder="กรอกชื่อบริษัท">
+          <input type="text" id="company_input" name="company" required placeholder="กรอกชื่อบริษัท">
         </div>
         <div class="form-group">
           <label>1.2 ชื่อ-นามสกุล ผู้ขออนุญาต <span class="req">*</span></label>
@@ -192,7 +192,7 @@ body{display:flex}
         </div>
         <div class="form-group">
           <label>1.5 แผนก <span class="req">*</span></label>
-          <select name="department" required>
+          <select id="department_input" name="department" required>
             <option value="">-- เลือกแผนก --</option>
             <option value="Production">Production</option>
             <option value="Maintenance">Maintenance</option>
@@ -267,24 +267,24 @@ body{display:flex}
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary btn-submit">ส่งคำขออนุญาตทำงาน</button>
+      <button type="submit" id="btn-submit-form" class="btn btn-primary btn-submit">ส่งคำขออนุญาตทำงาน</button>
     </form>
   </section>
 
-  <!-- ==================== PAGE 2: TRACKING (เพิ่มช่องค้นหาแบบคู่) ==================== -->
+  <!-- PAGE 2: TRACKING -->
   <section id="page-track" class="card-container hidden">
     <h1 class="page-title">🔍 ติดตามสถานะ Work Permit</h1>
     <div class="record">
       <h3>ค้นหาคำขอของคุณ</h3>
-      <p style="color:#64748b; font-size:13px; margin-bottom:15px;">🔒 กรุณากรอกทั้งเลขที่ใบอนุญาตและอีเมลผู้ขอให้ตรงกันเพื่อตรวจสอบข้อมูล[cite: 7]</p>
+      <p style="color:#64748b; font-size:13px; margin-bottom:15px;">🔒 กรุณากรอกทั้งเลขที่ใบอนุญาตและอีเมลผู้ขอให้ตรงกันเพื่อตรวจสอบข้อมูล</p>
       
       <div class="form-grid">
         <div class="form-group">
-          <label>เลขที่ใบอนุญาตทำงาน (Work Permit No.) <span class="req">*</span>[cite: 7]</label>
-          <input type="text" id="search_wp" placeholder="เช่น WP-2026-001" required>[cite: 7]
+          <label>เลขที่ใบอนุญาตทำงาน (Work Permit No.) <span class="req">*</span></label>
+          <input type="text" id="search_wp" placeholder="เช่น WP-2026-001" required>
         </div>
         <div class="form-group">
-          <label>อีเมลติดต่อผู้ขออนุญาต (Email) <span class="req">*</span>[cite: 7]</label>
+          <label>อีเมลติดต่อผู้ขออนุญาต (Email) <span class="req">*</span></label>
           <input type="email" id="search_email" placeholder="เช่น user@company.com" required>
         </div>
       </div>
@@ -294,7 +294,7 @@ body{display:flex}
     </div>
   </section>
 
-  <!-- ==================== PAGE 3: SAFETY APPROVAL ==================== -->
+  <!-- PAGE 3: SAFETY APPROVAL -->
   <section id="page-safety" class="card-container hidden">
     <h1 class="page-title">🛡️ พิจารณาอนุมัติสำหรับ จป.</h1>
     <div class="notice">
@@ -306,12 +306,14 @@ body{display:flex}
 </main>
 
 <script>
-let currentUser = null;
-let userDatabase = [
-  { fullname: 'นายสมศักดิ์ ปลอดภัย', empid: 'SAF-001', email: 'safety@company.com', password: '123', role: 'Safety Officer (จป.)' },
-  { fullname: 'นายสมชาย ใจดี', empid: 'EMP-101', email: 'user@company.com', password: '123', role: 'General User' }
-];
+// ==================== CONFIG SUPABASE ====================
+const SUPABASE_URL = 'YOUR_SUPABASE_URL'; // ใส่ URL ของคุณ
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'; // ใส่ Anon Key ของคุณ
 
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let currentUser = null;
+
+// สลับฟอร์ม Login / Signup
 function toggleAuthMode(mode) {
   if (mode === 'signup') {
     document.getElementById('login-form-container').classList.add('hidden');
@@ -322,41 +324,86 @@ function toggleAuthMode(mode) {
   }
 }
 
-function handleGlobalLogin(event) {
+// 🔐 เข้าสู่ระบบด้วย Supabase Auth จริง
+async function handleGlobalLogin(event) {
   event.preventDefault();
-  const email = document.getElementById('app_email').value;
+  const email = document.getElementById('app_email').value.trim();
   const password = document.getElementById('app_password').value;
+  const btn = document.getElementById('btn-login');
 
-  const foundUser = userDatabase.find(u => u.email === email && u.password === password);
+  btn.disabled = true;
+  btn.innerText = 'กำลังตรวจสอบ...';
 
-  if (foundUser) {
-    currentUser = foundUser;
-  } else {
-    let role = email.includes('safety') ? 'Safety Officer (จป.)' : 'General User';
-    currentUser = { fullname: email.split('@')[0], empid: 'TEMP-01', email: email, role: role };
+  try {
+    // 1. ตรวจสอบอีเมลและรหัสผ่านกับ Supabase Auth
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) throw error;
+
+    // 2. ดึงข้อมูล Profile เพิ่มเติมจากตาราง profiles
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', data.user.id)
+      .single();
+
+    currentUser = {
+      id: data.user.id,
+      email: data.user.email,
+      fullname: profile ? profile.fullname : email.split('@')[0],
+      empid: profile ? profile.employee_id : 'EMP-01',
+      role: profile ? profile.role : 'General User'
+    };
+
+    alert(`✅ เข้าสู่ระบบสำเร็จ!\nยินดีต้อนรับคุณ ${currentUser.fullname}`);
+    loginSuccess();
+
+  } catch (err) {
+    alert(`❌ เข้าสู่ระบบไม่สำเร็จ: ${err.message || 'อีเมลหรือรหัสผ่านไม่ถูกต้อง'}`);
+  } finally {
+    btn.disabled = false;
+    btn.innerText = 'เข้าสู่ระบบ';
   }
-  loginSuccess();
 }
 
-function handleGlobalSignUp(event) {
+// 📝 สมัครสมาชิกและบันทึกข้อมูลลง Supabase จริง
+async function handleGlobalSignUp(event) {
   event.preventDefault();
   const fullname = document.getElementById('signup_fullname').value.trim();
   const empid = document.getElementById('signup_empid').value.trim();
   const email = document.getElementById('signup_email').value.trim();
   const password = document.getElementById('signup_password').value;
   const role = document.getElementById('signup_role').value;
+  const btn = document.getElementById('btn-signup');
 
-  currentUser = { fullname, empid, email, password, role };
-  userDatabase.push(currentUser);
+  btn.disabled = true;
+  btn.innerText = 'กำลังบันทึกข้อมูล...';
 
-  alert(`🎉 สมัครสมาชิกสำเร็จ!\nชื่อ: ${fullname} (${empid})\nอีเมล: ${email}\nสิทธิ์การใช้งาน: ${role}`);
-  
-  document.getElementById('signup_fullname').value = '';
-  document.getElementById('signup_empid').value = '';
-  document.getElementById('signup_email').value = '';
-  document.getElementById('signup_password').value = '';
+  try {
+    // 1. สร้างบัญชีผู้ใช้ใน Supabase Auth
+    const { data, error } = await supabase.auth.signUp({ email, password });
+    if (error) throw error;
 
-  loginSuccess();
+    // 2. บันทึกรายละเอียดชื่อ/รหัสพนักงาน/บทบาท ลงตาราง profiles
+    if (data.user) {
+      await supabase.from('profiles').insert([{
+        id: data.user.id,
+        fullname: fullname,
+        employee_id: empid,
+        role: role,
+        updated_at: new Date()
+      }]);
+    }
+
+    alert(`🎉 สมัครสมาชิกสำเร็จเรียบร้อย!\nกรุณาใช้ อีเมล และ รหัสผ่าน เพื่อเข้าสู่ระบบครับ`);
+    toggleAuthMode('login');
+
+  } catch (err) {
+    alert(`❌ การสมัครสมาชิกล้มเหลว: ${err.message}`);
+  } finally {
+    btn.disabled = false;
+    btn.innerText = 'ยืนยันการสมัครสมาชิก';
+  }
 }
 
 function loginSuccess() {
@@ -366,8 +413,6 @@ function loginSuccess() {
   document.getElementById('applicant_name_input').value = currentUser.fullname || '';
   document.getElementById('employee_id_input').value = currentUser.empid || '';
   document.getElementById('applicant_email_input').value = currentUser.email || '';
-  
-  // เติมอีเมลให้อัตโนมัติในหน้าติดตามสถานะเพื่อความสะดวก
   document.getElementById('search_email').value = currentUser.email || '';
 
   document.getElementById('app-login-screen').classList.add('hidden');
@@ -382,9 +427,11 @@ function loginSuccess() {
   switchPage('form');
 }
 
-function handleGlobalLogout() {
+async function handleGlobalLogout() {
+  await supabase.auth.signOut();
   currentUser = null;
   document.getElementById('app-login-screen').classList.remove('hidden');
+  document.getElementById('app_password').value = '';
   toggleAuthMode('login');
 }
 
@@ -423,78 +470,110 @@ function handleWorkTypeChange() {
   else if (type === 'Electrical') document.getElementById('checklist-electrical').classList.remove('hidden');
 }
 
-function submitWorkPermit(event) {
+// 📤 บันทึกยื่นคำขอ Work Permit ลงตารางฐานข้อมูลจริง
+async function submitWorkPermit(event) {
   event.preventDefault();
-  alert("ส่งคำขอใบอนุญาตทำงานเรียบร้อยแล้ว!");
-  document.getElementById('workPermitForm').reset();
-  if (currentUser) {
-    document.getElementById('applicant_name_input').value = currentUser.fullname || '';
-    document.getElementById('employee_id_input').value = currentUser.empid || '';
-    document.getElementById('applicant_email_input').value = currentUser.email || '';
+  const btn = document.getElementById('btn-submit-form');
+  btn.disabled = true;
+
+  try {
+    const payload = {
+      wp_no: document.getElementById('wp_no').value,
+      company: document.getElementById('company_input').value,
+      applicant_name: document.getElementById('applicant_name_input').value,
+      employee_id: document.getElementById('employee_id_input').value,
+      applicant_email: document.getElementById('applicant_email_input').value,
+      department: document.getElementById('department_input').value,
+      work_type: document.getElementById('work_type').value,
+      worker_name: document.getElementById('worker_select').value,
+      status: 'Pending',
+      created_at: new Date()
+    };
+
+    // ส่งข้อมูลลง Supabase ตาราง work_permit_requests
+    const { error } = await supabase.from('work_permit_requests').insert([payload]);
+    if (error) throw error;
+
+    alert("✅ ส่งคำขอใบอนุญาตทำงานเรียบร้อยแล้ว!");
+    document.getElementById('workPermitForm').reset();
+    switchPage('track');
+
+  } catch (err) {
+    alert(`❌ เกิดข้อผิดพลาดในการบันทึกข้อมูล: ${err.message}`);
+  } finally {
+    btn.disabled = false;
   }
-  switchPage('track');
 }
 
-// 🔍 ระบบค้นหาแบบระบุทั้ง 2 เงื่อนไข (เลขที่ Work Permit + อีเมล)[cite: 7]
-function searchWorkPermit() {
+// 🔍 ค้นหาคำขอจากฐานข้อมูล Supabase ด้วย 2 เงื่อนไข (Strict Match)
+async function searchWorkPermit() {
   const wpNo = document.getElementById('search_wp').value.trim();
   const email = document.getElementById('search_email').value.trim();
   const resDiv = document.getElementById('track-result');
 
-  // ตรวจสอบว่ากรอกครบทั้ง 2 ช่องหรือไม่
   if (!wpNo || !email) {
     resDiv.innerHTML = '<div class="warning">⚠️ กรุณากรอกทั้ง <strong>"เลขที่ใบอนุญาต"</strong> และ <strong>"อีเมลติดต่อ"</strong> ให้ครบถ้วนเพื่อค้นหาครับ</div>';
     return;
   }
 
-  // ตัวอย่างจำลองคำขอในระบบ
-  const mockRecord = {
-    wp_no: 'WP-2026-001',
-    email: 'user@company.com',
-    company: 'บริษัท ไทยคอนสตรัคชั่น จำกัด',
-    applicant: 'นายสมชาย ใจดี',
-    work_type: 'งานความร้อน (Hot Work)',
-    status: 'Pending',
-    created_at: '30/10/2026'
-  };
+  resDiv.innerHTML = '<p>กำลังค้นหาข้อมูล...</p>';
 
-  // ตรวจสอบเงื่อนไขว่าตรงกันทั้งคู่หรือไม่ (Case-insensitive)
-  if (wpNo.toLowerCase() === mockRecord.wp_no.toLowerCase() && email.toLowerCase() === mockRecord.email.toLowerCase()) {
-    resDiv.innerHTML = `
-      <div class="record">
-        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #cbd5e1; padding-bottom:8px; margin-bottom:12px;">
-          <h4 style="margin:0; color:#0369a1;">📄 รายละเอียดคำขอ ${mockRecord.wp_no}</h4>
-          <span class="status status-Pending">รอการอนุมัติจาก จป.</span>
-        </div>
-        <p><strong>ผู้ขออนุญาต:</strong> ${mockRecord.applicant} (${mockRecord.company})</p>
-        <p><strong>อีเมลติดต่อ:</strong> ${mockRecord.email}</p>
-        <p><strong>ประเภทงาน:</strong> ${mockRecord.work_type}</p>
-        <p><strong>วันที่ยื่นคำขอ:</strong> ${mockRecord.created_at}</p>
-      </div>
-    `;
-  } else {
-    // หากกรอกไม่ตรงกัน
+  // ค้นหาใน Supabase โดยต้องตรงทั้ง wp_no AND applicant_email
+  const { data, error } = await supabase
+    .from('work_permit_requests')
+    .select('*')
+    .eq('wp_no', wpNo)
+    .eq('applicant_email', email);
+
+  if (error || !data || data.length === 0) {
     resDiv.innerHTML = `
       <div class="warning" style="background:#fef2f2; border-color:#fecaca; color:#991b1b;">
-        ❌ <strong>ไม่พบข้อมูลคำขอ:</strong> เลขที่ใบอนุญาตหรืออีเมลไม่ถูกต้อง กรุณาตรวจสอบข้อมูลและลองใหม่อีกครั้งครับ
+        ❌ <strong>ไม่พบข้อมูลคำขอ:</strong> เลขที่ใบอนุญาต หรืออีเมลไม่ถูกต้อง กรุณาตรวจสอบและลองใหม่อีกครั้งครับ
       </div>
     `;
+    return;
   }
+
+  const req = data[0];
+  resDiv.innerHTML = `
+    <div class="record">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #cbd5e1; padding-bottom:8px; margin-bottom:12px;">
+        <h4 style="margin:0; color:#0369a1;">📄 รายละเอียดคำขอ ${req.wp_no}</h4>
+        <span class="status status-${req.status}">${req.status === 'Pending' ? 'รอการอนุมัติจาก จป.' : req.status}</span>
+      </div>
+      <p><strong>ผู้ขออนุญาต:</strong> ${req.applicant_name} (${req.company})</p>
+      <p><strong>อีเมลติดต่อ:</strong> ${req.applicant_email}</p>
+      <p><strong>ประเภทงาน:</strong> ${req.work_type}</p>
+      <p><strong>วันที่ยื่นคำขอ:</strong> ${new Date(req.created_at).toLocaleDateString('th-TH')}</p>
+    </div>
+  `;
 }
 
-function loadSafetyRequests() {
+// 🛡️ ดึงรายการคำขอทั้งหมดจาก Supabase สำหรับให้ จป. ตรวจสอบ
+async function loadSafetyRequests() {
   const listDiv = document.getElementById('safety-requests-list');
-  const defaultReviewerName = currentUser && currentUser.role === 'Safety Officer (จป.)' ? currentUser.fullname : '';
-  const defaultReviewerId = currentUser && currentUser.role === 'Safety Officer (จป.)' ? currentUser.empid : '';
+  listDiv.innerHTML = '<p>กำลังดึงรายการคำขอจากฐานข้อมูล...</p>';
 
-  listDiv.innerHTML = `
-    <div class="record" id="req-WP-2026-001">
-      <p><strong>เลขที่ใบอนุญาต:</strong> WP-2026-001</p>
-      <p><strong>บริษัท/ผู้ขอ:</strong> บริษัท ไทยคอนสตรัคชั่น จำกัด (นายสมชาย)</p>
-      <p><strong>อีเมลติดต่อ:</strong> user@company.com</p>
-      <p><strong>ประเภทงาน:</strong> งานความร้อน (Hot Work)</p>
-      <p><strong>ผู้ปฏิบัติงาน:</strong> นายสมชาย ใจดี (ผ่านเกณฑ์ Safety Passport)</p>
-      <p><strong>ไฟล์แนบ:</strong> <a href="#" target="_blank">ดาวน์โหลดเอกสาร JSA/หลักฐาน</a></p>
+  const { data, error } = await supabase
+    .from('work_permit_requests')
+    .select('*')
+    .eq('status', 'Pending');
+
+  if (error || !data || data.length === 0) {
+    listDiv.innerHTML = '<div class="notice">🎉 ไม่มีรายการคำขอที่รอการอนุมัติในขณะนี้</div>';
+    return;
+  }
+
+  const defaultReviewerName = currentUser ? currentUser.fullname : '';
+  const defaultReviewerId = currentUser ? currentUser.empid : '';
+
+  listDiv.innerHTML = data.map(req => `
+    <div class="record" id="req-${req.id}">
+      <p><strong>เลขที่ใบอนุญาต:</strong> ${req.wp_no}</p>
+      <p><strong>บริษัท/ผู้ขอ:</strong> ${req.company} (${req.applicant_name})</p>
+      <p><strong>อีเมลติดต่อ:</strong> ${req.applicant_email}</p>
+      <p><strong>ประเภทงาน:</strong> ${req.work_type}</p>
+      <p><strong>ผู้ปฏิบัติงาน:</strong> ${req.worker_name}</p>
       <p><strong>สถานะปัจจุบัน:</strong> <span class="status status-Pending">รออนุมัติ</span></p>
       
       <div class="approval-box">
@@ -502,36 +581,52 @@ function loadSafetyRequests() {
         <div class="form-grid">
           <div class="form-group">
             <label>ชื่อ-นามสกุล จป. ผู้อนุมัติ <span class="req">*</span></label>
-            <input type="text" id="reviewer_name_WP-2026-001" value="${defaultReviewerName}" placeholder="เช่น นายอนันต์ ปลอดภัย">
+            <input type="text" id="reviewer_name_${req.id}" value="${defaultReviewerName}" placeholder="เช่น นายอนันต์ ปลอดภัย">
           </div>
           <div class="form-group">
             <label>รหัสพนักงาน จป. <span class="req">*</span></label>
-            <input type="text" id="reviewer_id_WP-2026-001" value="${defaultReviewerId}" placeholder="เช่น SAF-009">
+            <input type="text" id="reviewer_id_${req.id}" value="${defaultReviewerId}" placeholder="เช่น SAF-009">
           </div>
         </div>
         <div style="margin-top:15px; display:flex; gap:10px;">
-          <button class="btn btn-success" onclick="approveRequest('WP-2026-001', 'Approved')">อนุมัติ (Approve)</button>
-          <button class="btn btn-danger" onclick="approveRequest('WP-2026-001', 'Rejected')">ไม่อนุมัติ (Reject)</button>
+          <button class="btn btn-success" onclick="approveRequest('${req.id}', 'Approved')">อนุมัติ (Approve)</button>
+          <button class="btn btn-danger" onclick="approveRequest('${req.id}', 'Rejected')">ไม่อนุมัติ (Reject)</button>
         </div>
       </div>
     </div>
-  `;
+  `).join('');
 }
 
-function approveRequest(wpNo, actionStatus) {
-  const reviewerName = document.getElementById(`reviewer_name_${wpNo}`).value.trim();
-  const reviewerId = document.getElementById(`reviewer_id_${wpNo}`).value.trim();
+// ✍️ บันทึกการอนุมัติลง Supabase พร้อมชื่อและรหัสพนักงาน จป.
+async function approveRequest(id, actionStatus) {
+  const reviewerName = document.getElementById(`reviewer_name_${id}`).value.trim();
+  const reviewerId = document.getElementById(`reviewer_id_${id}`).value.trim();
 
   if (!reviewerName || !reviewerId) {
     alert("⚠️ กรุณากรอก 'ชื่อ-นามสกุล' และ 'รหัสพนักงาน' ของผู้อนุมัติให้ครบถ้วนก่อนกดอนุมัติครับ");
     return;
   }
 
+  // อัปเดตตาราง work_permit_requests
+  const { error } = await supabase
+    .from('work_permit_requests')
+    .update({
+      status: actionStatus,
+      reviewed_by_name: reviewerName,
+      reviewed_by_id: reviewerId,
+      reviewed_at: new Date()
+    })
+    .eq('id', id);
+
+  if (error) {
+    alert(`❌ เกิดข้อผิดพลาดในการบันทึก: ${error.message}`);
+    return;
+  }
+
   const statusLabel = actionStatus === 'Approved' ? 'อนุมัติ' : 'ไม่อนุมัติ';
+  alert(`✅ ดำเนินการ [${statusLabel}] คำขอเรียบร้อยแล้ว!\n\n📌 ข้อมูลผู้อนุมัติที่บันทึก:\n• ชื่อผู้อนุมัติ: ${reviewerName}\n• รหัสพนักงาน จป.: ${reviewerId}`);
   
-  alert(`✅ ดำเนินการ [${statusLabel}] คำขอเลขที่ ${wpNo} เรียบร้อยแล้ว!\n\n📌 ข้อมูลผู้อนุมัติที่บันทึก:\n• ชื่อผู้อนุมัติ: ${reviewerName}\n• รหัสพนักงาน จป.: ${reviewerId}\n• บัญชีผู้ใช้งาน: ${currentUser.email}\n• วันเวลา: ${new Date().toLocaleString('th-TH')}`);
-  
-  document.getElementById(`req-${wpNo}`).style.display = 'none';
+  loadSafetyRequests();
 }
 </script>
 
