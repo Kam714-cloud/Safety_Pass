@@ -26,24 +26,20 @@ input[type=text],input[type=email],input[type=number],input[type=date],input[typ
 input[readonly]{background:#f1f5f9;color:#0284c7;font-weight:bold}
 .options-group{display:flex;flex-direction:column;gap:10px}
 .option-label{display:flex;align-items:center;gap:10px;font-weight:normal;cursor:pointer}
-.option-label input{width:18px;height:18px;flex-shrink:0}
 .hidden{display:none!important}
-.notice,.warning,.danger-alert{padding:12px 16px;border-radius:8px;margin-bottom:18px;line-height:1.6;font-size:14px}
+.notice,.warning{padding:12px 16px;border-radius:8px;margin-bottom:18px;line-height:1.6;font-size:14px}
 .notice{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
 .warning{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}
-.danger-alert{background:#fef2f2;color:#991b1b;border:1px solid #fecaca;font-weight:bold}
 .btn{padding:12px 16px;border:0;border-radius:7px;font-size:15px;font-weight:bold;cursor:pointer}
 .btn-primary{background:#0284c7;color:white}
 .btn-success{background:#15803d;color:white}
 .btn-danger{background:#dc2626;color:white}
-.btn-warning{background:#d97706;color:white}
 .btn-submit{width:100%;margin-top:24px}
 .record{border:1px solid #cbd5e1;border-radius:9px;padding:18px;margin-top:15px;background:#fff}
 .checklist-box{background:#f8fafc;padding:15px;border-radius:8px;border:1px solid #cbd5e1;margin-top:10px}
 .status{display:inline-block;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:bold}
 .status-Pending{background:#fef3c7;color:#92400e}
-.status-Approved{background:#dcfce7;color:#166534}
-.status-Rejected{background:#fee2e2;color:#991b1b}
+.login-box{max-width:400px;margin:30px auto;padding:25px;border:1px solid #cbd5e1;border-radius:12px;background:#f8fafc}
 @media(min-width:768px){
 body{display:flex}
 .sidebar{width:260px;min-height:100vh;flex-shrink:0}
@@ -68,11 +64,11 @@ body{display:flex}
 
 <main class="main-content">
 
-  <!-- ==================== PAGE 1: FORM ==================== -->
+  <!-- ==================== PAGE 1: FORM (สำหรับผู้ขอทั่วไป ไม่ต้องล็อกอิน) ==================== -->
   <section id="page-form" class="card-container">
     <h1 class="page-title">ยื่นคำขอใบอนุญาตทำงาน (Work Permit)</h1>
     <div class="notice">
-      <strong>ข้อแนะนำ:</strong> กรุณากรอกข้อมูลและอัปโหลดหลักฐานความปลอดภัยให้ครบถ้วนก่อนยื่นคำขอ[cite: 2]
+      <strong>ข้อแนะนำ:</strong> ส่วนนี้สำหรับผู้ปฏิบัติงานหรือผู้รับเหมายื่นขอใบอนุญาตทำงาน โดยไม่ต้องเข้าสู่ระบบ[cite: 1, 2]
     </div>
     
     <form id="workPermitForm" onsubmit="submitWorkPermit(event)">
@@ -127,11 +123,10 @@ body{display:flex}
           </select>
         </div>
 
-        <!-- รายการตรวจเฉพาะตามประเภทงาน -->
         <div id="checklist-hotwork" class="form-group full-width hidden checklist-box">
           <label>🔥 รายการตรวจเฉพาะ: งานความร้อน (Hot Work Checklist)</label>
           <div class="options-group">
-            <label class="option-label"><input type="checkbox" name="specific_check" value="มีผู้เฝ้าระวังไฟ (Fire Watcher)"> มีผู้เฝ้าระวังไฟประจำจุดตลอดเวลา</label>
+            <label class="option-label"><input type="checkbox" name="specific_check" value="มีผู้เฝ้าระวังไฟ"> มีผู้เฝ้าระวังไฟประจำจุดตลอดเวลา</label>
             <label class="option-label"><input type="checkbox" name="specific_check" value="จัดเตรียมถังดับเพลิง"> มีอุปกรณ์ดับเพลิงพร้อมใช้งานรัศมี 10 เมตร</label>
           </div>
         </div>
@@ -148,14 +143,14 @@ body{display:flex}
           <label>🧗 รายการตรวจเฉพาะ: งานบนที่สูง (Height Work Checklist)</label>
           <div class="options-group">
             <label class="option-label"><input type="checkbox" name="specific_check" value="ตรวจนั่งร้าน/จุดยึด"> นั่งร้านผ่านการตรวจมาตรฐาน หรือมีจุดยึดเกาะที่แข็งแรง</label>
-            <label class="option-label"><input type="checkbox" name="specific_check" value="เข็มขัดนิรภัย Full Body Harness"> ผู้ปฏิบัติงานสวมเข็มขัดนิรภัยชนิดเต็มตัวพร้อมสายคู่</label>
+            <label class="option-label"><input type="checkbox" name="specific_check" value="เข็มขัดนิรภัย"> ผู้ปฏิบัติงานสวมเข็มขัดนิรภัยชนิดเต็มตัวพร้อมสายคู่</label>
           </div>
         </div>
 
         <div id="checklist-electrical" class="form-group full-width hidden checklist-box">
           <label>⚡ รายการตรวจเฉพาะ: งานไฟฟ้า (Electrical Checklist)</label>
           <div class="options-group">
-            <label class="option-label"><input type="checkbox" name="specific_check" value="ตัดแยกระบบ LOTO"> ดำเนินการตัดแยกแหล่งจ่ายไฟและติดป้าย LOTO (Lockout/Tagout)</label>
+            <label class="option-label"><input type="checkbox" name="specific_check" value="ตัดแยกระบบ LOTO"> ดำเนินการตัดแยกแหล่งจ่ายไฟและติดป้าย LOTO</label>
             <label class="option-label"><input type="checkbox" name="specific_check" value="ใช้เครื่องมือฉนวน"> ใช้เครื่องมือที่เป็นฉนวนไฟฟ้ามาตรฐาน</label>
           </div>
         </div>
@@ -194,23 +189,46 @@ body{display:flex}
     </div>
   </section>
 
-  <!-- ==================== PAGE 3: SAFETY APPROVAL ==================== -->
+  <!-- ==================== PAGE 3: SAFETY APPROVAL (ต้องเข้าสู่ระบบเฉพาะ จป.) ==================== -->
   <section id="page-safety" class="card-container hidden">
     <h1 class="page-title">🛡️ พิจารณาอนุมัติสำหรับ จป.</h1>
-    <div class="notice">
-      ส่วนนี้สำหรับเจ้าหน้าที่ความปลอดภัย (Safety Officer) ตรวจสอบรายละเอียดและอนุมัติเอกสาร[cite: 1, 2]
+
+    <!-- หน้าล็อกอินของ จป. -->
+    <div id="safety-login-box" class="login-box">
+      <h3 style="text-align:center; margin-top:0;">🔒 เข้าสู่ระบบสำหรับ จป.</h3>
+      <p style="text-align:center; color:#64748b; font-size:13px;">กรุณากรอกอีเมลและรหัสผ่านที่สมัครใช้งานระบบ</p>
+      <form onsubmit="handleSafetyLogin(event)">
+        <div class="form-group" style="margin-bottom:15px;">
+          <label>อีเมล (Email) <span class="req">*</span></label>
+          <input type="email" id="login_email" placeholder="safety@company.com" required>
+        </div>
+        <div class="form-group" style="margin-bottom:20px;">
+          <label>รหัสผ่าน (Password) <span class="req">*</span></label>
+          <input type="password" id="login_password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">เข้าสู่ระบบ</button>
+      </form>
     </div>
-    <div id="safety-requests-list">
-      <div class="record">
-        <p>กำลังโหลดรายการขออนุมัติ...</p>
+
+    <!-- แผงอนุมัติงาน (แสดงเมื่อล็อกอินสำเร็จแล้ว) -->
+    <div id="safety-dashboard" class="hidden">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:#f8fafc; padding:10px; border-radius:8px;">
+        <span>ผู้ใช้งานปัจจุบัน: <strong id="current-user-email"></strong></span>
+        <button class="btn btn-danger" style="padding:6px 12px; font-size:13px;" onclick="handleSafetyLogout()">ออกจากระบบ</button>
       </div>
+
+      <div class="notice">
+        ส่วนนี้สำหรับเจ้าหน้าที่ความปลอดภัย (Safety Officer) ตรวจสอบรายละเอียดและอนุมัติเอกสาร[cite: 1, 2]
+      </div>
+      <div id="safety-requests-list"></div>
     </div>
   </section>
 
 </main>
 
 <script>
-// ฟังก์ชันสลับหน้า (Tabs Navigation)
+let currentUser = null;
+
 function switchPage(pageId) {
   document.getElementById('page-form').classList.add('hidden');
   document.getElementById('page-track').classList.add('hidden');
@@ -224,34 +242,56 @@ function switchPage(pageId) {
   document.getElementById('menu-' + pageId).classList.add('active');
 
   if (pageId === 'safety') {
-    loadSafetyRequests();
+    checkSafetyAuth();
   }
 }
 
-// ฟังก์ชันซ่อน/แสดง Checklist ตามประเภทงานที่เลือก
+function checkSafetyAuth() {
+  const loginBox = document.getElementById('safety-login-box');
+  const dashboard = document.getElementById('safety-dashboard');
+
+  if (currentUser) {
+    loginBox.classList.add('hidden');
+    dashboard.classList.remove('hidden');
+    document.getElementById('current-user-email').innerText = currentUser.email;
+    loadSafetyRequests();
+  } else {
+    loginBox.classList.remove('hidden');
+    dashboard.classList.add('hidden');
+  }
+}
+
+function handleSafetyLogin(event) {
+  event.preventDefault();
+  const email = document.getElementById('login_email').value;
+  // จำลองการล็อกอินสำเร็จ (สามารถเปลี่ยนไปใช้ supabase.auth.signInWithPassword ได้ทีหลัง)[cite: 1]
+  currentUser = { email: email };
+  alert('เข้าสู่ระบบสำเร็จ!');
+  checkSafetyAuth();
+}
+
+function handleSafetyLogout() {
+  currentUser = null;
+  alert('ออกจากระบบเรียบร้อยแล้ว');
+  checkSafetyAuth();
+}
+
 function handleWorkTypeChange() {
   const type = document.getElementById('work_type').value;
-
   document.getElementById('checklist-hotwork').classList.add('hidden');
   document.getElementById('checklist-confined').classList.add('hidden');
   document.getElementById('checklist-height').classList.add('hidden');
   document.getElementById('checklist-electrical').classList.add('hidden');
 
-  if (type === 'Hot Work') {
-    document.getElementById('checklist-hotwork').classList.remove('hidden');
-  } else if (type === 'Confined Space') {
-    document.getElementById('checklist-confined').classList.remove('hidden');
-  } else if (type === 'Work at Height') {
-    document.getElementById('checklist-height').classList.remove('hidden');
-  } else if (type === 'Electrical') {
-    document.getElementById('checklist-electrical').classList.remove('hidden');
-  }
+  if (type === 'Hot Work') document.getElementById('checklist-hotwork').classList.remove('hidden');
+  else if (type === 'Confined Space') document.getElementById('checklist-confined').classList.remove('hidden');
+  else if (type === 'Work at Height') document.getElementById('checklist-height').classList.remove('hidden');
+  else if (type === 'Electrical') document.getElementById('checklist-electrical').classList.remove('hidden');
 }
 
-// จำลองการส่งคำขอ (สามารถเชื่อมต่อ Supabase จริงต่อได้ทันที)
 function submitWorkPermit(event) {
   event.preventDefault();
-  alert("ส่งคำขอใบอนุญาตทำงานเรียบร้อยแล้ว! ระบบได้บันทึกข้อมูลเข้าสู่ฐานข้อมูล");
+  alert("ส่งคำขอใบอนุญาตทำงานเรียบร้อยแล้ว!");
   document.getElementById('workPermitForm').reset();
   switchPage('track');
 }
@@ -267,7 +307,7 @@ function searchWorkPermit() {
     <div class="record">
       <p><strong>เลขที่คำขอ:</strong> ${val}</p>
       <p><strong>สถานะปัจจุบัน:</strong> <span class="status status-Pending">รอการอนุมัติจาก จป. (Pending)</span></p>
-      <p class="muted">บันทึกเมื่อ: ${new Date().toLocaleDateString('th-TH')}</p>
+      <p style="color:#64748b; font-size:13px;">บันทึกเมื่อ: ${new Date().toLocaleDateString('th-TH')}</p>
     </div>
   `;
 }
@@ -279,14 +319,18 @@ function loadSafetyRequests() {
       <p><strong>เลขที่ใบอนุญาต:</strong> WP-2026-001</p>
       <p><strong>บริษัท/ผู้ขอ:</strong> บริษัท ไทยคอนสตรัคชั่น จำกัด (นายสมชาย)</p>
       <p><strong>ประเภทงาน:</strong> งานความร้อน (Hot Work)</p>
-      <p><strong>ผู้ปฏิบัติงาน (Digital Passport):</strong> นายสมชาย ใจดี (ผ่านเกณฑ์)</p>
-      <p><strong>ไฟล์แนบ:</strong> <a href="#" target="_blank">ดาวน์โหลดเอกสาร JSA/หลักฐานความปลอดภัย</a></p>
+      <p><strong>ผู้ปฏิบัติงาน:</strong> นายสมชาย ใจดี (ผ่านเกณฑ์)</p>
+      <p><strong>ไฟล์แนบ:</strong> <a href="#" target="_blank">ดาวน์โหลดเอกสาร JSA/หลักฐาน</a></p>
       <div style="margin-top:15px; display:flex; gap:10px;">
-        <button class="btn btn-success" onclick="alert('อนุมัติคำขอเรียบร้อย')">อนุมัติ (Approve)</button>
-        <button class="btn btn-danger" onclick="alert('ปฏิเสธคำขอเรียบร้อย')">ไม่อนุมัติ (Reject)</button>
+        <button class="btn btn-success" onclick="approveRequest('WP-2026-001', 'Approved')">อนุมัติ (Approve)</button>
+        <button class="btn btn-danger" onclick="approveRequest('WP-2026-001', 'Rejected')">ไม่อนุมัติ (Reject)</button>
       </div>
     </div>
   `;
+}
+
+function approveRequest(wpNo, actionStatus) {
+  alert(`ดำเนินการ [${actionStatus}] คำขอเลขที่ ${wpNo} เรียบร้อย (บันทึกผู้อนุมัติ: ${currentUser.email})`);
 }
 </script>
 
