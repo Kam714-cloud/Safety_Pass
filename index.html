@@ -106,7 +106,7 @@ body{display:flex}
       <span class="toggle-link" onclick="toggleAuthMode('signup')">ยังไม่มีบัญชี? สมัครสมาชิกที่นี่</span>
     </div>
 
-    <!-- ฟอร์มที่ 2: สมัครสมาชิก (SIGN UP - เพิ่มชื่อและรหัสพนักงานแล้ว) -->
+    <!-- ฟอร์มที่ 2: สมัครสมาชิก (SIGN UP) -->
     <div id="signup-form-container" class="hidden">
       <form onsubmit="handleGlobalSignUp(event)">
         <div class="form-group" style="margin-bottom:15px;">
@@ -271,15 +271,25 @@ body{display:flex}
     </form>
   </section>
 
-  <!-- ==================== PAGE 2: TRACKING ==================== -->
+  <!-- ==================== PAGE 2: TRACKING (เพิ่มช่องค้นหาแบบคู่) ==================== -->
   <section id="page-track" class="card-container hidden">
     <h1 class="page-title">🔍 ติดตามสถานะ Work Permit</h1>
     <div class="record">
       <h3>ค้นหาคำขอของคุณ</h3>
-      <div class="form-group" style="margin-top:10px;">
-        <input type="text" id="search_wp" placeholder="กรอกเลขที่ Work Permit เช่น WP-2026-001">
+      <p style="color:#64748b; font-size:13px; margin-bottom:15px;">🔒 กรุณากรอกทั้งเลขที่ใบอนุญาตและอีเมลผู้ขอให้ตรงกันเพื่อตรวจสอบข้อมูล[cite: 7]</p>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label>เลขที่ใบอนุญาตทำงาน (Work Permit No.) <span class="req">*</span>[cite: 7]</label>
+          <input type="text" id="search_wp" placeholder="เช่น WP-2026-001" required>[cite: 7]
+        </div>
+        <div class="form-group">
+          <label>อีเมลติดต่อผู้ขออนุญาต (Email) <span class="req">*</span>[cite: 7]</label>
+          <input type="email" id="search_email" placeholder="เช่น user@company.com" required>
+        </div>
       </div>
-      <button class="btn btn-primary" style="margin-top:10px;" onclick="searchWorkPermit()">ค้นหาข้อมูล</button>
+      
+      <button class="btn btn-primary" style="margin-top:15px; width:100%;" onclick="searchWorkPermit()">🔍 ค้นหาข้อมูล</button>
       <div id="track-result" style="margin-top:20px;"></div>
     </div>
   </section>
@@ -341,7 +351,6 @@ function handleGlobalSignUp(event) {
 
   alert(`🎉 สมัครสมาชิกสำเร็จ!\nชื่อ: ${fullname} (${empid})\nอีเมล: ${email}\nสิทธิ์การใช้งาน: ${role}`);
   
-  // ล้างฟอร์ม
   document.getElementById('signup_fullname').value = '';
   document.getElementById('signup_empid').value = '';
   document.getElementById('signup_email').value = '';
@@ -354,10 +363,12 @@ function loginSuccess() {
   document.getElementById('logged-user-name').innerText = `${currentUser.fullname} (${currentUser.empid})`;
   document.getElementById('logged-user-role').innerText = currentUser.role;
   
-  // เติมข้อมูลลงฟอร์มยื่นคำขออัตโนมัติ
   document.getElementById('applicant_name_input').value = currentUser.fullname || '';
   document.getElementById('employee_id_input').value = currentUser.empid || '';
   document.getElementById('applicant_email_input').value = currentUser.email || '';
+  
+  // เติมอีเมลให้อัตโนมัติในหน้าติดตามสถานะเพื่อความสะดวก
+  document.getElementById('search_email').value = currentUser.email || '';
 
   document.getElementById('app-login-screen').classList.add('hidden');
 
@@ -424,20 +435,51 @@ function submitWorkPermit(event) {
   switchPage('track');
 }
 
+// 🔍 ระบบค้นหาแบบระบุทั้ง 2 เงื่อนไข (เลขที่ Work Permit + อีเมล)[cite: 7]
 function searchWorkPermit() {
-  const val = document.getElementById('search_wp').value;
+  const wpNo = document.getElementById('search_wp').value.trim();
+  const email = document.getElementById('search_email').value.trim();
   const resDiv = document.getElementById('track-result');
-  if(!val) {
-    resDiv.innerHTML = '<p class="warning">กรุณากรอกเลขที่ใบอนุญาตก่อนค้นหา</p>';
+
+  // ตรวจสอบว่ากรอกครบทั้ง 2 ช่องหรือไม่
+  if (!wpNo || !email) {
+    resDiv.innerHTML = '<div class="warning">⚠️ กรุณากรอกทั้ง <strong>"เลขที่ใบอนุญาต"</strong> และ <strong>"อีเมลติดต่อ"</strong> ให้ครบถ้วนเพื่อค้นหาครับ</div>';
     return;
   }
-  resDiv.innerHTML = `
-    <div class="record">
-      <p><strong>เลขที่คำขอ:</strong> ${val}</p>
-      <p><strong>สถานะปัจจุบัน:</strong> <span class="status status-Pending">รอการอนุมัติจาก จป. (Pending)</span></p>
-      <p style="color:#64748b; font-size:13px;">บันทึกเมื่อ: ${new Date().toLocaleDateString('th-TH')}</p>
-    </div>
-  `;
+
+  // ตัวอย่างจำลองคำขอในระบบ
+  const mockRecord = {
+    wp_no: 'WP-2026-001',
+    email: 'user@company.com',
+    company: 'บริษัท ไทยคอนสตรัคชั่น จำกัด',
+    applicant: 'นายสมชาย ใจดี',
+    work_type: 'งานความร้อน (Hot Work)',
+    status: 'Pending',
+    created_at: '30/10/2026'
+  };
+
+  // ตรวจสอบเงื่อนไขว่าตรงกันทั้งคู่หรือไม่ (Case-insensitive)
+  if (wpNo.toLowerCase() === mockRecord.wp_no.toLowerCase() && email.toLowerCase() === mockRecord.email.toLowerCase()) {
+    resDiv.innerHTML = `
+      <div class="record">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #cbd5e1; padding-bottom:8px; margin-bottom:12px;">
+          <h4 style="margin:0; color:#0369a1;">📄 รายละเอียดคำขอ ${mockRecord.wp_no}</h4>
+          <span class="status status-Pending">รอการอนุมัติจาก จป.</span>
+        </div>
+        <p><strong>ผู้ขออนุญาต:</strong> ${mockRecord.applicant} (${mockRecord.company})</p>
+        <p><strong>อีเมลติดต่อ:</strong> ${mockRecord.email}</p>
+        <p><strong>ประเภทงาน:</strong> ${mockRecord.work_type}</p>
+        <p><strong>วันที่ยื่นคำขอ:</strong> ${mockRecord.created_at}</p>
+      </div>
+    `;
+  } else {
+    // หากกรอกไม่ตรงกัน
+    resDiv.innerHTML = `
+      <div class="warning" style="background:#fef2f2; border-color:#fecaca; color:#991b1b;">
+        ❌ <strong>ไม่พบข้อมูลคำขอ:</strong> เลขที่ใบอนุญาตหรืออีเมลไม่ถูกต้อง กรุณาตรวจสอบข้อมูลและลองใหม่อีกครั้งครับ
+      </div>
+    `;
+  }
 }
 
 function loadSafetyRequests() {
@@ -449,6 +491,7 @@ function loadSafetyRequests() {
     <div class="record" id="req-WP-2026-001">
       <p><strong>เลขที่ใบอนุญาต:</strong> WP-2026-001</p>
       <p><strong>บริษัท/ผู้ขอ:</strong> บริษัท ไทยคอนสตรัคชั่น จำกัด (นายสมชาย)</p>
+      <p><strong>อีเมลติดต่อ:</strong> user@company.com</p>
       <p><strong>ประเภทงาน:</strong> งานความร้อน (Hot Work)</p>
       <p><strong>ผู้ปฏิบัติงาน:</strong> นายสมชาย ใจดี (ผ่านเกณฑ์ Safety Passport)</p>
       <p><strong>ไฟล์แนบ:</strong> <a href="#" target="_blank">ดาวน์โหลดเอกสาร JSA/หลักฐาน</a></p>
