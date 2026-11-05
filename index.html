@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAFE PASS - Smart Work Permit System</title>
+    <title>AUDI WORK PERMIT - Smart System</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Supabase JS Client v2 -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: 'Kanit', sans-serif; }
+        body { font-family: Arial, Tahoma, sans-serif; }
         .hidden-section { display: none !important; }
         .other-input { display: block; margin-top: 5px; width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body class="bg-gray-100 min-h-screen text-gray-800">
 
@@ -21,13 +20,12 @@
     <nav class="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <span class="text-2xl font-bold text-blue-400">SAFE PASS</span>
-                <span class="text-xs bg-blue-600 px-2 py-0.5 rounded text-white font-light">Smart Work Permit</span>
+                <span class="text-2xl font-bold text-sky-400">AUDI WORK PERMIT</span>
             </div>
             <div id="user-info-bar" class="hidden-section flex items-center space-x-4">
                 <div class="text-right">
                     <p id="nav-user-name" class="text-sm font-semibold text-white">ผู้ใช้งาน</p>
-                    <p id="nav-user-role" class="text-xs text-blue-300">สิทธิ์: General User</p>
+                    <p id="nav-user-role" class="text-xs text-sky-300">สิทธิ์: General User</p>
                 </div>
                 <button onclick="handleLogout()" class="bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1.5 rounded transition">
                     ออกจากระบบ
@@ -39,13 +37,13 @@
     <!-- Main Container -->
     <div class="max-w-7xl mx-auto p-4 md:p-6">
         
-        <!-- AUTH SECTION (Login / Sign Up) : แสดงเมื่อยังไม่เข้าสู่ระบบ -->
+        <!-- AUTH SECTION (Login / Sign Up) -->
         <div id="auth-section" class="max-w-md mx-auto my-12 bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
             <div class="flex border-b border-gray-200">
-                <button id="tab-login" onclick="switchAuthTab('login')" class="w-1/2 py-3 font-semibold text-center text-blue-600 border-b-2 border-blue-600">
+                <button id="tab-login" onclick="switchAuthTab('login')" class="w-1/2 py-3 font-semibold text-center text-sky-600 border-b-2 border-sky-600">
                     เข้าสู่ระบบ
                 </button>
-                <button id="tab-signup" onclick="switchAuthTab('signup')" class="w-1/2 py-3 font-semibold text-center text-gray-500 hover:text-blue-600">
+                <button id="tab-signup" onclick="switchAuthTab('signup')" class="w-1/2 py-3 font-semibold text-center text-gray-500 hover:text-sky-600">
                     สมัครสมาชิก
                 </button>
             </div>
@@ -53,13 +51,13 @@
             <form id="form-login" onsubmit="handleLogin(event)" class="p-6 space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">อีเมล (Email)</label>
-                    <input type="email" id="login_email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <input type="email" id="login_email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน (Password)</label>
-                    <input type="password" id="login_password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <input type="password" id="login_password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:outline-none">
                 </div>
-                <button type="submit" id="btn-login" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition">
+                <button type="submit" id="btn-login" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 rounded-lg transition">
                     เข้าสู่ระบบ
                 </button>
             </form>
@@ -67,47 +65,47 @@
             <form id="form-signup" onsubmit="handleSignUp(event)" class="p-6 space-y-4 hidden-section">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อ-นามสกุล *</label>
-                    <input type="text" id="signup_fullname" placeholder="กรอกชื่อ-นามสกุล" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <input type="text" id="signup_fullname" placeholder="กรอกชื่อ-นามสกุล" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">รหัสพนักงาน / รหัสผู้รับเหมา *</label>
-                    <input type="text" id="signup_empid" placeholder="เช่น EMP-102" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <input type="text" id="signup_empid" placeholder="เช่น EMP-102" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">อีเมลสมัครใช้งาน (Email) *</label>
-                    <input type="email" id="signup_email" placeholder="example@gmail.com" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <input type="email" id="signup_email" placeholder="example@gmail.com" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">ตั้งรหัสผ่าน (Password) *</label>
-                    <input type="password" id="signup_password" placeholder="อย่างน้อย 6 ตัวอักษร" required minlength="6" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <input type="password" id="signup_password" placeholder="อย่างน้อย 6 ตัวอักษร" required minlength="6" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">ประเภทบัญชี / สิทธิ์ใช้งาน *</label>
-                    <select id="signup_role" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
+                    <select id="signup_role" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:outline-none bg-white">
                         <option value="General User">ผู้ขออนุญาตทั่วไป / ผู้รับเหมา</option>
                         <option value="Safety Officer (จป.)">เจ้าหน้าที่ความปลอดภัย (จป.)</option>
                     </select>
                 </div>
-                <button type="submit" id="btn-signup" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 rounded-lg transition">
+                <button type="submit" id="btn-signup" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 rounded-lg transition">
                     ยืนยันการสมัครสมาชิก
                 </button>
             </form>
         </div>
 
-        <!-- APP DASHBOARD SECTION : ถูกซ่อนไว้จนกว่าจะล็อกอินสำเร็จ -->
+        <!-- APP DASHBOARD SECTION -->
         <div id="app-section" class="hidden-section grid grid-cols-1 md:grid-cols-4 gap-6">
             
             <!-- Sidebar Menu -->
             <div class="md:col-span-1 bg-white p-4 rounded-xl shadow-sm border border-gray-200 h-fit space-y-2">
-                <button onclick="showPage('permit-form')" id="menu-btn-form" class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 flex items-center space-x-2">
-                    <span>📝</span> <span>ยื่นขอใบอนุญาต (27 ข้อ)</span>
+                <button onclick="showPage('permit-form')" id="menu-btn-form" class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-sky-600 bg-sky-50 hover:bg-sky-100 flex items-center space-x-2">
+                    <span>📝</span> <span>ยื่นขอใบอนุญาต</span>
                 </button>
                 <button onclick="showPage('status-tracker')" id="menu-btn-track" class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
                     <span>🔍</span> <span>ติดตามสถานะ</span>
                 </button>
                 <button id="btn-safety-menu" onclick="showPage('safety-approval')" class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-gray-400 bg-gray-50 cursor-not-allowed flex items-center justify-between" disabled>
                     <div class="flex items-center space-x-2">
-                        <span>🛡️</span> <span>พิจารณาอนุมัติ (จป.)</span>
+                        <span>🛡️</span> <span>Safety Approval</span>
                     </div>
                     <span id="badge-lock" class="text-xs bg-gray-200 px-1.5 py-0.5 rounded text-gray-500">🔒 ล็อก</span>
                 </button>
@@ -116,171 +114,194 @@
             <!-- Content Area -->
             <div class="md:col-span-3 space-y-6">
                 
-                <!-- Page 1: แบบฟอร์มขอใบอนุญาต 27 ข้อครบถ้วน -->
+                <!-- Page 1: แบบฟอร์มขอใบอนุญาต (27 ข้อ ครบถ้วน 100%) -->
                 <div id="page-permit-form" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
-                    <h2 class="text-xl font-bold text-gray-800 border-b pb-3">ระบบกรอกคำขอ Work Permit (27 ข้อ)</h2>
+                    <h2 class="text-xl font-bold text-gray-800 border-b pb-3">ระบบกรอกคำขอ Work Permit</h2>
                     <form id="workPermitForm" onsubmit="handleWorkPermitSubmit(event)" class="space-y-6">
                         
-                        <div class="p-4 bg-blue-50 rounded-lg">
-                            <label class="block font-semibold text-blue-900 mb-1">เลขที่ใบอนุญาตทำงาน (Work Permit No.)</label>
-                            <input type="text" id="wp_no" name="wp_no" readonly class="w-full px-3 py-2 bg-white border rounded-lg font-bold text-blue-700">
+                        <div class="p-4 bg-sky-50 rounded-lg">
+                            <label class="block font-semibold text-sky-900 mb-1">เลขที่ใบอนุญาตทำงาน (Work Permit No.) <span class="text-red-500">*</span></label>
+                            <input type="text" id="wp_no" name="wp_no" readonly required class="w-full px-3 py-2 bg-gray-100 border rounded-lg font-bold text-sky-700">
                         </div>
 
                         <!-- ข้อมูลผู้ขออนุญาต (ข้อ 1-6) -->
                         <div class="space-y-4">
-                            <h3 class="text-lg font-semibold text-blue-800 border-l-4 border-blue-600 pl-2">ข้อมูลผู้ขออนุญาต</h3>
+                            <h3 class="text-lg font-semibold text-sky-800 border-l-4 border-sky-600 pl-2">ข้อมูลผู้ขออนุญาต</h3>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">1. ชื่อบริษัท / สังกัด *</label>
-                                <input type="text" name="q1" required class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                <label class="block text-sm font-medium text-gray-700">1. ชื่อบริษัท <span class="text-red-500">*</span></label>
+                                <input type="text" name="q1" required placeholder="ใส่คำตอบ" class="w-full mt-1 px-3 py-2 border rounded-lg">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">2. ชื่อ-นามสกุล ผู้ขออนุญาต *</label>
-                                <input type="text" name="q2" required class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                <label class="block text-sm font-medium text-gray-700">2. ชื่อ-นามสกุล <span class="text-red-500">*</span></label>
+                                <input type="text" name="q2" required placeholder="ใส่คำตอบ" class="w-full mt-1 px-3 py-2 border rounded-lg">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">3. รหัสพนักงาน / ผู้รับเหมา *</label>
-                                <input type="text" name="q3" required class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                <label class="block text-sm font-medium text-gray-700">3. รหัสพนักงาน/ผู้รับเหมา <span class="text-red-500">*</span></label>
+                                <input type="text" name="q3" required placeholder="ใส่คำตอบ" class="w-full mt-1 px-3 py-2 border rounded-lg">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">4. Email *</label>
-                                <input type="email" name="q4" required class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                <label class="block text-sm font-medium text-gray-700">4. Email <span class="text-red-500">*</span></label>
+                                <input type="email" name="q4" required placeholder="name@company.com" class="w-full mt-1 px-3 py-2 border rounded-lg">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">5. แผนก *</label>
+                                <label class="block text-sm font-medium text-gray-700">5. แผนก <span class="text-red-500">*</span></label>
                                 <div class="space-y-2 mt-1">
-                                    <label class="flex items-center space-x-2"><input type="radio" name="q5" value="Production" required> <span>Production</span></label>
-                                    <label class="flex items-center space-x-2"><input type="radio" name="q5" value="Maintenance"> <span>Maintenance</span></label>
-                                    <label class="flex items-center space-x-2"><input type="radio" name="q5" value="Warehouse"> <span>Warehouse</span></label>
-                                    <label class="flex items-center space-x-2"><input type="radio" name="q5" value="Other" onclick="toggleOther('q5')"> <span>Other</span></label>
+                                    <label class="flex items-center space-x-2"><input type="radio" name="q5" value="Production" required onclick="toggleOtherRadio('q5', false)"> <span>Production</span></label>
+                                    <label class="flex items-center space-x-2"><input type="radio" name="q5" value="Maintenance" onclick="toggleOtherRadio('q5', false)"> <span>Maintenance</span></label>
+                                    <label class="flex items-center space-x-2"><input type="radio" name="q5" value="Warehouse" onclick="toggleOtherRadio('q5', false)"> <span>Warehouse</span></label>
+                                    <label class="flex items-center space-x-2"><input type="radio" name="q5" value="Engineering" onclick="toggleOtherRadio('q5', false)"> <span>Engineering</span></label>
+                                    <label class="flex items-center space-x-2"><input type="radio" name="q5" value="QC" onclick="toggleOtherRadio('q5', false)"> <span>QC</span></label>
+                                    <label class="flex items-center space-x-2"><input type="radio" name="q5" value="Other" onclick="toggleOtherRadio('q5', true)"> <span>Other</span></label>
                                     <input type="text" id="q5_other" name="q5_other" class="hidden-section other-input" placeholder="โปรดระบุแผนก">
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">6. ตำแหน่งงาน *</label>
-                                <input type="text" name="q6" required class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                <label class="block text-sm font-medium text-gray-700">6. ตำแหน่งงาน <span class="text-red-500">*</span></label>
+                                <input type="text" name="q6" required placeholder="ใส่คำตอบ" class="w-full mt-1 px-3 py-2 border rounded-lg">
                             </div>
                         </div>
 
                         <!-- Safety Training (ข้อ 7-9) -->
                         <div class="space-y-4">
-                            <h3 class="text-lg font-semibold text-blue-800 border-l-4 border-blue-600 pl-2">Safety Training</h3>
+                            <h3 class="text-lg font-semibold text-sky-800 border-l-4 border-sky-600 pl-2">Safety Training</h3>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">7. ผ่านการอบรมมาตรฐานความปลอดภัย *</label>
+                                <label class="block text-sm font-medium text-gray-700">7. ผ่านการอบรมมาตรฐานความปลอดภัย <span class="text-red-500">*</span></label>
                                 <div class="flex space-x-4 mt-1">
                                     <label class="flex items-center space-x-2"><input type="radio" name="q7" value="ผ่าน" required> <span>ผ่าน</span></label>
                                     <label class="flex items-center space-x-2"><input type="radio" name="q7" value="ไม่ผ่าน"> <span>ไม่ผ่าน</span></label>
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">8. ใบรับรองผ่านการอบรมด้านความปลอดภัย *</label>
+                                <label class="block text-sm font-medium text-gray-700">8. ใบรับรองผ่านการอบรมด้านความปลอดภัย <span class="text-red-500">*</span></label>
                                 <div class="space-y-2 mt-1">
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q8" value="Fire Safety"> <span>Fire Safety</span></label>
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q8" value="Work at Height"> <span>Work at Height</span></label>
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q8" value="Confined Space"> <span>Confined Space</span></label>
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q8" value="Hot Work"> <span>Hot Work</span></label>
+                                    <label class="flex items-center space-x-2"><input type="checkbox" name="q8" value="Electrical Work"> <span>Electrical Work</span></label>
+                                    <label class="flex items-center space-x-2"><input type="checkbox" name="q8" value="Forklift"> <span>Forklift</span></label>
+                                    <label class="flex items-center space-x-2"><input type="checkbox" id="q8_other_cb" name="q8" value="Other" onchange="toggleOtherCB('q8_other_cb', 'q8_other')"> <span>Other</span></label>
+                                    <input type="text" id="q8_other" name="q8_other" class="hidden-section other-input" placeholder="โปรดระบุใบรับรอง">
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">9. แนบหลักฐานการอบรมมาตรฐานความปลอดภัย</label>
-                                <input type="file" name="q9" class="w-full mt-1 px-3 py-2 border rounded-lg bg-gray-50">
+                                <label class="block text-sm font-medium text-gray-700">9. หลักฐานการอบรมมาตรฐานความปลอดภัย</label>
+                                <input type="file" name="q9" accept="image/*,.pdf" class="w-full mt-1 px-3 py-2 border rounded-lg bg-gray-50">
+                                <p class="text-xs text-gray-500 mt-1">เลือกไฟล์ได้ 1 ไฟล์ ขนาดไม่เกิน 10MB</p>
                             </div>
                         </div>
 
-                        <!-- Smart Work Permit Details (ข้อ 10-16) -->
+                        <!-- Smart Work Permit (ข้อ 10-16) -->
                         <div class="space-y-4">
-                            <h3 class="text-lg font-semibold text-blue-800 border-l-4 border-blue-600 pl-2">Smart Work Permit Details</h3>
+                            <h3 class="text-lg font-semibold text-sky-800 border-l-4 border-sky-600 pl-2">Smart Work Permit</h3>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">10. ชื่อผู้ขอ Work Permit *</label>
-                                <input type="text" name="q10" required class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                <label class="block text-sm font-medium text-gray-700">10. ชื่อผู้ขอ Work Permit <span class="text-red-500">*</span></label>
+                                <input type="text" name="q10" required placeholder="ใส่คำตอบ" class="w-full mt-1 px-3 py-2 border rounded-lg">
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">11. บริษัท *</label>
-                                    <input type="text" name="q11" required class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                    <label class="block text-sm font-medium text-gray-700">11. บริษัท <span class="text-red-500">*</span></label>
+                                    <input type="text" name="q11" required placeholder="ใส่คำตอบ" class="w-full mt-1 px-3 py-2 border rounded-lg">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">12. จำนวนผู้ปฏิบัติงาน *</label>
-                                    <input type="number" name="q12" min="1" required class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                    <label class="block text-sm font-medium text-gray-700">12. จำนวนผู้ปฏิบัติงาน <span class="text-red-500">*</span></label>
+                                    <input type="number" name="q12" min="1" required placeholder="ใส่จำนวน" class="w-full mt-1 px-3 py-2 border rounded-lg">
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">13. รายชื่อผู้ปฏิบัติงาน *</label>
-                                <textarea name="q13" rows="3" required class="w-full mt-1 px-3 py-2 border rounded-lg" placeholder="ระบุรายชื่อผู้ปฏิบัติงานทั้งหมด..."></textarea>
+                                <label class="block text-sm font-medium text-gray-700">13. รายชื่อผู้ปฏิบัติงาน <span class="text-red-500">*</span></label>
+                                <textarea name="q13" rows="3" required placeholder="ใส่รายชื่อผู้ปฏิบัติงาน" class="w-full mt-1 px-3 py-2 border rounded-lg"></textarea>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">14. พื้นที่การทำงาน *</label>
+                                <label class="block text-sm font-medium text-gray-700">14. พื้นที่การทำงาน <span class="text-red-500">*</span></label>
                                 <div class="space-y-2 mt-1">
-                                    <label class="flex items-center space-x-2"><input type="radio" name="q14" value="Production Area" required> <span>Production Area</span></label>
-                                    <label class="flex items-center space-x-2"><input type="radio" name="q14" value="Warehouse"> <span>Warehouse</span></label>
-                                    <label class="flex items-center space-x-2"><input type="radio" name="q14" value="Roof"> <span>Roof</span></label>
-                                    <label class="flex items-center space-x-2"><input type="radio" name="q14" value="Other"> <span>Other</span></label>
+                                    <label class="flex items-center space-x-2"><input type="radio" name="q14" value="Production Area" required onclick="toggleOtherRadio('q14', false)"> <span>Production Area</span></label>
+                                    <label class="flex items-center space-x-2"><input type="radio" name="q14" value="Warehouse" onclick="toggleOtherRadio('q14', false)"> <span>Warehouse</span></label>
+                                    <label class="flex items-center space-x-2"><input type="radio" name="q14" value="Roof" onclick="toggleOtherRadio('q14', false)"> <span>Roof</span></label>
+                                    <label class="flex items-center space-x-2"><input type="radio" name="q14" value="Maintenance Area" onclick="toggleOtherRadio('q14', false)"> <span>Maintenance Area</span></label>
+                                    <label class="flex items-center space-x-2"><input type="radio" name="q14" value="Utility Area" onclick="toggleOtherRadio('q14', false)"> <span>Utility Area</span></label>
+                                    <label class="flex items-center space-x-2"><input type="radio" name="q14" value="Confined Space Area" onclick="toggleOtherRadio('q14', false)"> <span>Confined Space Area</span></label>
+                                    <label class="flex items-center space-x-2"><input type="radio" name="q14" value="Other" onclick="toggleOtherRadio('q14', true)"> <span>Other</span></label>
+                                    <input type="text" id="q14_other" name="q14_other" class="hidden-section other-input" placeholder="โปรดระบุพื้นที่การทำงาน">
                                 </div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">15. วันที่เริ่มงาน *</label>
-                                    <input type="date" name="q15" required class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                    <label class="block text-sm font-medium text-gray-700">15. วันที่เริ่มงาน <span class="text-red-500">*</span></label>
+                                    <input type="date" id="q15" name="q15" required class="w-full mt-1 px-3 py-2 border rounded-lg">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">16. วันที่สิ้นสุดงาน *</label>
-                                    <input type="date" name="q16" required class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                    <label class="block text-sm font-medium text-gray-700">16. วันที่สิ้นสุดงาน <span class="text-red-500">*</span></label>
+                                    <input type="date" id="q16" name="q16" required class="w-full mt-1 px-3 py-2 border rounded-lg">
                                 </div>
                             </div>
                         </div>
 
                         <!-- อันตรายและการควบคุม (ข้อ 17-18) -->
                         <div class="space-y-4">
-                            <h3 class="text-lg font-semibold text-blue-800 border-l-4 border-blue-600 pl-2">อันตรายและการควบคุม</h3>
+                            <h3 class="text-lg font-semibold text-sky-800 border-l-4 border-sky-600 pl-2">อันตรายและการควบคุม</h3>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">17. อันตรายที่คาดว่าจะพบ *</label>
-                                <div class="grid grid-cols-2 gap-2 mt-1">
+                                <label class="block text-sm font-medium text-gray-700">17. อันตรายที่คาดว่าจะพบ <span class="text-red-500">*</span></label>
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mt-1">
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q17" value="Fire"> <span>Fire</span></label>
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q17" value="Fall from Height"> <span>Fall from Height</span></label>
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q17" value="Electrical"> <span>Electrical</span></label>
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q17" value="Chemical"> <span>Chemical</span></label>
+                                    <label class="flex items-center space-x-2"><input type="checkbox" name="q17" value="Falling Object"> <span>Falling Object</span></label>
+                                    <label class="flex items-center space-x-2"><input type="checkbox" name="q17" value="Confined Space"> <span>Confined Space</span></label>
+                                    <label class="flex items-center space-x-2"><input type="checkbox" name="q17" value="Machine"> <span>Machine</span></label>
+                                    <label class="flex items-center space-x-2"><input type="checkbox" name="q17" value="Noise"> <span>Noise</span></label>
+                                    <label class="flex items-center space-x-2"><input type="checkbox" id="q17_other_cb" name="q17" value="Other" onchange="toggleOtherCB('q17_other_cb', 'q17_other')"> <span>Other</span></label>
                                 </div>
+                                <input type="text" id="q17_other" name="q17_other" class="hidden-section other-input mt-2" placeholder="โปรดระบุอันตรายเพิ่มเติม">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">18. เอกสารควบคุมมาตรการ</label>
-                                <input type="file" name="q18" class="w-full mt-1 px-3 py-2 border rounded-lg bg-gray-50">
+                                <input type="file" name="q18" accept="image/*,.pdf" class="w-full mt-1 px-3 py-2 border rounded-lg bg-gray-50">
+                                <p class="text-xs text-gray-500 mt-1">แนบเอกสารควบคุมมาตรการหรือเอกสารประกอบที่เกี่ยวข้อง</p>
                             </div>
                         </div>
 
-                        <!-- PPE & Checklists (ข้อ 19-23) -->
+                        <!-- PPE & Site Readiness Checklist (ข้อ 19-23) -->
                         <div class="space-y-4">
-                            <h3 class="text-lg font-semibold text-blue-800 border-l-4 border-blue-600 pl-2">PPE & Site Readiness Checklist</h3>
+                            <h3 class="text-lg font-semibold text-sky-800 border-l-4 border-sky-600 pl-2">PPE & Site Readiness Checklist</h3>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">19. PPE ที่ต้องใช้ *</label>
-                                <div class="grid grid-cols-2 gap-2 mt-1">
+                                <label class="block text-sm font-medium text-gray-700">19. PPE ที่ต้องใช้ <span class="text-red-500">*</span></label>
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mt-1">
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q20" value="Safety Helmet"> <span>Safety Helmet</span></label>
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q20" value="Safety Shoes"> <span>Safety Shoes</span></label>
+                                    <label class="flex items-center space-x-2"><input type="checkbox" name="q20" value="Face Shield"> <span>Face Shield</span></label>
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q20" value="Safety Glasses"> <span>Safety Glasses</span></label>
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q20" value="Gloves"> <span>Gloves</span></label>
+                                    <label class="flex items-center space-x-2"><input type="checkbox" name="q20" value="Full Body Harness"> <span>Full Body Harness</span></label>
+                                    <label class="flex items-center space-x-2"><input type="checkbox" name="q20" value="Respirator"> <span>Respirator</span></label>
+                                    <label class="flex items-center space-x-2"><input type="checkbox" id="q20_other_cb" name="q20" value="Other" onchange="toggleOtherCB('q20_other_cb', 'q20_other')"> <span>Other</span></label>
                                 </div>
+                                <input type="text" id="q20_other" name="q20_other" class="hidden-section other-input mt-2" placeholder="โปรดระบุ PPE อื่นๆ">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">20. มี Work Permit ที่เกี่ยวข้องหรือไม่? *</label>
+                                <label class="block text-sm font-medium text-gray-700">20. มี Work Permit ที่เกี่ยวข้องหรือไม่? <span class="text-red-500">*</span></label>
                                 <div class="flex space-x-4 mt-1">
                                     <label class="flex items-center space-x-2"><input type="radio" name="q21" value="มี" required> <span>มี</span></label>
                                     <label class="flex items-center space-x-2"><input type="radio" name="q21" value="ไม่มี"> <span>ไม่มี</span></label>
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">21. PPE พร้อมใช้งานหรือไม่ *</label>
+                                <label class="block text-sm font-medium text-gray-700">21. PPE พร้อมใช้งานหรือไม่ <span class="text-red-500">*</span></label>
                                 <div class="flex space-x-4 mt-1">
                                     <label class="flex items-center space-x-2"><input type="radio" name="q22" value="พร้อม" required> <span>พร้อม</span></label>
                                     <label class="flex items-center space-x-2"><input type="radio" name="q22" value="ไม่พร้อม"> <span>ไม่พร้อม</span></label>
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">22. อุปกรณ์/เครื่องมือผ่านการตรวจสอบหรือไม่ *</label>
+                                <label class="block text-sm font-medium text-gray-700">22. อุปกรณ์/เครื่องมือผ่านการตรวจสอบหรือไม่ <span class="text-red-500">*</span></label>
                                 <div class="flex space-x-4 mt-1">
                                     <label class="flex items-center space-x-2"><input type="radio" name="q23" value="ผ่าน" required> <span>ผ่าน</span></label>
                                     <label class="flex items-center space-x-2"><input type="radio" name="q23" value="ไม่ผ่าน"> <span>ไม่ผ่าน</span></label>
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">23. มีผู้ควบคุมงานหรือไม่ *</label>
+                                <label class="block text-sm font-medium text-gray-700">23. มีผู้ควบคุมงานหรือไม่ <span class="text-red-500">*</span></label>
                                 <div class="flex space-x-4 mt-1">
                                     <label class="flex items-center space-x-2"><input type="radio" name="q24" value="มี" required> <span>มี</span></label>
                                     <label class="flex items-center space-x-2"><input type="radio" name="q24" value="ไม่มี"> <span>ไม่มี</span></label>
@@ -288,32 +309,32 @@
                             </div>
                         </div>
 
-                        <!-- ผู้รับผิดชอบ (ข้อ 24-26) -->
+                        <!-- ผู้รับผิดชอบการปฏิบัติงาน (ข้อ 24-26) -->
                         <div class="space-y-4">
-                            <h3 class="text-lg font-semibold text-blue-800 border-l-4 border-blue-600 pl-2">ผู้รับผิดชอบการปฏิบัติงาน</h3>
+                            <h3 class="text-lg font-semibold text-sky-800 border-l-4 border-sky-600 pl-2">ผู้รับผิดชอบการปฏิบัติงาน</h3>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">24. ชื่อผู้รับผิดชอบ *</label>
-                                <input type="text" name="q25" required class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                <label class="block text-sm font-medium text-gray-700">24. ชื่อผู้รับผิดชอบ <span class="text-red-500">*</span></label>
+                                <input type="text" name="q25" required placeholder="ใส่คำตอบ" class="w-full mt-1 px-3 py-2 border rounded-lg">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">25. เบอร์ติดต่อ *</label>
-                                <input type="text" name="q26" required class="w-full mt-1 px-3 py-2 border rounded-lg">
+                                <label class="block text-sm font-medium text-gray-700">25. เบอร์ติดต่อ <span class="text-red-500">*</span></label>
+                                <input type="text" name="q26" required placeholder="ใส่คำตอบ" class="w-full mt-1 px-3 py-2 border rounded-lg">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">26. หมายเหตุเพิ่มเติม</label>
-                                <textarea name="q27" rows="2" class="w-full mt-1 px-3 py-2 border rounded-lg" placeholder="ระบุเพิ่มเติม..."></textarea>
+                                <textarea name="q27" rows="2" placeholder="ใส่คำตอบ" class="w-full mt-1 px-3 py-2 border rounded-lg"></textarea>
                             </div>
                         </div>
 
-                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition shadow">
-                            ยื่นคำขออนุญาตทำงาน (Submit Work Permit)
+                        <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-medium py-3 rounded-lg transition shadow">
+                            ยื่นคำขออนุญาตทำงาน
                         </button>
                     </form>
                 </div>
 
                 <!-- Page 2: ติดตามสถานะ -->
                 <div id="page-status-tracker" class="hidden-section bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4">
-                    <h2 class="text-xl font-bold text-gray-800 border-b pb-3">ติดตามสถานะใบอนุญาตทำงาน</h2>
+                    <h2 class="text-xl font-bold text-gray-800 border-b pb-3">ติดตามสถานะ Work Permit</h2>
                     <div id="requests-list" class="space-y-3">
                         <p class="text-gray-500 text-sm">กำลังโหลดข้อมูล...</p>
                     </div>
@@ -322,8 +343,8 @@
                 <!-- Page 3: หน้าพิจารณาอนุมัติ (Safety Only) -->
                 <div id="page-safety-approval" class="hidden-section bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4">
                     <div class="flex justify-between items-center border-b pb-3">
-                        <h2 class="text-xl font-bold text-gray-800">รายการรอการพิจารณาอนุมัติ (สำหรับ จป.)</h2>
-                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Safety Panel</span>
+                        <h2 class="text-xl font-bold text-gray-800">Safety Approval</h2>
+                        <span class="bg-sky-100 text-sky-800 text-xs font-semibold px-2.5 py-0.5 rounded">Safety Panel</span>
                     </div>
                     <div id="safety-approval-list" class="space-y-3">
                         <p class="text-gray-500 text-sm">กำลังโหลดรายการรออนุมัติ...</p>
@@ -354,6 +375,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             generateWPNumber();
             checkExistingSession();
+            setupDateValidation();
         });
 
         function generateWPNumber() {
@@ -362,6 +384,24 @@
             const rand = Math.floor(1000 + Math.random() * 9000);
             const wpInput = document.getElementById('wp_no');
             if (wpInput) wpInput.value = `AA_${dateStr}_${rand}`;
+        }
+
+        function setupDateValidation() {
+            const startDate = document.getElementById('q15');
+            const endDate = document.getElementById('q16');
+            if (!startDate || !endDate) return;
+            startDate.addEventListener('change', function () {
+                endDate.min = startDate.value;
+                if (endDate.value && endDate.value < startDate.value) {
+                    endDate.value = '';
+                }
+            });
+            endDate.addEventListener('change', function () {
+                if (startDate.value && endDate.value && endDate.value < startDate.value) {
+                    alert('วันที่สิ้นสุดงานต้องไม่ก่อนวันที่เริ่มงาน');
+                    endDate.value = '';
+                }
+            });
         }
 
         async function checkExistingSession() {
@@ -381,13 +421,13 @@
             if (type === 'login') {
                 document.getElementById('form-login').classList.remove('hidden-section');
                 document.getElementById('form-signup').classList.add('hidden-section');
-                document.getElementById('tab-login').className = "w-1/2 py-3 font-semibold text-center text-blue-600 border-b-2 border-blue-600";
-                document.getElementById('tab-signup').className = "w-1/2 py-3 font-semibold text-center text-gray-500 hover:text-blue-600";
+                document.getElementById('tab-login').className = "w-1/2 py-3 font-semibold text-center text-sky-600 border-b-2 border-sky-600";
+                document.getElementById('tab-signup').className = "w-1/2 py-3 font-semibold text-center text-gray-500 hover:text-sky-600";
             } else {
                 document.getElementById('form-login').classList.add('hidden-section');
                 document.getElementById('form-signup').classList.remove('hidden-section');
-                document.getElementById('tab-signup').className = "w-1/2 py-3 font-semibold text-center text-blue-600 border-b-2 border-blue-600";
-                document.getElementById('tab-login').className = "w-1/2 py-3 font-semibold text-center text-gray-500 hover:text-blue-600";
+                document.getElementById('tab-signup').className = "w-1/2 py-3 font-semibold text-center text-sky-600 border-b-2 border-sky-600";
+                document.getElementById('tab-login').className = "w-1/2 py-3 font-semibold text-center text-gray-500 hover:text-sky-600";
             }
         }
 
@@ -474,10 +514,10 @@
             if (isSafety) {
                 btnSafety.disabled = false;
                 btnSafety.classList.remove('text-gray-400', 'bg-gray-50', 'cursor-not-allowed');
-                btnSafety.classList.add('text-green-700', 'hover:bg-green-50');
+                btnSafety.classList.add('text-emerald-700', 'hover:bg-emerald-50');
                 badgeLock.textContent = '✅ ปลดล็อก';
-                badgeLock.classList.replace('bg-gray-200', 'bg-green-200');
-                badgeLock.classList.replace('text-gray-500', 'text-green-800');
+                badgeLock.classList.replace('bg-gray-200', 'bg-emerald-200');
+                badgeLock.classList.replace('text-gray-500', 'text-emerald-800');
             }
             loadWorkPermitRequests();
         }
@@ -498,9 +538,29 @@
             }
         }
 
-        function toggleOther(groupName) {
+        function toggleOtherRadio(groupName, isOther) {
             const otherInput = document.getElementById(`${groupName}_other`);
-            if (otherInput) otherInput.classList.toggle('hidden-section');
+            if (otherInput) {
+                if (isOther) {
+                    otherInput.classList.remove('hidden-section');
+                } else {
+                    otherInput.classList.add('hidden-section');
+                    otherInput.value = '';
+                }
+            }
+        }
+
+        function toggleOtherCB(cbId, inputId) {
+            const cb = document.getElementById(cbId);
+            const input = document.getElementById(inputId);
+            if (cb && input) {
+                if (cb.checked) {
+                    input.classList.remove('hidden-section');
+                } else {
+                    input.classList.add('hidden-section');
+                    input.value = '';
+                }
+            }
         }
 
         async function handleWorkPermitSubmit(event) {
@@ -515,11 +575,11 @@
             try {
                 const { error } = await db.from('work_permit_requests').insert([{
                     wp_no: wpNo,
-                    user_id: currentUser.id,
-                    applicant_name: userProfile.fullname,
-                    work_type: dataObj.q14 || 'General',
-                    worker_name: dataObj.q2 || '-',
-                    company: dataObj.q1 || '-',
+                    company: dataObj.q1,
+                    employee_id: dataObj.q3,
+                    applicant_email: dataObj.q4,
+                    applicant_name: dataObj.q2,
+                    submitted_at: new Date().toISOString(),
                     status: 'Pending',
                     form_data: dataObj
                 }]);
@@ -534,7 +594,7 @@
         }
 
         async function loadWorkPermitRequests() {
-            const { data, error } = await db.from('work_permit_requests').select('*').order('created_at', { ascending: false });
+            const { data, error } = await db.from('work_permit_requests').select('*').order('submitted_at', { ascending: false });
             if (error) return;
 
             const statusContainer = document.getElementById('requests-list');
@@ -545,7 +605,7 @@
 
             data.forEach(item => {
                 const card = `
-                    <div class="p-4 border rounded-lg flex justify-between items-center">
+                    <div class="p-4 border rounded-lg flex justify-between items-center bg-white shadow-sm">
                         <div>
                             <p class="font-bold text-gray-800">${item.wp_no} - ${item.company || '-'}</p>
                             <p class="text-sm text-gray-600">ผู้ขอ: ${item.applicant_name}</p>
@@ -567,7 +627,7 @@
                                 <p class="text-sm text-gray-600">ผู้ขออนุญาต: ${item.applicant_name}</p>
                             </div>
                             <div class="flex space-x-2">
-                                <button onclick="updateStatus('${item.id}', 'Approved')" class="bg-green-600 text-white text-xs px-3 py-1.5 rounded hover:bg-green-700">อนุมัติ</button>
+                                <button onclick="updateStatus('${item.id}', 'Approved')" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded hover:bg-emerald-700">อนุมัติ</button>
                                 <button onclick="updateStatus('${item.id}', 'Rejected')" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded hover:bg-red-700">ไม่อนุมัติ</button>
                             </div>
                         </div>
@@ -596,7 +656,7 @@
 
         function getStatusBadge(status) {
             switch (status) {
-                case 'Approved': return 'bg-green-100 text-green-800';
+                case 'Approved': return 'bg-emerald-100 text-emerald-800';
                 case 'Rejected': return 'bg-red-100 text-red-800';
                 default: return 'bg-yellow-100 text-yellow-800';
             }
