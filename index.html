@@ -77,7 +77,7 @@ body{display:flex}
 <section id="page-form" class="card-container">
 <h1 class="page-title">ระบบกรอกคำขอ Work Permit</h1>
 <div class="warning">
-<strong>หมายเหตุ:</strong> ระบบเชื่อมต่อฐานข้อมูล Supabase เรียบร้อยแล้ว
+<strong>หมายเหตุ:</strong> ระบบนี้จะบันทึกคำขอลง Supabase เมื่อกำหนดค่าฐานข้อมูลและ RLS policy ถูกต้อง
 </div>
 <form id="workPermitForm">
 <div class="form-group">
@@ -119,15 +119,64 @@ body{display:flex}
 <input type="text" name="q6" required placeholder="ใส่คำตอบ">
 </div>
 </div>
+<div class="section-title">Safety Training</div>
+<div class="form-grid">
+<div class="form-group full-width">
+<label>7. ผ่านการอบรมมาตรฐานความปลอดภัย <span class="req">*</span></label>
+<div class="options-group">
+<label class="option-label"><input type="radio" name="q7" value="ผ่าน" required> ผ่าน</label>
+<label class="option-label"><input type="radio" name="q7" value="ไม่ผ่าน"> ไม่ผ่าน</label>
+</div>
+</div>
+<div class="form-group full-width">
+<label>8. ใบรับรองผ่านการอบรมด้านความปลอดภัย <span class="req">*</span></label>
+<div class="options-group">
+<label class="option-label"><input type="checkbox" name="q8" value="Fire Safety"> Fire Safety</label>
+<label class="option-label"><input type="checkbox" name="q8" value="Work at Height"> Work at Height</label>
+<label class="option-label"><input type="checkbox" name="q8" value="Confined Space"> Confined Space</label>
+<label class="option-label"><input type="checkbox" name="q8" value="Hot Work"> Hot Work</label>
+<label class="option-label"><input type="checkbox" name="q8" value="Electrical Work"> Electrical Work</label>
+<label class="option-label"><input type="checkbox" name="q8" value="Forklift"> Forklift</label>
+<label class="option-label"><input type="checkbox" id="q8_other_cb" name="q8" value="Other"> Other</label>
+<input type="text" id="q8_other" name="q8_other" class="other-input hidden" placeholder="โปรดระบุใบรับรอง">
+</div>
+</div>
+<div class="form-group full-width">
+<label>9. หลักฐานการอบรมมาตรฐานความปลอดภัย</label>
+<input type="file" name="q9" accept="image/*,.pdf">
+<p class="muted">เลือกไฟล์ได้ 1 ไฟล์ ขนาดไม่เกิน 10MB</p>
+</div>
+</div>
 <div class="section-title">Smart Work Permit</div>
 <div class="form-grid">
 <div class="form-group full-width">
-<label>10. ลักษณะงาน/รายละเอียด <span class="req">*</span></label>
-<input type="text" name="work_type" required placeholder="ระบุลักษณะงาน">
+<label>10. ชื่อผู้ขอ Work Permit <span class="req">*</span></label>
+<input type="text" name="q10" required placeholder="ใส่คำตอบ">
+</div>
+<div class="form-group">
+<label>11. บริษัท <span class="req">*</span></label>
+<input type="text" name="q11" required placeholder="ใส่คำตอบ">
+</div>
+<div class="form-group">
+<label>12. จำนวนผู้ปฏิบัติงาน <span class="req">*</span></label>
+<input type="number" name="q12" min="1" required placeholder="ใส่จำนวน">
 </div>
 <div class="form-group full-width">
 <label>13. รายชื่อผู้ปฏิบัติงาน <span class="req">*</span></label>
-<textarea name="worker_name" rows="3" required placeholder="ใส่รายชื่อผู้ปฏิบัติงาน"></textarea>
+<textarea name="q13" rows="3" required placeholder="ใส่รายชื่อผู้ปฏิบัติงาน"></textarea>
+</div>
+<div class="form-group full-width">
+<label>14. พื้นที่การทำงาน <span class="req">*</span></label>
+<div class="options-group">
+<label class="option-label"><input type="radio" name="q14" value="Production Area" required> Production Area</label>
+<label class="option-label"><input type="radio" name="q14" value="Warehouse"> Warehouse</label>
+<label class="option-label"><input type="radio" name="q14" value="Roof"> Roof</label>
+<label class="option-label"><input type="radio" name="q14" value="Maintenance Area"> Maintenance Area</label>
+<label class="option-label"><input type="radio" name="q14" value="Utility Area"> Utility Area</label>
+<label class="option-label"><input type="radio" name="q14" value="Confined Space Area"> Confined Space Area</label>
+<label class="option-label"><input type="radio" name="q14" value="Other"> Other</label>
+<input type="text" id="q14_other" name="q14_other" class="other-input hidden" placeholder="โปรดระบุพื้นที่การทำงาน">
+</div>
 </div>
 <div class="form-group">
 <label>15. วันที่เริ่มงาน <span class="req">*</span></label>
@@ -138,18 +187,105 @@ body{display:flex}
 <input type="date" name="q16" required>
 </div>
 </div>
+<div class="section-title">อันตรายและการควบคุม</div>
+<div class="form-grid">
+<div class="form-group full-width">
+<label>17. อันตรายที่คาดว่าจะพบ <span class="req">*</span></label>
+<div class="options-group">
+<label class="option-label"><input type="checkbox" name="q17" value="Fire"> Fire</label>
+<label class="option-label"><input type="checkbox" name="q17" value="Fall from Height"> Fall from Height</label>
+<label class="option-label"><input type="checkbox" name="q17" value="Electrical"> Electrical</label>
+<label class="option-label"><input type="checkbox" name="q17" value="Chemical"> Chemical</label>
+<label class="option-label"><input type="checkbox" name="q17" value="Falling Object"> Falling Object</label>
+<label class="option-label"><input type="checkbox" name="q17" value="Confined Space"> Confined Space</label>
+<label class="option-label"><input type="checkbox" name="q17" value="Machine"> Machine</label>
+<label class="option-label"><input type="checkbox" name="q17" value="Noise"> Noise</label>
+<label class="option-label"><input type="checkbox" id="q17_other_cb" name="q17" value="Other"> Other</label>
+<input type="text" id="q17_other" name="q17_other" class="other-input hidden" placeholder="โปรดระบุอันตรายเพิ่มเติม">
+</div>
+</div>
+<div class="form-group full-width">
+<label>18. เอกสารควบคุมมาตรการ</label>
+<input type="file" name="q18" accept="image/*,.pdf">
+<p class="muted">แนบเอกสารควบคุมมาตรการหรือเอกสารประกอบที่เกี่ยวข้อง</p>
+</div>
+</div>
+<div class="section-title">PPE &amp; Site Readiness Checklist</div>
+<div class="form-grid">
+<div class="form-group full-width">
+<label>19. PPE ที่ต้องใช้ <span class="req">*</span></label>
+<div class="options-group">
+<label class="option-label"><input type="checkbox" name="q20" value="Safety Helmet"> Safety Helmet</label>
+<label class="option-label"><input type="checkbox" name="q20" value="Safety Shoes"> Safety Shoes</label>
+<label class="option-label"><input type="checkbox" name="q20" value="Face Shield"> Face Shield</label>
+<label class="option-label"><input type="checkbox" name="q20" value="Safety Glasses"> Safety Glasses</label>
+<label class="option-label"><input type="checkbox" name="q20" value="Gloves"> Gloves</label>
+<label class="option-label"><input type="checkbox" name="q20" value="Full Body Harness"> Full Body Harness</label>
+<label class="option-label"><input type="checkbox" name="q20" value="Respirator"> Respirator</label>
+<label class="option-label"><input type="checkbox" id="q20_other_cb" name="q20" value="Other"> Other</label>
+<input type="text" id="q20_other" name="q20_other" class="other-input hidden" placeholder="โปรดระบุ PPE อื่นๆ">
+</div>
+</div>
+<div class="form-group full-width">
+<label>20. มี Work Permit ที่เกี่ยวข้องหรือไม่? <span class="req">*</span></label>
+<div class="options-group">
+<label class="option-label"><input type="radio" name="q21" value="มี" required> มี</label>
+<label class="option-label"><input type="radio" name="q21" value="ไม่มี"> ไม่มี</label>
+</div>
+</div>
+<div class="form-group full-width">
+<label>21. PPE พร้อมใช้งานหรือไม่ <span class="req">*</span></label>
+<div class="options-group">
+<label class="option-label"><input type="radio" name="q22" value="พร้อม" required> พร้อม</label>
+<label class="option-label"><input type="radio" name="q22" value="ไม่พร้อม"> ไม่พร้อม</label>
+</div>
+</div>
+<div class="form-group full-width">
+<label>22. อุปกรณ์/เครื่องมือผ่านการตรวจสอบหรือไม่ <span class="req">*</span></label>
+<div class="options-group">
+<label class="option-label"><input type="radio" name="q23" value="ผ่าน" required> ผ่าน</label>
+<label class="option-label"><input type="radio" name="q23" value="ไม่ผ่าน"> ไม่ผ่าน</label>
+</div>
+</div>
+<div class="form-group full-width">
+<label>23. มีผู้ควบคุมงานหรือไม่ <span class="req">*</span></label>
+<div class="options-group">
+<label class="option-label"><input type="radio" name="q24" value="มี" required> มี</label>
+<label class="option-label"><input type="radio" name="q24" value="ไม่มี"> ไม่มี</label>
+</div>
+</div>
+</div>
+<div class="section-title">ผู้รับผิดชอบการปฏิบัติงาน</div>
+<div class="form-grid">
+<div class="form-group full-width">
+<label>24. ชื่อผู้รับผิดชอบ <span class="req">*</span></label>
+<input type="text" name="q25" required placeholder="ใส่คำตอบ">
+</div>
+<div class="form-group full-width">
+<label>25. เบอร์ติดต่อ <span class="req">*</span></label>
+<input type="text" name="q26" required placeholder="ใส่คำตอบ">
+</div>
+<div class="form-group full-width">
+<label>26. หมายเหตุเพิ่มเติม</label>
+<textarea name="q27" rows="2" placeholder="ใส่คำตอบ"></textarea>
+</div>
+</div>
 <button type="submit" class="btn btn-primary btn-submit">ยื่นคำขออนุญาตทำงาน</button>
 </form>
 </section>
 <!-- ==================== TRACKING PAGE ==================== -->
 <section id="page-track" class="card-container hidden">
  <h1 class="page-title">ติดตามสถานะ Work Permit</h1>
+ <div class="notice">
+   กรอกรหัสพนักงานหรือเลขที่ Work Permit เพื่อค้นหาสถานะคำขอ
+ </div>
  <div class="form-group">
-   <label for="tracking-search">เลขที่ Work Permit</label>
-   <input type="text" id="tracking-search" placeholder="กรอกเลขที่ Work Permit">
+   <label for="tracking-search">รหัสพนักงาน หรือเลขที่ Work Permit</label>
+   <input type="text" id="tracking-search" placeholder="กรอกรหัสพนักงานหรือเลขที่ Work Permit">
  </div>
  <div class="actions">
    <button type="button" class="btn btn-primary" onclick="searchTracking()">ค้นหาสถานะ</button>
+   <button type="button" class="btn btn-warning" onclick="clearTracking()">ล้างข้อมูล</button>
  </div>
  <div id="tracking-results">
    <div class="empty">กรอกข้อมูลเพื่อค้นหาสถานะคำขอ</div>
@@ -160,6 +296,7 @@ body{display:flex}
  <h1 class="page-title">Safety Approval</h1>
  <div id="safety-auth-box" class="card-container" style="background: #f8fafc; border: 1px dashed #cbd5e1; margin-bottom: 20px;">
    <h3 style="margin-top: 0; color: #0369a1;">🔒 กรุณากรอกรหัส PIN ผู้อำนวยความสะดวกด้านความปลอดภัย</h3>
+   <p class="muted">หน้านี้จำกัดสิทธิ์เฉพาะเจ้าหน้าที่ Safety เท่านั้น</p>
    <div class="form-group" style="margin-top: 15px;">
      <label for="safety-pin-input">รหัส PIN 4 หลัก</label>
      <input type="password" id="safety-pin-input" placeholder="••••" maxlength="4" style="max-width: 200px;">
@@ -170,10 +307,21 @@ body{display:flex}
    <div id="safety-auth-error" class="muted" style="color: #dc2626; margin-top: 10px; font-weight: bold;"></div>
  </div>
  <div id="safety-content-area" class="hidden">
+   <div class="warning">
+     <strong>ระบบจัดการความปลอดภัย:</strong> ตรวจสอบและพิจารณาอนุมัติคำขอ Work Permit
+   </div>
    <div class="tab-switch">
      <button type="button" class="tab-btn active" id="tab-pending" onclick="filterSafety('Pending')">รออนุมัติ</button>
      <button type="button" class="tab-btn" id="tab-all" onclick="filterSafety('All')">คำขอทั้งหมด</button>
    </div>
+   <div class="form-group">
+     <label for="safety-search">ค้นหาเลขที่ Work Permit หรือชื่อผู้ขอ</label>
+     <input type="text" id="safety-search" placeholder="กรอกเลขที่ Work Permit หรือชื่อผู้ขอ" oninput="renderSafetyRequests()">
+   </div>
+   <div class="actions">
+     <button type="button" class="btn btn-primary" onclick="loadSafetyRequests()">โหลดรายการใหม่</button>
+   </div>
+   <div id="safety-message" class="muted"></div>
    <div id="safety-results">
      <div class="empty">กำลังเตรียมรายการคำขอ...</div>
    </div>
@@ -187,15 +335,18 @@ function verifySafetyPin() {
   const errorDiv = document.getElementById('safety-auth-error');
   const authBox = document.getElementById('safety-auth-box');
   const contentArea = document.getElementById('safety-content-area');
-  if (pinInput && pinInput.value === CORRECT_SAFETY_PIN) {
+  if (!pinInput) return;
+  if (pinInput.value === CORRECT_SAFETY_PIN) {
     if (authBox) authBox.classList.add('hidden');
     if (contentArea) contentArea.classList.remove('hidden');
     loadSafetyRequests();
   } else {
-    if (errorDiv) errorDiv.textContent = 'รหัส PIN ไม่ถูกต้อง';
-    if (pinInput) pinInput.value = '';
+    if (errorDiv) errorDiv.textContent = 'รหัส PIN ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง';
+    pinInput.value = '';
+    pinInput.focus();
   }
 }
+
 const SUPABASE_URL = 'https://oqthxncwleedvccganmg.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_bhnJ7U04RVjyByqFE5bqiQ_Qa_ffBNJ';
 const TABLE_NAME = 'work_permit_requests';
@@ -207,6 +358,8 @@ document.addEventListener('DOMContentLoaded', function () {
  if (window.supabase && window.supabase.createClient) {
    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
  }
+ setupOtherFields();
+ setupDateValidation();
  setInitialWPNumber();
  const form = document.getElementById('workPermitForm');
  if (form) {
@@ -216,9 +369,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function generateWPNumber() {
  const now = new Date();
- const dateKey = String(now.getDate()).padStart(2, '0') + String(now.getMonth() + 1).padStart(2, '0');
- const randomSuffix = Math.floor(1000 + Math.random() * 9000);
- return `AA_${dateKey}_${randomSuffix}`;
+ const day = String(now.getDate()).padStart(2, '0');
+ const month = String(now.getMonth() + 1).padStart(2, '0');
+ return `AA_${day}${month}_${Math.floor(1000 + Math.random() * 9000)}`;
 }
 function setInitialWPNumber() {
  const input = document.getElementById('wp_no');
@@ -234,6 +387,75 @@ function switchPage(pageName) {
  if (pageName === 'safety') loadSafetyRequests();
 }
 
+function setupOtherFields() {
+ const otherConfigs = [
+   { group: 'q5', checkbox: null, input: 'q5_other' },
+   { group: 'q8', checkbox: 'q8_other_cb', input: 'q8_other' },
+   { group: 'q14', checkbox: null, input: 'q14_other' },
+   { group: 'q17', checkbox: 'q17_other_cb', input: 'q17_other' },
+   { group: 'q20', checkbox: 'q20_other_cb', input: 'q20_other' }
+ ];
+ otherConfigs.forEach(config => {
+   const input = document.getElementById(config.input);
+   if (!input) return;
+   function updateVisibility() {
+     let checked = false;
+     if (config.checkbox) {
+       const cb = document.getElementById(config.checkbox);
+       checked = Boolean(cb && cb.checked);
+     } else {
+       const selected = document.querySelector(`input[name="${config.group}"]:checked`);
+       checked = Boolean(selected && selected.value === 'Other');
+     }
+     input.classList.toggle('hidden', !checked);
+     input.disabled = !checked;
+     if (!checked) input.value = '';
+   }
+   document.querySelectorAll(`input[name="${config.group}"]`).forEach(el => {
+     el.addEventListener('change', updateVisibility);
+   });
+   if (config.checkbox) {
+     const cb = document.getElementById(config.checkbox);
+     if (cb) cb.addEventListener('change', updateVisibility);
+   }
+   updateVisibility();
+ });
+}
+
+function setupDateValidation() {
+ const startDate = document.querySelector('[name="q15"]');
+ const endDate = document.querySelector('[name="q16"]');
+ if (!startDate || !endDate) return;
+ startDate.addEventListener('change', () => {
+   endDate.min = startDate.value;
+   if (endDate.value && endDate.value < startDate.value) endDate.value = '';
+ });
+}
+
+function collectFormData(form) {
+ const data = {};
+ Array.from(form.elements).forEach(element => {
+   if (!element.name || element.type === 'submit') return;
+   if (element.type === 'file') {
+     const file = element.files && element.files[0];
+     data[element.name] = file ? { name: file.name, size: file.size } : null;
+     return;
+   }
+   if (element.type === 'checkbox') {
+     if (!Array.isArray(data[element.name])) data[element.name] = [];
+     if (element.checked) data[element.name].push(element.value);
+     return;
+   }
+   if (element.type === 'radio') {
+     if (element.checked) data[element.name] = element.value;
+     else if (!(element.name in data)) data[element.name] = '';
+     return;
+   }
+   data[element.name] = element.value;
+ });
+ return data;
+}
+
 async function submitWorkPermit(event) {
  event.preventDefault();
  const form = event.currentTarget;
@@ -242,30 +464,31 @@ async function submitWorkPermit(event) {
    return;
  }
  const submitButton = form.querySelector('button[type="submit"]');
+ const originalText = submitButton.textContent;
  submitButton.disabled = true;
  submitButton.textContent = 'กำลังบันทึกคำขอ...';
 
  try {
+   const formDataObj = collectFormData(form);
    const requestRecord = {
-     wp_no: form.elements.wp_no.value,
-     work_type: form.elements.work_type.value,
-     worker_name: form.elements.worker_name.value,
+     wp_no: formDataObj.wp_no,
+     work_type: formDataObj.q14 || 'General Work',
+     worker_name: formDataObj.q2 || '-',
      status: 'Pending'
    };
 
    const { error } = await supabaseClient.from(TABLE_NAME).insert(requestRecord);
-   if (error) {
-     throw new Error(error.message);
-   }
+   if (error) throw new Error(error.message);
 
    alert('ส่งคำขอสำเร็จ! เลขที่ Work Permit: ' + requestRecord.wp_no);
    form.reset();
    setInitialWPNumber();
+   setupOtherFields();
  } catch (error) {
    alert('เกิดข้อผิดพลาด: ' + error.message);
  } finally {
    submitButton.disabled = false;
-   submitButton.textContent = 'ยื่นคำขออนุญาตทำงาน';
+   submitButton.textContent = originalText;
  }
 }
 
@@ -282,10 +505,16 @@ async function searchTracking() {
  results.innerHTML = data.map(r => `
    <article class="record">
      <h3>${r.wp_no}</h3>
+     <p><strong>ผู้ขอ:</strong> ${r.worker_name || '-'}</p>
      <p><strong>ลักษณะงาน:</strong> ${r.work_type || '-'}</p>
      <p><strong>สถานะ:</strong> <span class="status status-${r.status || 'Pending'}">${r.status || 'Pending'}</span></p>
    </article>
  `).join('');
+}
+
+function clearTracking() {
+ document.getElementById('tracking-search').value = '';
+ document.getElementById('tracking-results').innerHTML = '<div class="empty">กรอกข้อมูลเพื่อค้นหาสถานะคำขอ</div>';
 }
 
 async function loadSafetyRequests() {
@@ -299,11 +528,23 @@ async function loadSafetyRequests() {
  renderSafetyRequests();
 }
 
+function filterSafety(filter) {
+ currentSafetyFilter = filter;
+ document.getElementById('tab-pending').classList.toggle('active', filter === 'Pending');
+ document.getElementById('tab-all').classList.toggle('active', filter === 'All');
+ renderSafetyRequests();
+}
+
 function renderSafetyRequests() {
  const results = document.getElementById('safety-results');
+ const keyword = document.getElementById('safety-search') ? document.getElementById('safety-search').value.toLowerCase() : '';
  let records = allSafetyRequests;
+ 
  if (currentSafetyFilter === 'Pending') {
    records = records.filter(r => (r.status || 'Pending') === 'Pending');
+ }
+ if (keyword) {
+   records = records.filter(r => String(r.wp_no).toLowerCase().includes(keyword) || String(r.worker_name).toLowerCase().includes(keyword));
  }
  if (!records.length) {
    results.innerHTML = '<div class="empty">ไม่พบรายการคำขอ</div>';
@@ -312,8 +553,8 @@ function renderSafetyRequests() {
  results.innerHTML = records.map(r => `
    <article class="record">
      <h3>${r.wp_no}</h3>
+     <p><strong>ผู้ขอ:</strong> ${r.worker_name || '-'}</p>
      <p><strong>ลักษณะงาน:</strong> ${r.work_type || '-'}</p>
-     <p><strong>รายชื่อ:</strong> ${r.worker_name || '-'}</p>
      <p><strong>สถานะ:</strong> <span class="status status-${r.status || 'Pending'}">${r.status || 'Pending'}</span></p>
      <div class="actions">
        <button class="btn btn-success" onclick="updateStatus('${r.wp_no}', 'Approved')">อนุมัติ</button>
