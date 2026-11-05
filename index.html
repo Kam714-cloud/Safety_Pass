@@ -114,7 +114,7 @@
             <!-- Content Area -->
             <div class="md:col-span-3 space-y-6">
                 
-                <!-- Page 1: แบบฟอร์มขอใบอนุญาต (27 ข้อ ครบถ้วน 100%) -->
+                <!-- Page 1: แบบฟอร์มขอใบอนุญาต -->
                 <div id="page-permit-form" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
                     <h2 class="text-xl font-bold text-gray-800 border-b pb-3">ระบบกรอกคำขอ Work Permit</h2>
                     <form id="workPermitForm" onsubmit="handleWorkPermitSubmit(event)" class="space-y-6">
@@ -332,25 +332,58 @@
                     </form>
                 </div>
 
-                <!-- Page 2: ติดตามสถานะ -->
-                <div id="page-status-tracker" class="hidden-section bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4">
+                <!-- Page 2: ติดตามสถานะ (ปรับปรุงให้สืบค้นด้วย เลขที่ WP + อีเมล เท่านั้น) -->
+                <div id="page-status-tracker" class="hidden-section bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
                     <h2 class="text-xl font-bold text-gray-800 border-b pb-3">ติดตามสถานะ Work Permit</h2>
-                    <div id="requests-list" class="space-y-3">
-                        <p class="text-gray-500 text-sm">กำลังโหลดข้อมูล...</p>
+                    <p class="text-sm text-gray-600">กรุณากรอกเลขที่ Work Permit และ อีเมลผู้ขออนุญาต เพื่อตรวจสอบสถานะ</p>
+                    
+                    <form onsubmit="handleSearchStatus(event)" class="space-y-4 bg-sky-50 p-4 rounded-lg border border-sky-100">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">เลขที่ Work Permit *</label>
+                            <input type="text" id="track_wp_no" placeholder="เช่น AA_0611_4795" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">อีเมลผู้ขออนุญาต (Applicant Email) *</label>
+                            <input type="email" id="track_email" placeholder="name@company.com" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                        <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 rounded-lg transition">
+                            ค้นหาสถานะ
+                        </button>
+                    </form>
+
+                    <div id="tracking-result-area" class="space-y-3 pt-2">
+                        <!-- ผลการค้นหาจะแสดงตรงนี้ -->
                     </div>
                 </div>
 
-                <!-- Page 3: หน้าพิจารณาอนุมัติ (Safety Only) -->
+                <!-- Page 3: หน้าพิจารณาอนุมัติ (Safety Only - เพิ่มการแสดงรายละเอียดข้อมูลครบถ้วนก่อนอนุมัติ) -->
                 <div id="page-safety-approval" class="hidden-section bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4">
                     <div class="flex justify-between items-center border-b pb-3">
-                        <h2 class="text-xl font-bold text-gray-800">Safety Approval</h2>
+                        <h2 class="text-xl font-bold text-gray-800">Safety Approval (สำหรับ จป.)</h2>
                         <span class="bg-sky-100 text-sky-800 text-xs font-semibold px-2.5 py-0.5 rounded">Safety Panel</span>
                     </div>
-                    <div id="safety-approval-list" class="space-y-3">
+                    <p class="text-xs text-gray-500">ตรวจสอบรายละเอียดข้อมูลคำขอ 27 ข้ออย่างถี่ถ้วนก่อนพิจารณาอนุมัติ</p>
+                    <div id="safety-approval-list" class="space-y-4">
                         <p class="text-gray-500 text-sm">กำลังโหลดรายการรออนุมัติ...</p>
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL / POPUP แสดงรายละเอียดข้อมูลคำขอแบบเต็มสำหรับ จป. -->
+    <div id="detail-modal" class="hidden-section fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-xl max-w-2xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto shadow-xl">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-lg font-bold text-gray-800" id="modal-title">รายละเอียดคำขอ Work Permit</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+            </div>
+            <div id="modal-body-content" class="space-y-3 text-sm text-gray-700">
+                <!-- ข้อมูลแบบละเอียดจะถูกฉีดเข้าที่นี่ -->
+            </div>
+            <div class="border-t pt-3 flex justify-end">
+                <button onclick="closeModal()" class="bg-gray-500 hover:bg-gray-600 text-white text-xs px-4 py-2 rounded">ปิด</button>
             </div>
         </div>
     </div>
@@ -371,6 +404,7 @@
 
         let currentUser = null;
         let userProfile = null;
+        let activeSafetyData = [];
 
         document.addEventListener('DOMContentLoaded', () => {
             generateWPNumber();
@@ -519,7 +553,6 @@
                 badgeLock.classList.replace('bg-gray-200', 'bg-emerald-200');
                 badgeLock.classList.replace('text-gray-500', 'text-emerald-800');
             }
-            loadWorkPermitRequests();
         }
 
         async function handleLogout() {
@@ -533,8 +566,8 @@
             document.getElementById('page-safety-approval').classList.add('hidden-section');
             
             document.getElementById(`page-${pageName}`).classList.remove('hidden-section');
-            if (pageName === 'status-tracker' || pageName === 'safety-approval') {
-                loadWorkPermitRequests();
+            if (pageName === 'safety-approval') {
+                loadSafetyRequests();
             }
         }
 
@@ -568,7 +601,18 @@
             const form = event.target;
             const formData = new FormData(form);
             const dataObj = {};
-            formData.forEach((value, key) => { dataObj[key] = value; });
+            
+            // จัดเก็บข้อมูลแบบ Multiple Checkbox ให้ถูกต้อง
+            formData.forEach((value, key) => {
+                if (dataObj[key]) {
+                    if (!Array.isArray(dataObj[key])) {
+                        dataObj[key] = [dataObj[key]];
+                    }
+                    dataObj[key].push(value);
+                } else {
+                    dataObj[key] = value;
+                }
+            });
 
             const wpNo = document.getElementById('wp_no').value;
 
@@ -584,7 +628,7 @@
                     form_data: dataObj
                 }]);
                 if (error) throw error;
-                alert('✅ ยื่นคำขอใบอนุญาตทำงานเรียบร้อยแล้ว!');
+                alert(`✅ ยื่นคำขอเรียบร้อยแล้ว!\nเลขที่ Work Permit: ${wpNo}`);
                 form.reset();
                 generateWPNumber();
                 showPage('status-tracker');
@@ -593,51 +637,183 @@
             }
         }
 
-        async function loadWorkPermitRequests() {
-            const { data, error } = await db.from('work_permit_requests').select('*').order('submitted_at', { ascending: false });
-            if (error) return;
+        // ฟังก์ชันค้นหาสถานะคำขอเฉพาะบุคคลด้วย WP No. และ Email
+        async function handleSearchStatus(event) {
+            event.preventDefault();
+            const wpNo = document.getElementById('track_wp_no').value.trim();
+            const email = document.getElementById('track_email').value.trim();
+            const resultArea = document.getElementById('tracking-result-area');
 
-            const statusContainer = document.getElementById('requests-list');
-            statusContainer.innerHTML = data.length === 0 ? '<p class="text-gray-500">ยังไม่มีรายการคำขอ</p>' : '';
-            
-            const safetyContainer = document.getElementById('safety-approval-list');
-            safetyContainer.innerHTML = '';
+            resultArea.innerHTML = '<p class="text-gray-500 text-sm">กำลังค้นหาข้อมูล...</p>';
 
-            data.forEach(item => {
-                const card = `
-                    <div class="p-4 border rounded-lg flex justify-between items-center bg-white shadow-sm">
-                        <div>
-                            <p class="font-bold text-gray-800">${item.wp_no} - ${item.company || '-'}</p>
-                            <p class="text-sm text-gray-600">ผู้ขอ: ${item.applicant_name}</p>
+            try {
+                const { data, error } = await db.from('work_permit_requests')
+                    .select('*')
+                    .eq('wp_no', wpNo)
+                    .eq('applicant_email', email);
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    resultArea.innerHTML = `
+                        <div class="p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+                            ❌ ไม่พบข้อมูลคำขอ! กรุณาตรวจสอบเลขที่ Work Permit และ อีเมลให้ถูกต้อง
                         </div>
-                        <div>
+                    `;
+                    return;
+                }
+
+                const item = data[0];
+                const formObj = item.form_data || {};
+
+                resultArea.innerHTML = `
+                    <div class="p-4 border border-sky-200 bg-sky-50 rounded-lg space-y-3">
+                        <div class="flex justify-between items-center border-b border-sky-200 pb-2">
+                            <div>
+                                <span class="font-bold text-sky-900 text-base">${item.wp_no}</span>
+                                <p class="text-xs text-gray-600">ยื่นเมื่อ: ${new Date(item.submitted_at).toLocaleString('th-TH')}</p>
+                            </div>
                             <span class="px-3 py-1 rounded-full text-xs font-semibold ${getStatusBadge(item.status)}">
                                 ${item.status}
                             </span>
                         </div>
+                        <div class="text-xs space-y-1 text-gray-700">
+                            <p><strong>ผู้ขออนุญาต:</strong> ${item.applicant_name}</p>
+                            <p><strong>บริษัท:</strong> ${item.company || '-'}</p>
+                            <p><strong>พื้นที่ปฏิบัติงาน:</strong> ${formObj.q14 || '-'}</p>
+                            <p><strong>ระยะเวลา:</strong> ${formObj.q15 || '-'} ถึง ${formObj.q16 || '-'}</p>
+                        </div>
                     </div>
                 `;
-                statusContainer.innerHTML += card;
+            } catch (err) {
+                resultArea.innerHTML = `<p class="text-red-500 text-sm">เกิดข้อผิดพลาด: ${err.message}</p>`;
+            }
+        }
 
-                if (item.status === 'Pending') {
+        // โหลดข้อมูลคำขอทั้งหมดสำหรับ Safety จป.
+        async function loadSafetyRequests() {
+            const safetyContainer = document.getElementById('safety-approval-list');
+            safetyContainer.innerHTML = '<p class="text-gray-500 text-sm">กำลังโหลดรายการรออนุมัติ...</p>';
+
+            try {
+                const { data, error } = await db.from('work_permit_requests')
+                    .select('*')
+                    .order('submitted_at', { ascending: false });
+
+                if (error) throw error;
+
+                activeSafetyData = data || [];
+                safetyContainer.innerHTML = '';
+
+                if (activeSafetyData.length === 0) {
+                    safetyContainer.innerHTML = '<p class="text-gray-500 text-sm">ไม่มีรายการคำขอในระบบ</p>';
+                    return;
+                }
+
+                activeSafetyData.forEach((item, index) => {
+                    const formObj = item.form_data || {};
+                    const ppeList = Array.isArray(formObj.q20) ? formObj.q20.join(', ') : (formObj.q20 || '-');
+                    const hazardList = Array.isArray(formObj.q17) ? formObj.q17.join(', ') : (formObj.q17 || '-');
+
                     const safetyCard = `
-                        <div class="p-4 border border-amber-200 bg-amber-50 rounded-lg flex justify-between items-center">
-                            <div>
-                                <p class="font-bold text-gray-800">${item.wp_no} - ${item.company || '-'}</p>
-                                <p class="text-sm text-gray-600">ผู้ขออนุญาต: ${item.applicant_name}</p>
+                        <div class="p-4 border border-gray-200 bg-white rounded-xl shadow-sm space-y-3">
+                            <div class="flex justify-between items-start border-b pb-2">
+                                <div>
+                                    <span class="font-bold text-gray-800 text-base">${item.wp_no}</span>
+                                    <span class="ml-2 text-xs text-gray-500">(${item.company || '-'})</span>
+                                    <p class="text-xs text-gray-600 mt-0.5">ผู้ขออนุญาต: <strong>${item.applicant_name}</strong> | รหัส: ${item.employee_id || '-'}</p>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold ${getStatusBadge(item.status)}">
+                                    ${item.status}
+                                </span>
                             </div>
-                            <div class="flex space-x-2">
-                                <button onclick="updateStatus('${item.id}', 'Approved')" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded hover:bg-emerald-700">อนุมัติ</button>
-                                <button onclick="updateStatus('${item.id}', 'Rejected')" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded hover:bg-red-700">ไม่อนุมัติ</button>
+
+                            <!-- ส่วนแสดงข้อมูลสำคัญก่อนอนุมัติ -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs bg-gray-50 p-3 rounded-lg border text-gray-700">
+                                <div><strong>📍 พื้นที่ทำงาน:</strong> ${formObj.q14 || '-'}</div>
+                                <div><strong>📅 วันที่:</strong> ${formObj.q15 || '-'} ถึง ${formObj.q16 || '-'}</div>
+                                <div><strong>👥 จำนวนผู้ปฏิบัติงาน:</strong> ${formObj.q12 || '1'} คน</div>
+                                <div><strong>⚠️ อันตรายที่พบ:</strong> ${hazardList}</div>
+                                <div class="md:col-span-2"><strong>🦺 PPE ที่ใช้:</strong> ${ppeList}</div>
+                            </div>
+
+                            <div class="flex justify-between items-center pt-1">
+                                <button onclick="openModal(${index})" class="text-sky-600 hover:text-sky-800 text-xs font-semibold underline">
+                                    🔍 ดูข้อมูลคำขอทั้งหมด (27 ข้อ)
+                                </button>
+                                ${item.status === 'Pending' ? `
+                                    <div class="flex space-x-2">
+                                        <button onclick="updateStatus('${item.id}', 'Approved')" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded hover:bg-emerald-700 transition">อนุมัติ</button>
+                                        <button onclick="updateStatus('${item.id}', 'Rejected')" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded hover:bg-red-700 transition">ไม่อนุมัติ</button>
+                                    </div>
+                                ` : ''}
                             </div>
                         </div>
                     `;
                     safetyContainer.innerHTML += safetyCard;
-                }
-            });
-            if (safetyContainer.innerHTML === '') {
-                safetyContainer.innerHTML = '<p class="text-gray-500">ไม่มีรายการที่รอการอนุมัติ</p>';
+                });
+            } catch (err) {
+                safetyContainer.innerHTML = `<p class="text-red-500 text-sm">เกิดข้อผิดพลาดในการโหลดข้อมูล: ${err.message}</p>`;
             }
+        }
+
+        // เปิด Modal แสดงข้อมูลคำขอ 27 ข้อเต็มรูปแบบ
+        function openModal(index) {
+            const item = activeSafetyData[index];
+            if (!item) return;
+            const f = item.form_data || {};
+
+            document.getElementById('modal-title').textContent = `รายละเอียด Work Permit: ${item.wp_no}`;
+            
+            const modalContent = document.getElementById('modal-body-content');
+            modalContent.innerHTML = `
+                <div class="space-y-3 divide-y">
+                    <div>
+                        <h4 class="font-bold text-sky-800 mb-1">ข้อมูลผู้ขออนุญาต (ข้อ 1-6)</h4>
+                        <p>1. บริษัท/สังกัด: ${f.q1 || '-'}</p>
+                        <p>2. ชื่อ-นามสกุล: ${f.q2 || '-'}</p>
+                        <p>3. รหัสพนักงาน: ${f.q3 || '-'}</p>
+                        <p>4. Email: ${f.q4 || '-'}</p>
+                        <p>5. แผนก: ${f.q5 === 'Other' ? f.q5_other : (f.q5 || '-')}</p>
+                        <p>6. ตำแหน่งงาน: ${f.q6 || '-'}</p>
+                    </div>
+                    <div class="pt-2">
+                        <h4 class="font-bold text-sky-800 mb-1">Safety Training (ข้อ 7-9)</h4>
+                        <p>7. การอบรมมาตรฐาน: ${f.q7 || '-'}</p>
+                        <p>8. ใบรับรองความปลอดภัย: ${Array.isArray(f.q8) ? f.q8.join(', ') : (f.q8 || '-')}</p>
+                    </div>
+                    <div class="pt-2">
+                        <h4 class="font-bold text-sky-800 mb-1">Work Permit Details (ข้อ 10-16)</h4>
+                        <p>10. ชื่อผู้ขอ: ${f.q10 || '-'}</p>
+                        <p>11. บริษัท: ${f.q11 || '-'}</p>
+                        <p>12. จำนวนผู้ปฏิบัติงาน: ${f.q12 || '-'} คน</p>
+                        <p>13. รายชื่อผู้ปฏิบัติงาน: ${f.q13 || '-'}</p>
+                        <p>14. พื้นที่ทำงาน: ${f.q14 === 'Other' ? f.q14_other : (f.q14 || '-')}</p>
+                        <p>15-16. วันที่ทำงาน: ${f.q15 || '-'} ถึง ${f.q16 || '-'}</p>
+                    </div>
+                    <div class="pt-2">
+                        <h4 class="font-bold text-sky-800 mb-1">อันตราย & PPE Checklist (ข้อ 17-23)</h4>
+                        <p>17. อันตรายที่คาดว่าจะพบ: ${Array.isArray(f.q17) ? f.q17.join(', ') : (f.q17 || '-')}</p>
+                        <p>19. PPE ที่ใช้: ${Array.isArray(f.q20) ? f.q20.join(', ') : (f.q20 || '-')}</p>
+                        <p>20. Work Permit เกี่ยวข้อง: ${f.q21 || '-'}</p>
+                        <p>21. PPE พร้อมใช้งาน: ${f.q22 || '-'}</p>
+                        <p>22. เครื่องมือผ่านการตรวจ: ${f.q23 || '-'}</p>
+                        <p>23. ผู้ควบคุมงาน: ${f.q24 || '-'}</p>
+                    </div>
+                    <div class="pt-2">
+                        <h4 class="font-bold text-sky-800 mb-1">ผู้รับผิดชอบ (ข้อ 24-26)</h4>
+                        <p>24. ชื่อผู้รับผิดชอบ: ${f.q25 || '-'}</p>
+                        <p>25. เบอร์ติดต่อ: ${f.q26 || '-'}</p>
+                        <p>26. หมายเหตุ: ${f.q27 || '-'}</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('detail-modal').classList.remove('hidden-section');
+        }
+
+        function closeModal() {
+            document.getElementById('detail-modal').classList.add('hidden-section');
         }
 
         async function updateStatus(requestId, newStatus) {
@@ -650,7 +826,7 @@
                 alert('❌ อัปเดตสถานะไม่สำเร็จ: ' + error.message);
             } else {
                 alert(`✅ เปลี่ยนสถานะเป็น [${newStatus}] สำเร็จ`);
-                loadWorkPermitRequests();
+                loadSafetyRequests();
             }
         }
 
