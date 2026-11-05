@@ -24,7 +24,7 @@
                 <span class="text-2xl font-bold text-blue-400">SAFE PASS</span>
                 <span class="text-xs bg-blue-600 px-2 py-0.5 rounded text-white font-light">Smart Work Permit</span>
             </div>
-            <div id="user-info-bar" class="hidden flex items-center space-x-4">
+            <div id="user-info-bar" class="hidden-section flex items-center space-x-4">
                 <div class="text-right">
                     <p id="nav-user-name" class="text-sm font-semibold text-white">ผู้ใช้งาน</p>
                     <p id="nav-user-role" class="text-xs text-blue-300">สิทธิ์: General User</p>
@@ -39,7 +39,7 @@
     <!-- Main Container -->
     <div class="max-w-7xl mx-auto p-4 md:p-6">
         
-        <!-- AUTH SECTION (Login / Sign Up) -->
+        <!-- AUTH SECTION (Login / Sign Up) : แสดงขึ้นมาเมื่อยังไม่เข้าสู่ระบบ -->
         <div id="auth-section" class="max-w-md mx-auto my-12 bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
             <div class="flex border-b border-gray-200">
                 <button id="tab-login" onclick="switchAuthTab('login')" class="w-1/2 py-3 font-semibold text-center text-blue-600 border-b-2 border-blue-600">
@@ -94,7 +94,7 @@
             </form>
         </div>
 
-        <!-- APP DASHBOARD SECTION -->
+        <!-- APP DASHBOARD SECTION : จะถูกซ่อนไว้จนกว่าจะเข้าสู่ระบบสำเร็จ -->
         <div id="app-section" class="hidden-section grid grid-cols-1 md:grid-cols-4 gap-6">
             
             <!-- Sidebar Menu -->
@@ -371,6 +371,10 @@
                 currentUser = session.user;
                 await fetchUserProfile(currentUser.id);
                 initDashboardUI();
+            } else {
+                // ถ้ายังไม่ล็อกอิน ให้แสดงหน้า Auth และซ่อนหน้า App Dashboard
+                document.getElementById('auth-section').classList.remove('hidden-section');
+                document.getElementById('app-section').classList.add('hidden-section');
             }
         }
 
