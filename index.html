@@ -168,9 +168,9 @@
 
     <!-- JavaScript Logic -->
     <script>
-        // 1. ตั้งค่า Supabase Client
-        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        // 1. ตั้งค่าการเชื่อมต่อ Supabase (ใส่ค่า URL และ Key ของคุณแล้ว)
+        const SUPABASE_URL = 'https://oqthxncwleedvccganmg.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_bhnJ7U04RVjyByqFE5bqiQ_Qa_ffBNJ';
         const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let currentUser = null;
@@ -191,7 +191,7 @@
             }
         }
 
-        // ระบบสมัครสมาชิก (Sign Up) พร้อมบันทึก Role
+        // ระบบสมัครสมาชิก (Sign Up) พร้อมบันทึก Role ลงตาราง profiles อัตโนมัติ
         async function handleSignUp(event) {
             event.preventDefault();
             const fullname = document.getElementById('signup_fullname').value.trim();
@@ -200,7 +200,6 @@
             const password = document.getElementById('signup_password').value;
             const selectedRole = document.getElementById('signup_role').value;
 
-            // กำหนดค่า Role ให้ชัดเจน
             let finalRole = 'General User';
             if (selectedRole.includes('ความปลอดภัย') || selectedRole.includes('Safety')) {
                 finalRole = 'Safety Officer (จป.)';
@@ -211,12 +210,10 @@
             btn.innerText = 'กำลังบันทึกข้อมูล...';
 
             try {
-                // 1. สร้างบัญชีผ่าน Auth
                 const { data, error } = await db.auth.signUp({ email, password });
                 if (error) throw error;
 
                 if (data?.user) {
-                    // 2. บันทึกสิทธิ์และโปรไฟล์ลงตาราง profiles ทันที
                     const { error: profileError } = await db.from('profiles').upsert([{
                         id: data.user.id,
                         fullname: fullname,
@@ -279,7 +276,7 @@
             }
         }
 
-        // ปรับการแสดงผลหน้าจอ Dashboard ตามสิทธิ์ที่ดึงมา
+        // ปรับการแสดงผลหน้าจอ Dashboard ตามสิทธิ์
         function initDashboardUI() {
             document.getElementById('auth-section').classList.add('hidden');
             document.getElementById('app-section').classList.remove('hidden');
@@ -359,16 +356,13 @@
                 return;
             }
 
-            // แสดงรายการในหน้าติดตามสถานะ
             const statusContainer = document.getElementById('requests-list');
             statusContainer.innerHTML = data.length === 0 ? '<p class="text-gray-500">ยังไม่มีรายการคำขอ</p>' : '';
             
-            // แสดงรายการในหน้า Safety Approval
             const safetyContainer = document.getElementById('safety-approval-list');
             safetyContainer.innerHTML = '';
 
             data.forEach(item => {
-                // Card หน้าติดตามสถานะ
                 const card = `
                     <div class="p-4 border rounded-lg flex justify-between items-center">
                         <div>
@@ -385,7 +379,6 @@
                 `;
                 statusContainer.innerHTML += card;
 
-                // Card หน้า Safety (ถ้าสถานะ Pending)
                 if (item.status === 'Pending') {
                     const safetyCard = `
                         <div class="p-4 border border-amber-200 bg-amber-50 rounded-lg flex justify-between items-center">
