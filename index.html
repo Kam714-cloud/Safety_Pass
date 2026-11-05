@@ -1,443 +1,337 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAFE PASS - Smart Work Permit System</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS Client v2 -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        body { font-family: 'Kanit', sans-serif; }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AUDI WORK PERMIT</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;font-family:Arial,Tahoma,sans-serif}
+body{margin:0;background:#f0f4f8;color:#1e293b}
+.sidebar{background:#0f172a;color:white;padding:15px}
+.sidebar h2{color:#38bdf8;text-align:center}
+.sidebar-menu{display:flex;gap:8px;flex-wrap:wrap}
+.menu-item{border:0;padding:12px;border-radius:8px;background:transparent;color:white;cursor:pointer}
+.menu-item.active{background:#0284c7}
+.main-content{padding:15px;flex:1;min-width:0}
+.card-container{max-width:950px;margin:0 auto 20px;background:white;padding:22px;border-radius:12px;border:1px solid #e2e8f0}
+.page-title{text-align:center;font-size:24px;margin-bottom:25px}
+.section-title{color:#0369a1;font-size:19px;font-weight:bold;border-left:5px solid #0284c7;padding-left:12px;margin:28px 0 18px}
+.form-grid{display:grid;grid-template-columns:1fr;gap:18px}
+.form-group{min-width:0}
+label{display:block;font-weight:bold;margin-bottom:8px;line-height:1.5}
+.req{color:red}
+input[type=text],input[type=email],input[type=number],input[type=date],input[type=file],input[type=password],textarea,select{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;font-size:16px;background:white}
+input[readonly]{background:#f1f5f9;color:#0284c7;font-weight:bold}
+.options-group{display:flex;flex-direction:column;gap:12px}
+.option-label{display:flex;align-items:center;gap:10px;font-weight:normal;cursor:pointer}
+.option-label input{width:20px;height:20px;flex-shrink:0}
+.other-input{display:block;margin:5px 0 12px 28px;width:calc(100% - 28px)!important}
+.hidden{display:none!important}
+.notice,.warning{padding:12px;border-radius:8px;margin-bottom:18px;line-height:1.6;font-size:14px}
+.notice{background:#eff6ff;color:#1d4ed8}
+.warning{background:#fff7ed;color:#9a3412}
+.btn{padding:12px 16px;border:0;border-radius:7px;font-size:15px;font-weight:bold;cursor:pointer}
+.btn-primary{background:#0284c7;color:white}
+.btn-success{background:#15803d;color:white}
+.btn-danger{background:#dc2626;color:white}
+.btn-warning{background:#d97706;color:white}
+.btn-submit{width:100%;margin-top:24px}
+.tab-switch,.actions{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}
+.tab-btn{padding:10px;border:0;border-radius:6px;background:#e2e8f0;cursor:pointer}
+.tab-btn.active{background:#0284c7;color:white}
+.record{border:1px solid #cbd5e1;border-radius:9px;padding:15px;margin-top:15px;overflow-wrap:anywhere}
+.status{display:inline-block;padding:5px 10px;border-radius:20px;font-size:13px;font-weight:bold}
+.status-Pending{background:#fef3c7;color:#92400e}
+.status-Approved{background:#dcfce7;color:#166534}
+.status-Rejected{background:#fee2e2;color:#991b1b}
+.status-Revision{background:#ffedd5;color:#9a3412}
+.muted{color:#64748b;font-size:13px;line-height:1.6}
+.empty{padding:20px;text-align:center;background:#f8fafc;border-radius:8px}
+.record-grid{display:grid;grid-template-columns:1fr;gap:8px}
+textarea{resize:vertical}
+hr{border:0;border-top:1px solid #e2e8f0;margin:20px 0}
+button:focus,input:focus,textarea:focus{outline:2px solid #38bdf8;outline-offset:2px}
+@media(min-width:768px){
+body{display:flex}
+.sidebar{width:240px;min-height:100vh;flex-shrink:0}
+.sidebar-menu{flex-direction:column}
+.menu-item{text-align:left}
+.main-content{flex:1;padding:30px;min-width:0}
+.card-container{padding:30px}
+.form-grid,.record-grid{grid-template-columns:1fr 1fr}
+.full-width{grid-column:1/-1}
+}
+</style>
 </head>
-<body class="bg-gray-100 min-h-screen text-gray-800">
+<body>
+<aside class="sidebar">
+<h2>AUDI WORK PERMIT</h2>
+<nav class="sidebar-menu">
+<button type="button" class="menu-item active" id="menu-form" onclick="switchPage('form')">กรอกคำขอ</button>
+<button type="button" class="menu-item" id="menu-track" onclick="switchPage('track')">ติดตามผล</button>
+<button type="button" class="menu-item" id="menu-safety" onclick="switchPage('safety')">Safety Approval</button>
+</nav>
+</aside>
+<main class="main-content">
+<section id="page-form" class="card-container">
+<h1 class="page-title">ระบบกรอกคำขอ Work Permit</h1>
+<div class="warning">
+<strong>หมายเหตุ:</strong> ระบบเชื่อมต่อฐานข้อมูล Supabase เรียบร้อยแล้ว
+</div>
+<form id="workPermitForm">
+<div class="form-group">
+<label>เลขที่ใบอนุญาตทำงาน (Work Permit No.) <span class="req">*</span></label>
+<input type="text" id="wp_no" name="wp_no" readonly required>
+</div>
+<div class="section-title">ข้อมูลผู้ขออนุญาต</div>
+<div class="form-grid">
+<div class="form-group full-width">
+<label>1. ชื่อบริษัท <span class="req">*</span></label>
+<input type="text" name="q1" required placeholder="ใส่คำตอบ">
+</div>
+<div class="form-group full-width">
+<label>2. ชื่อ-นามสกุล <span class="req">*</span></label>
+<input type="text" name="q2" required placeholder="ใส่คำตอบ">
+</div>
+<div class="form-group full-width">
+<label>3. รหัสพนักงาน/ผู้รับเหมา <span class="req">*</span></label>
+<input type="text" name="q3" required placeholder="ใส่คำตอบ">
+</div>
+<div class="form-group full-width">
+<label>4. Email <span class="req">*</span></label>
+<input type="email" name="q4" required placeholder="name@company.com">
+</div>
+<div class="form-group full-width">
+<label>5. แผนก <span class="req">*</span></label>
+<div class="options-group">
+<label class="option-label"><input type="radio" name="q5" value="Production" required> Production</label>
+<label class="option-label"><input type="radio" name="q5" value="Maintenance"> Maintenance</label>
+<label class="option-label"><input type="radio" name="q5" value="Warehouse"> Warehouse</label>
+<label class="option-label"><input type="radio" name="q5" value="Engineering"> Engineering</label>
+<label class="option-label"><input type="radio" name="q5" value="QC"> QC</label>
+<label class="option-label"><input type="radio" name="q5" value="Other"> Other</label>
+<input type="text" id="q5_other" name="q5_other" class="other-input hidden" placeholder="โปรดระบุแผนก">
+</div>
+</div>
+<div class="form-group full-width">
+<label>6. ตำแหน่งงาน <span class="req">*</span></label>
+<input type="text" name="q6" required placeholder="ใส่คำตอบ">
+</div>
+</div>
+<div class="section-title">Smart Work Permit</div>
+<div class="form-grid">
+<div class="form-group full-width">
+<label>10. ลักษณะงาน/รายละเอียด <span class="req">*</span></label>
+<input type="text" name="work_type" required placeholder="ระบุลักษณะงาน">
+</div>
+<div class="form-group full-width">
+<label>13. รายชื่อผู้ปฏิบัติงาน <span class="req">*</span></label>
+<textarea name="worker_name" rows="3" required placeholder="ใส่รายชื่อผู้ปฏิบัติงาน"></textarea>
+</div>
+<div class="form-group">
+<label>15. วันที่เริ่มงาน <span class="req">*</span></label>
+<input type="date" name="q15" required>
+</div>
+<div class="form-group">
+<label>16. วันที่สิ้นสุดงาน <span class="req">*</span></label>
+<input type="date" name="q16" required>
+</div>
+</div>
+<button type="submit" class="btn btn-primary btn-submit">ยื่นคำขออนุญาตทำงาน</button>
+</form>
+</section>
+<!-- ==================== TRACKING PAGE ==================== -->
+<section id="page-track" class="card-container hidden">
+ <h1 class="page-title">ติดตามสถานะ Work Permit</h1>
+ <div class="form-group">
+   <label for="tracking-search">เลขที่ Work Permit</label>
+   <input type="text" id="tracking-search" placeholder="กรอกเลขที่ Work Permit">
+ </div>
+ <div class="actions">
+   <button type="button" class="btn btn-primary" onclick="searchTracking()">ค้นหาสถานะ</button>
+ </div>
+ <div id="tracking-results">
+   <div class="empty">กรอกข้อมูลเพื่อค้นหาสถานะคำขอ</div>
+ </div>
+</section>
+<!-- ==================== SAFETY APPROVAL PAGE ==================== -->
+<section id="page-safety" class="card-container hidden">
+ <h1 class="page-title">Safety Approval</h1>
+ <div id="safety-auth-box" class="card-container" style="background: #f8fafc; border: 1px dashed #cbd5e1; margin-bottom: 20px;">
+   <h3 style="margin-top: 0; color: #0369a1;">🔒 กรุณากรอกรหัส PIN ผู้อำนวยความสะดวกด้านความปลอดภัย</h3>
+   <div class="form-group" style="margin-top: 15px;">
+     <label for="safety-pin-input">รหัส PIN 4 หลัก</label>
+     <input type="password" id="safety-pin-input" placeholder="••••" maxlength="4" style="max-width: 200px;">
+   </div>
+   <div class="actions" style="margin-top: 15px;">
+     <button type="button" class="btn btn-primary" onclick="verifySafetyPin()">ยืนยันรหัส PIN</button>
+   </div>
+   <div id="safety-auth-error" class="muted" style="color: #dc2626; margin-top: 10px; font-weight: bold;"></div>
+ </div>
+ <div id="safety-content-area" class="hidden">
+   <div class="tab-switch">
+     <button type="button" class="tab-btn active" id="tab-pending" onclick="filterSafety('Pending')">รออนุมัติ</button>
+     <button type="button" class="tab-btn" id="tab-all" onclick="filterSafety('All')">คำขอทั้งหมด</button>
+   </div>
+   <div id="safety-results">
+     <div class="empty">กำลังเตรียมรายการคำขอ...</div>
+   </div>
+ </div>
+</section>
+</main>
+<script>
+const CORRECT_SAFETY_PIN = '7185';
+function verifySafetyPin() {
+  const pinInput = document.getElementById('safety-pin-input');
+  const errorDiv = document.getElementById('safety-auth-error');
+  const authBox = document.getElementById('safety-auth-box');
+  const contentArea = document.getElementById('safety-content-area');
+  if (pinInput && pinInput.value === CORRECT_SAFETY_PIN) {
+    if (authBox) authBox.classList.add('hidden');
+    if (contentArea) contentArea.classList.remove('hidden');
+    loadSafetyRequests();
+  } else {
+    if (errorDiv) errorDiv.textContent = 'รหัส PIN ไม่ถูกต้อง';
+    if (pinInput) pinInput.value = '';
+  }
+}
+const SUPABASE_URL = 'https://oqthxncwleedvccganmg.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_bhnJ7U04RVjyByqFE5bqiQ_Qa_ffBNJ';
+const TABLE_NAME = 'work_permit_requests';
+let supabaseClient = null;
+let allSafetyRequests = [];
+let currentSafetyFilter = 'Pending';
 
-    <!-- Top Navigation Bar -->
-    <nav class="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <span class="text-2xl font-bold text-blue-400">SAFE PASS</span>
-                <span class="text-xs bg-blue-600 px-2 py-0.5 rounded text-white font-light">Smart Work Permit</span>
-            </div>
-            <div id="user-info-bar" class="hidden flex items-center space-x-4">
-                <div class="text-right">
-                    <p id="nav-user-name" class="text-sm font-semibold text-white">ผู้ใช้งาน</p>
-                    <p id="nav-user-role" class="text-xs text-blue-300">สิทธิ์: General User</p>
-                </div>
-                <button onclick="handleLogout()" class="bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1.5 rounded transition">
-                    ออกจากระบบ
-                </button>
-            </div>
-        </div>
-    </nav>
+document.addEventListener('DOMContentLoaded', function () {
+ if (window.supabase && window.supabase.createClient) {
+   supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+ }
+ setInitialWPNumber();
+ const form = document.getElementById('workPermitForm');
+ if (form) {
+   form.addEventListener('submit', submitWorkPermit);
+ }
+});
 
-    <!-- Main Container -->
-    <div class="max-w-7xl mx-auto p-4 md:p-6">
+function generateWPNumber() {
+ const now = new Date();
+ const dateKey = String(now.getDate()).padStart(2, '0') + String(now.getMonth() + 1).padStart(2, '0');
+ const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+ return `AA_${dateKey}_${randomSuffix}`;
+}
+function setInitialWPNumber() {
+ const input = document.getElementById('wp_no');
+ if (input && !input.value) input.value = generateWPNumber();
+}
+function switchPage(pageName) {
+ ['form', 'track', 'safety'].forEach(key => {
+   const page = document.getElementById(`page-${key}`);
+   if (page) page.classList.toggle('hidden', key !== pageName);
+   const menu = document.getElementById(`menu-${key}`);
+   if (menu) menu.classList.toggle('active', key === pageName);
+ });
+ if (pageName === 'safety') loadSafetyRequests();
+}
 
-        <!-- AUTH SECTION (Login / Sign Up) -->
-        <div id="auth-section" class="max-w-md mx-auto my-12 bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
-            <!-- Header Tabs -->
-            <div class="flex border-b border-gray-200">
-                <button id="tab-login" onclick="switchAuthTab('login')" class="w-1/2 py-3 font-semibold text-center text-blue-600 border-b-2 border-blue-600">
-                    เข้าสู่ระบบ
-                </button>
-                <button id="tab-signup" onclick="switchAuthTab('signup')" class="w-1/2 py-3 font-semibold text-center text-gray-500 hover:text-blue-600">
-                    สมัครสมาชิก
-                </button>
-            </div>
+async function submitWorkPermit(event) {
+ event.preventDefault();
+ const form = event.currentTarget;
+ if (!supabaseClient) {
+   alert('ยังเชื่อมต่อ Supabase ไม่สำเร็จ');
+   return;
+ }
+ const submitButton = form.querySelector('button[type="submit"]');
+ submitButton.disabled = true;
+ submitButton.textContent = 'กำลังบันทึกคำขอ...';
 
-            <!-- Login Form -->
-            <form id="form-login" onsubmit="handleLogin(event)" class="p-6 space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">อีเมล (Email)</label>
-                    <input type="email" id="login_email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน (Password)</label>
-                    <input type="password" id="login_password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                </div>
-                <button type="submit" id="btn-login" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition">
-                    เข้าสู่ระบบ
-                </button>
-            </form>
+ try {
+   const requestRecord = {
+     wp_no: form.elements.wp_no.value,
+     work_type: form.elements.work_type.value,
+     worker_name: form.elements.worker_name.value,
+     status: 'Pending'
+   };
 
-            <!-- Sign Up Form -->
-            <form id="form-signup" onsubmit="handleSignUp(event)" class="p-6 space-y-4 hidden">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อ-นามสกุล *</label>
-                    <input type="text" id="signup_fullname" placeholder="กรอกชื่อ-นามสกุล" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">รหัสพนักงาน / รหัสผู้รับเหมา *</label>
-                    <input type="text" id="signup_empid" placeholder="เช่น EMP-102 หรือ CON-05" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">อีเมลสมัครใช้งาน (Email) *</label>
-                    <input type="email" id="signup_email" placeholder="example@gmail.com" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">ตั้งรหัสผ่าน (Password) *</label>
-                    <input type="password" id="signup_password" placeholder="อย่างน้อย 6 ตัวอักษร" required minlength="6" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">ประเภทบัญชี / สิทธิ์ใช้งาน *</label>
-                    <select id="signup_role" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white">
-                        <option value="General User">ผู้ขออนุญาตทั่วไป / ผู้รับเหมา</option>
-                        <option value="Safety Officer (จป.)">เจ้าหน้าที่ความปลอดภัย (จป.)</option>
-                    </select>
-                </div>
-                <button type="submit" id="btn-signup" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 rounded-lg transition">
-                    ยืนยันการสมัครสมาชิก
-                </button>
-            </form>
-        </div>
+   const { error } = await supabaseClient.from(TABLE_NAME).insert(requestRecord);
+   if (error) {
+     throw new Error(error.message);
+   }
 
-        <!-- APP DASHBOARD SECTION -->
-        <div id="app-section" class="hidden grid grid-cols-1 md:grid-cols-4 gap-6">
-            
-            <!-- Sidebar Menu -->
-            <div class="md:col-span-1 bg-white p-4 rounded-xl shadow-sm border border-gray-200 h-fit space-y-2">
-                <button onclick="showPage('permit-form')" class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 flex items-center space-x-2">
-                    <span>📝</span> <span>ยื่นขอใบอนุญาต (Work Permit)</span>
-                </button>
-                <button onclick="showPage('status-tracker')" class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
-                    <span>🔍</span> <span>ติดตามสถานะ</span>
-                </button>
-                <button id="btn-safety-menu" onclick="showPage('safety-approval')" class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-gray-400 bg-gray-50 cursor-not-allowed flex items-center justify-between" disabled>
-                    <div class="flex items-center space-x-2">
-                        <span>🛡️</span> <span>พิจารณาอนุมัติ (จป.)</span>
-                    </div>
-                    <span id="badge-lock" class="text-xs bg-gray-200 px-1.5 py-0.5 rounded text-gray-500">🔒 ล็อก</span>
-                </button>
-            </div>
+   alert('ส่งคำขอสำเร็จ! เลขที่ Work Permit: ' + requestRecord.wp_no);
+   form.reset();
+   setInitialWPNumber();
+ } catch (error) {
+   alert('เกิดข้อผิดพลาด: ' + error.message);
+ } finally {
+   submitButton.disabled = false;
+   submitButton.textContent = 'ยื่นคำขออนุญาตทำงาน';
+ }
+}
 
-            <!-- Content Area -->
-            <div class="md:col-span-3 space-y-6">
+async function searchTracking() {
+ const keyword = document.getElementById('tracking-search').value.trim();
+ const results = document.getElementById('tracking-results');
+ if (!keyword) return;
+ 
+ const { data, error } = await supabaseClient.from(TABLE_NAME).select('*').eq('wp_no', keyword);
+ if (error || !data.length) {
+   results.innerHTML = '<div class="empty">ไม่พบรายการ</div>';
+   return;
+ }
+ results.innerHTML = data.map(r => `
+   <article class="record">
+     <h3>${r.wp_no}</h3>
+     <p><strong>ลักษณะงาน:</strong> ${r.work_type || '-'}</p>
+     <p><strong>สถานะ:</strong> <span class="status status-${r.status || 'Pending'}">${r.status || 'Pending'}</span></p>
+   </article>
+ `).join('');
+}
 
-                <!-- Page 1: แบบฟอร์มขอใบอนุญาต -->
-                <div id="page-permit-form" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
-                    <h2 class="text-xl font-bold text-gray-800 border-b pb-3">ยื่นขอใบอนุญาตทำงาน (Work Permit)</h2>
-                    <form onsubmit="handleWorkPermitSubmit(event)" class="space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">ชื่อบริษัท / สังกัด *</label>
-                                <input type="text" id="wp_company" required class="w-full mt-1 px-3 py-2 border rounded-lg">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">พื้นที่ปฏิบัติงาน *</label>
-                                <input type="text" id="wp_location" placeholder="ระบุอาคาร / ชั้น / ห้อง" required class="w-full mt-1 px-3 py-2 border rounded-lg">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">รายละเอียดลักษณะงาน *</label>
-                            <textarea id="wp_description" rows="3" required class="w-full mt-1 px-3 py-2 border rounded-lg" placeholder="ระบุรายละเอียดงานที่ต้องปฏิบัติ..."></textarea>
-                        </div>
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
-                            ส่งคำขออนุมัติ
-                        </button>
-                    </form>
-                </div>
+async function loadSafetyRequests() {
+ const results = document.getElementById('safety-results');
+ const { data, error } = await supabaseClient.from(TABLE_NAME).select('*');
+ if (error) {
+   results.innerHTML = '<div class="empty">โหลดรายการไม่สำเร็จ</div>';
+   return;
+ }
+ allSafetyRequests = data || [];
+ renderSafetyRequests();
+}
 
-                <!-- Page 2: ติดตามสถานะ -->
-                <div id="page-status-tracker" class="hidden bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4">
-                    <h2 class="text-xl font-bold text-gray-800 border-b pb-3">รายการคำขอใบอนุญาตทั้งหมด</h2>
-                    <div id="requests-list" class="space-y-3">
-                        <p class="text-gray-500 text-sm">กำลังโหลดข้อมูล...</p>
-                    </div>
-                </div>
+function renderSafetyRequests() {
+ const results = document.getElementById('safety-results');
+ let records = allSafetyRequests;
+ if (currentSafetyFilter === 'Pending') {
+   records = records.filter(r => (r.status || 'Pending') === 'Pending');
+ }
+ if (!records.length) {
+   results.innerHTML = '<div class="empty">ไม่พบรายการคำขอ</div>';
+   return;
+ }
+ results.innerHTML = records.map(r => `
+   <article class="record">
+     <h3>${r.wp_no}</h3>
+     <p><strong>ลักษณะงาน:</strong> ${r.work_type || '-'}</p>
+     <p><strong>รายชื่อ:</strong> ${r.worker_name || '-'}</p>
+     <p><strong>สถานะ:</strong> <span class="status status-${r.status || 'Pending'}">${r.status || 'Pending'}</span></p>
+     <div class="actions">
+       <button class="btn btn-success" onclick="updateStatus('${r.wp_no}', 'Approved')">อนุมัติ</button>
+       <button class="btn btn-danger" onclick="updateStatus('${r.wp_no}', 'Rejected')">ไม่อนุมัติ</button>
+     </div>
+   </article>
+ `).join('');
+}
 
-                <!-- Page 3: หน้าพิจารณาอนุมัติ (Safety Only) -->
-                <div id="page-safety-approval" class="hidden bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4">
-                    <div class="flex justify-between items-center border-b pb-3">
-                        <h2 class="text-xl font-bold text-gray-800">รายการรอการพิจารณาอนุมัติ (สำหรับ จป.)</h2>
-                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Safety Panel</span>
-                    </div>
-                    <div id="safety-approval-list" class="space-y-3">
-                        <p class="text-gray-500 text-sm">กำลังโหลดรายการรออนุมัติ...</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-
-    <!-- MAIN JAVASCRIPT -->
-    <script>
-        // กำหนดค่าเชื่อมต่อ Supabase ไว้บรรทัดแรกสุด
-        const SUPABASE_URL = 'https://oqthxncwleedvccganmg.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_bhnJ7U04RVjyByqFE5bqiQ_Qa_ffBNJ';
-        
-        // ตรวจสอบความพร้อมของไลบรารี Supabase ก่อนสร้าง Client
-        let db = null;
-        try {
-            if (window.supabase) {
-                db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            }
-        } catch (e) {
-            console.error('Supabase Init Error:', e);
-        }
-
-        let currentUser = null;
-        let userProfile = null;
-
-        function switchAuthTab(type) {
-            if (type === 'login') {
-                document.getElementById('form-login').classList.remove('hidden');
-                document.getElementById('form-signup').classList.add('hidden');
-                document.getElementById('tab-login').className = "w-1/2 py-3 font-semibold text-center text-blue-600 border-b-2 border-blue-600";
-                document.getElementById('tab-signup').className = "w-1/2 py-3 font-semibold text-center text-gray-500 hover:text-blue-600";
-            } else {
-                document.getElementById('form-login').classList.add('hidden');
-                document.getElementById('form-signup').classList.remove('hidden');
-                document.getElementById('tab-signup').className = "w-1/2 py-3 font-semibold text-center text-blue-600 border-b-2 border-blue-600";
-                document.getElementById('tab-login').className = "w-1/2 py-3 font-semibold text-center text-gray-500 hover:text-blue-600";
-            }
-        }
-
-        async function handleSignUp(event) {
-            event.preventDefault();
-            if (!db) {
-                alert('⚠️ ระบบฐานข้อมูลยังไม่พร้อมใช้งาน (กรุณาตรวจสอบการเชื่อมต่อสคริปต์ Supabase)');
-                return;
-            }
-
-            const fullname = document.getElementById('signup_fullname').value.trim();
-            const empid = document.getElementById('signup_empid').value.trim();
-            const email = document.getElementById('signup_email').value.trim();
-            const password = document.getElementById('signup_password').value;
-            const selectedRole = document.getElementById('signup_role').value;
-
-            let finalRole = 'General User';
-            if (selectedRole.includes('ความปลอดภัย') || selectedRole.includes('Safety')) {
-                finalRole = 'Safety Officer (จป.)';
-            }
-
-            const btn = document.getElementById('btn-signup');
-            btn.disabled = true;
-            btn.innerText = 'กำลังบันทึกข้อมูล...';
-
-            try {
-                const { data, error } = await db.auth.signUp({ email, password });
-                if (error) throw error;
-
-                if (data?.user) {
-                    const { error: profileError } = await db.from('profiles').upsert([{
-                        id: data.user.id,
-                        fullname: fullname,
-                        employee_id: empid,
-                        role: finalRole,
-                        updated_at: new Date()
-                    }], { onConflict: 'id' });
-
-                    if (profileError) throw profileError;
-                }
-
-                alert(`🎉 สมัครสมาชิกสำเร็จเรียบร้อย!\nสิทธิ์การใช้งานของคุณคือ: [${finalRole}]\nกรุณาเข้าสู่ระบบอีกครั้งครับ`);
-                switchAuthTab('login');
-            } catch (err) {
-                console.error('Sign Up Error:', err);
-                alert(`❌ การสมัครสมาชิกล้มเหลว: ${err.message}`);
-            } finally {
-                btn.disabled = false;
-                btn.innerText = 'ยืนยันการสมัครสมาชิก';
-            }
-        }
-
-        async function handleLogin(event) {
-            event.preventDefault();
-            if (!db) return;
-
-            const email = document.getElementById('login_email').value.trim();
-            const password = document.getElementById('login_password').value;
-            const btn = document.getElementById('btn-login');
-
-            btn.disabled = true;
-            btn.innerText = 'กำลังตรวจสอบ...';
-
-            try {
-                const { data, error } = await db.auth.signInWithPassword({ email, password });
-                if (error) throw error;
-
-                currentUser = data.user;
-                await fetchUserProfile(data.user.id);
-                initDashboardUI();
-            } catch (err) {
-                alert(`❌ เข้าสู่ระบบไม่สำเร็จ: ${err.message}`);
-            } finally {
-                btn.disabled = false;
-                btn.innerText = 'เข้าสู่ระบบ';
-            }
-        }
-
-        async function fetchUserProfile(userId) {
-            const { data, error } = await db
-                .from('profiles')
-                .select('*')
-                .eq('id', userId)
-                .single();
-
-            if (!error && data) {
-                userProfile = data;
-            } else {
-                userProfile = { fullname: 'ผู้ใช้งานทั่วไป', role: 'General User' };
-            }
-        }
-
-        function initDashboardUI() {
-            document.getElementById('auth-section').classList.add('hidden');
-            document.getElementById('app-section').classList.remove('hidden');
-            document.getElementById('user-info-bar').classList.remove('hidden');
-
-            document.getElementById('nav-user-name').textContent = userProfile.fullname || currentUser.email;
-            document.getElementById('nav-user-role').textContent = `สิทธิ์: ${userProfile.role}`;
-
-            const isSafety = userProfile.role === 'Safety Officer (จป.)';
-            const btnSafety = document.getElementById('btn-safety-menu');
-            const badgeLock = document.getElementById('badge-lock');
-
-            if (isSafety) {
-                btnSafety.disabled = false;
-                btnSafety.classList.remove('text-gray-400', 'bg-gray-50', 'cursor-not-allowed');
-                btnSafety.classList.add('text-green-700', 'hover:bg-green-50');
-                badgeLock.textContent = '✅ ปลดล็อก';
-                badgeLock.classList.replace('bg-gray-200', 'bg-green-200');
-                badgeLock.classList.replace('text-gray-500', 'text-green-800');
-            }
-
-            loadWorkPermitRequests();
-        }
-
-        async function handleLogout() {
-            if (db) await db.auth.signOut();
-            window.location.reload();
-        }
-
-        function showPage(pageName) {
-            document.getElementById('page-permit-form').classList.add('hidden');
-            document.getElementById('page-status-tracker').classList.add('hidden');
-            document.getElementById('page-safety-approval').classList.add('hidden');
-
-            document.getElementById(`page-${pageName}`).classList.remove('hidden');
-
-            if (pageName === 'status-tracker' || pageName === 'safety-approval') {
-                loadWorkPermitRequests();
-            }
-        }
-
-        async function handleWorkPermitSubmit(event) {
-            event.preventDefault();
-            const company = document.getElementById('wp_company').value;
-            const location = document.getElementById('wp_location').value;
-            const description = document.getElementById('wp_description').value;
-
-            try {
-                const { error } = await db.from('work_permit_requests').insert([{
-                    user_id: currentUser.id,
-                    applicant_name: userProfile.fullname,
-                    company: company,
-                    location: location,
-                    description: description,
-                    status: 'Pending'
-                }]);
-
-                if (error) throw error;
-
-                alert('✅ ยื่นคำขอใบอนุญาตทำงานเรียบร้อยแล้ว!');
-                event.target.reset();
-                showPage('status-tracker');
-            } catch (err) {
-                alert('❌ ยื่นคำขอไม่สำเร็จ: ' + err.message);
-            }
-        }
-
-        async function loadWorkPermitRequests() {
-            const { data, error } = await db.from('work_permit_requests').select('*').order('created_at', { ascending: false });
-
-            if (error) {
-                console.error(error);
-                return;
-            }
-
-            const statusContainer = document.getElementById('requests-list');
-            statusContainer.innerHTML = data.length === 0 ? '<p class="text-gray-500">ยังไม่มีรายการคำขอ</p>' : '';
-            
-            const safetyContainer = document.getElementById('safety-approval-list');
-            safetyContainer.innerHTML = '';
-
-            data.forEach(item => {
-                const card = `
-                    <div class="p-4 border rounded-lg flex justify-between items-center">
-                        <div>
-                            <p class="font-bold text-gray-800">${item.company} (${item.location})</p>
-                            <p class="text-sm text-gray-600">${item.description}</p>
-                            <p class="text-xs text-gray-400">ผู้ยื่น: ${item.applicant_name}</p>
-                        </div>
-                        <div>
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold ${getStatusBadge(item.status)}">
-                                ${item.status}
-                            </span>
-                        </div>
-                    </div>
-                `;
-                statusContainer.innerHTML += card;
-
-                if (item.status === 'Pending') {
-                    const safetyCard = `
-                        <div class="p-4 border border-amber-200 bg-amber-50 rounded-lg flex justify-between items-center">
-                            <div>
-                                <p class="font-bold text-gray-800">${item.company} (${item.location})</p>
-                                <p class="text-sm text-gray-600">${item.description}</p>
-                                <p class="text-xs text-gray-500">ผู้ขออนุญาต: ${item.applicant_name}</p>
-                            </div>
-                            <div class="flex space-x-2">
-                                <button onclick="updateStatus('${item.id}', 'Approved')" class="bg-green-600 text-white text-xs px-3 py-1.5 rounded hover:bg-green-700">อนุมัติ</button>
-                                <button onclick="updateStatus('${item.id}', 'Rejected')" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded hover:bg-red-700">ไม่อนุมัติ</button>
-                            </div>
-                        </div>
-                    `;
-                    safetyContainer.innerHTML += safetyCard;
-                }
-            });
-
-            if (safetyContainer.innerHTML === '') {
-                safetyContainer.innerHTML = '<p class="text-gray-500">ไม่มีรายการที่รอการอนุมัติ</p>';
-            }
-        }
-
-        async function updateStatus(requestId, newStatus) {
-            if (userProfile.role !== 'Safety Officer (จป.)') {
-                alert('❌ เฉพาะเจ้าหน้าที่ Safety เท่านั้นที่สามารถพิจารณาอนุมัติได้');
-                return;
-            }
-
-            const { error } = await db
-                .from('work_permit_requests')
-                .update({ 
-                    status: newStatus,
-                    reviewed_by: userProfile.fullname,
-                    reviewed_at: new Date()
-                })
-                .eq('id', requestId);
-
-            if (error) {
-                alert('❌ ปรับปรุงสถานะไม่สำเร็จ: ' + error.message);
-            } else {
-                alert(`✅ ปรับสถานะเป็น [${newStatus}] เรียบร้อยแล้ว`);
-                loadWorkPermitRequests();
-            }
-        }
-
-        function getStatusBadge(status) {
-            switch (status) {
-                case 'Approved': return 'bg-green-100 text-green-800';
-                case 'Rejected': return 'bg-red-100 text-red-800';
-                default: return 'bg-yellow-100 text-yellow-800';
-            }
-        }
-    </script>
+async function updateStatus(wpNo, newStatus) {
+ const { error } = await supabaseClient.from(TABLE_NAME).update({ status: newStatus }).eq('wp_no', wpNo);
+ if (error) {
+   alert('อัปเดตสถานะไม่สำเร็จ: ' + error.message);
+   return;
+ }
+ alert('อัปเดตสถานะเรียบร้อยแล้ว');
+ loadSafetyRequests();
+}
+</script>
 </body>
 </html>
