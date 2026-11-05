@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAFE PASS - Smart Work Permit System</title>
-    <!-- Tailwind CSS CDN -->
+    <!-- 1. โหลด Tailwind CSS และ Supabase JS Client v2 ใน HEAD เสมอ -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { font-family: 'Kanit', sans-serif; }
@@ -106,7 +105,6 @@
                 <button onclick="showPage('status-tracker')" class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
                     <span>🔍</span> <span>ติดตามสถานะ</span>
                 </button>
-                <!-- ปุ่มพิจารณาอนุมัติ (จะเปิดให้กดเฉพาะเมื่อเป็น Safety) -->
                 <button id="btn-safety-menu" onclick="showPage('safety-approval')" class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-gray-400 bg-gray-50 cursor-not-allowed flex items-center justify-between" disabled>
                     <div class="flex items-center space-x-2">
                         <span>🛡️</span> <span>พิจารณาอนุมัติ (จป.)</span>
@@ -166,19 +164,16 @@
 
     </div>
 
-    <!-- JavaScript Logic -->
+    <!-- MAIN JAVASCRIPT -->
     <script>
-        // ==========================================
-        // 1. ตั้งค่าการเชื่อมต่อ Supabase (ไว้อยู่บนสุดเสมอ)
-        // ==========================================
+        // ประกาศตัวแปร db ไว้บรรทัดแรกสุดของ <script> เสมอ
         const SUPABASE_URL = 'https://oqthxncwleedvccganmg.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_bhnJ7U04RVjyByqFE5bqiQ_Qa_ffBNJ';
-        const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const db = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
         let currentUser = null;
         let userProfile = null;
 
-        // สลับแท็บ Login / Sign Up
         function switchAuthTab(type) {
             if (type === 'login') {
                 document.getElementById('form-login').classList.remove('hidden');
@@ -193,9 +188,13 @@
             }
         }
 
-        // ระบบสมัครสมาชิก (Sign Up) พร้อมบันทึก Role ลงตาราง profiles อัตโนมัติ
         async function handleSignUp(event) {
             event.preventDefault();
+            if (!db) {
+                alert('ไม่สามารถเชื่อมต่อฐานข้อมูล Supabase ได้ กรุณาเช็กการเชื่อมต่ออินเทอร์เน็ต');
+                return;
+            }
+
             const fullname = document.getElementById('signup_fullname').value.trim();
             const empid = document.getElementById('signup_empid').value.trim();
             const email = document.getElementById('signup_email').value.trim();
@@ -238,9 +237,10 @@
             }
         }
 
-        // ระบบเข้าสู่ระบบ (Login)
         async function handleLogin(event) {
             event.preventDefault();
+            if (!db) return;
+
             const email = document.getElementById('login_email').value.trim();
             const password = document.getElementById('login_password').value;
             const btn = document.getElementById('btn-login');
@@ -263,7 +263,6 @@
             }
         }
 
-        // ดึงข้อมูล Role จากตาราง profiles
         async function fetchUserProfile(userId) {
             const { data, error } = await db
                 .from('profiles')
@@ -278,7 +277,6 @@
             }
         }
 
-        // ปรับการแสดงผลหน้าจอ Dashboard ตามสิทธิ์
         function initDashboardUI() {
             document.getElementById('auth-section').classList.add('hidden');
             document.getElementById('app-section').classList.remove('hidden');
@@ -303,13 +301,11 @@
             loadWorkPermitRequests();
         }
 
-        // ระบบออกจากระบบ
         async function handleLogout() {
-            await db.auth.signOut();
+            if (db) await db.auth.signOut();
             window.location.reload();
         }
 
-        // สลับแสดงผลหน้าย่อย
         function showPage(pageName) {
             document.getElementById('page-permit-form').classList.add('hidden');
             document.getElementById('page-status-tracker').classList.add('hidden');
@@ -322,7 +318,6 @@
             }
         }
 
-        // บันทึกคำขอ Work Permit
         async function handleWorkPermitSubmit(event) {
             event.preventDefault();
             const company = document.getElementById('wp_company').value;
@@ -349,7 +344,6 @@
             }
         }
 
-        // โหลดข้อมูลคำขอทั้งหมด
         async function loadWorkPermitRequests() {
             const { data, error } = await db.from('work_permit_requests').select('*').order('created_at', { ascending: false });
 
@@ -404,7 +398,6 @@
             }
         }
 
-        // จป. กดเปลี่ยนสถานะ อนุมัติ / ไม่อนุมัติ
         async function updateStatus(requestId, newStatus) {
             if (userProfile.role !== 'Safety Officer (จป.)') {
                 alert('❌ เฉพาะเจ้าหน้าที่ Safety เท่านั้นที่สามารถพิจารณาอนุมัติได้');
