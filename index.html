@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAFE PASS - Smart Work Permit System</title>
-    <!-- 1. โหลด Tailwind CSS และ Supabase JS Client v2 ใน HEAD เสมอ -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase JS Client v2 -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { font-family: 'Kanit', sans-serif; }
@@ -166,10 +167,19 @@
 
     <!-- MAIN JAVASCRIPT -->
     <script>
-        // ประกาศตัวแปร db ไว้บรรทัดแรกสุดของ <script> เสมอ
+        // กำหนดค่าเชื่อมต่อ Supabase ไว้บรรทัดแรกสุด
         const SUPABASE_URL = 'https://oqthxncwleedvccganmg.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_bhnJ7U04RVjyByqFE5bqiQ_Qa_ffBNJ';
-        const db = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+        
+        // ตรวจสอบความพร้อมของไลบรารี Supabase ก่อนสร้าง Client
+        let db = null;
+        try {
+            if (window.supabase) {
+                db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            }
+        } catch (e) {
+            console.error('Supabase Init Error:', e);
+        }
 
         let currentUser = null;
         let userProfile = null;
@@ -191,7 +201,7 @@
         async function handleSignUp(event) {
             event.preventDefault();
             if (!db) {
-                alert('ไม่สามารถเชื่อมต่อฐานข้อมูล Supabase ได้ กรุณาเช็กการเชื่อมต่ออินเทอร์เน็ต');
+                alert('⚠️ ระบบฐานข้อมูลยังไม่พร้อมใช้งาน (กรุณาตรวจสอบการเชื่อมต่อสคริปต์ Supabase)');
                 return;
             }
 
