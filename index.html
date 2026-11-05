@@ -75,9 +75,26 @@ body{display:flex}
 </nav>
 </aside>
 <main class="main-content">
-<div class="header-bar">
-  <div><strong>somjai</strong> <span class="muted" style="margin-left: 5px;">สิทธิ์: Safety Officer (จป.)</span></div>
-  <button type="button" class="btn btn-danger" style="padding: 6px 12px; font-size: 13px;" onclick="alert('ออกจากระบบเรียบร้อย')">ออกจากระบบ</button>
+<!-- ==================== LOGIN HEADER ==================== -->
+<div class="header-bar" id="header-user-bar">
+  <div id="user-info-display"><strong>กำลังโหลดข้อมูลผู้ใช้...</strong></div>
+  <button type="button" id="logout-btn" class="btn btn-danger" style="padding: 6px 12px; font-size: 13px;" onclick="handleLogout()">ออกจากระบบ</button>
+</div>
+
+<!-- Login Modal / Box หากยังไม่เข้าสู่ระบบ -->
+<div id="login-container" class="card-container hidden" style="max-width: 450px; margin-top: 50px;">
+  <h2 style="text-align:center; color:#0369a1; margin-top:0;">เข้าสู่ระบบ AUDI WORK PERMIT</h2>
+  <form id="loginForm" onsubmit="handleLogin(event)">
+    <div class="form-group" style="margin-bottom: 15px;">
+      <label>Email</label>
+      <input type="email" id="login-email" required placeholder="name@company.com">
+    </div>
+    <div class="form-group" style="margin-bottom: 20px;">
+      <label>รหัสผ่าน</label>
+      <input type="password" id="login-password" required placeholder="••••••••">
+    </div>
+    <button type="submit" class="btn btn-primary" style="width: 100%;">เข้าสู่ระบบ</button>
+  </form>
 </div>
 
 <section id="page-form" class="card-container">
@@ -328,18 +345,71 @@ let supabaseClient = null;
 let allSafetyRequests = [];
 let currentSafetyFilter = 'Pending';
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
  if (window.supabase && window.supabase.createClient) {
    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
  }
  setupOtherFields();
  setupDateValidation();
  setInitialWPNumber();
+ 
  const form = document.getElementById('workPermitForm');
  if (form) {
    form.addEventListener('submit', submitWorkPermit);
  }
+
+ // ตรวจสอบสถานะ Login จาก Supabase Auth
+ if (supabaseClient) {
+   const { data: { session } } = await supabaseClient.auth.getSession();
+   updateAuthUI(session);
+
+   supabaseClient.auth.onAuthStateChange((event, session) => {
+     updateAuthUI(session);
+   });
+ }
 });
+
+function updateAuthUI(session) {
+ const userInfo = document.getElementById('user-info-display');
+ const logoutBtn = document.getElementById('logout-btn');
+ const loginContainer = document.getElementById('login-container');
+ const mainSections = document.querySelectorAll('.card-container:not(#login-container), .sidebar');
+
+ if (session && session.user) {
+   if (userInfo) userInfo.innerHTML = `<strong>${session.user.email}</strong> <span class="muted" style="margin-left: 5px;">สิทธิ์: ผู้ใช้งานระบบ</span>`;
+   if (logoutBtn) logoutBtn.classList.remove('hidden');
+   if (loginContainer) loginContainer.classList.add('hidden');
+   mainSections.forEach(el => el.classList.remove('hidden'));
+ } else {
+   if (userInfo) userInfo.innerHTML = `<strong>ยังไม่ได้เข้าสู่ระบบ</strong>`;
+   if (logoutBtn) logoutBtn.classList.add('hidden');
+   if (loginContainer) loginContainer.classList.remove('hidden');
+   // ซ่อนหน้าหลักไว้ก่อนถ้ายังไม่ล็อกอิน
+   document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
+ }
+}
+
+async function handleLogin(event) {
+ event.preventDefault();
+ const email = document.getElementById('login-email').value;
+ const password = document.getElementById('login-password').value;
+ 
+ const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+ if (error) {
+   alert('เข้าสู่ระบบไม่สำเร็จ: ' + error.message);
+   return;
+ }
+ alert('เข้าสู่ระบบสำเร็จ');
+ switchPage('form');
+}
+
+async function handleLogout() {
+ if (supabaseClient) {
+   await supabaseClient.auth.signOut();
+ }
+ alert('ออกจากระบบเรียบร้อย');
+ location.reload();
+}
 
 function generateWPNumber() {
  const now = new Date();
