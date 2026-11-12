@@ -192,11 +192,11 @@
 
             <div class="md:col-span-1 bg-white p-4 rounded-xl shadow-sm border border-gray-200 h-fit space-y-2">
 
-                <button onclick="showPage('permit-form')" id="menu-btn-form" class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-sky-600 bg-sky-50 hover:bg-sky-100 flex items-center space-x-2">
 
-                    <span>📝</span> <span>ยื่นขอใบอนุญาต</span>
-
-               <button onclick="showPage('permit-form')" id="menu-btn-form"
+<!-- ปุ่มยื่นขอใบอนุญาต -->
+<button type="button"
+    onclick="showPage('permit-form')"
+    id="menu-btn-form"
     class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-sky-600 bg-sky-50 hover:bg-sky-100 flex items-center space-x-2">
 
     <span>📝</span>
@@ -204,13 +204,17 @@
 
 </button>
 
-<button type="button" onclick="showPage('status-tracker')" id="menu-btn-track"
+<!-- ปุ่มติดตามสถานะ -->
+<button type="button"
+    onclick="showPage('status-tracker')"
+    id="menu-btn-track"
     class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
 
     <span>🔍</span>
     <span>ติดตามสถานะ</span>
 
 </button>
+
 
                 <button id="btn-safety-menu" onclick="showPage('safety-approval')" class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-gray-400 bg-gray-50 cursor-not-allowed flex items-center justify-between" disabled>
 
