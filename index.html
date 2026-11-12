@@ -1,284 +1,532 @@
 <!DOCTYPE html>
+
 <html lang="th">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>AUDI WORK PERMIT - Smart System</title>
+
     <!-- Tailwind CSS CDN -->
+
     <script src="https://cdn.tailwindcss.com"></script>
+
     <!-- Supabase JS Client v2 -->
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
+
         body { font-family: Arial, Tahoma, sans-serif; }
+
         .hidden-section { display: none !important; }
+
         .other-input { display: block; margin-top: 5px; width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; }
+
     </style>
+
 </head>
+
 <body class="bg-gray-100 min-h-screen text-gray-800">
 
+
+
     <!-- Top Navigation Bar -->
+
     <nav class="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
+
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+
             <div class="flex items-center space-x-3">
+
                 <span class="text-2xl font-bold text-sky-400">AUDI WORK PERMIT</span>
+
             </div>
+
             <div id="user-info-bar" class="hidden-section flex items-center space-x-4">
+
                 <div class="text-right">
+
                     <p id="nav-user-name" class="text-sm font-semibold text-white">ผู้ใช้งาน</p>
+
                     <p id="nav-user-role" class="text-xs text-sky-300">สิทธิ์: General User</p>
+
                 </div>
+
                 <button onclick="handleLogout()" class="bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1.5 rounded transition">
+
                     ออกจากระบบ
+
                 </button>
+
             </div>
+
         </div>
+
     </nav>
 
+
+
     <!-- Main Container -->
+
     <div class="max-w-7xl mx-auto p-4 md:p-6">
-        
+
+
+
         <!-- AUTH SECTION (Login / Sign Up) -->
+
         <div id="auth-section" class="max-w-md mx-auto my-12 bg-white rounded-xl shadow-md overflow-hidden border border-gray-200">
+
             <div class="flex border-b border-gray-200">
+
                 <button id="tab-login" onclick="switchAuthTab('login')" class="w-1/2 py-3 font-semibold text-center text-sky-600 border-b-2 border-sky-600">
+
                     เข้าสู่ระบบ
+
                 </button>
+
                 <button id="tab-signup" onclick="switchAuthTab('signup')" class="w-1/2 py-3 font-semibold text-center text-gray-500 hover:text-sky-600">
+
                     สมัครสมาชิก
+
                 </button>
+
             </div>
+
             <!-- Login Form -->
+
             <form id="form-login" onsubmit="handleLogin(event)" class="p-6 space-y-4">
+
                 <div>
+
                     <label class="block text-sm font-medium text-gray-700 mb-1">อีเมล (Email)</label>
+
                     <input type="email" id="login_email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:outline-none">
+
                 </div>
+
                 <div>
+
                     <label class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน (Password)</label>
+
                     <input type="password" id="login_password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:outline-none">
+
                 </div>
+
                 <button type="submit" id="btn-login" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 rounded-lg transition">
+
                     เข้าสู่ระบบ
+
                 </button>
+
             </form>
+
             <!-- Sign Up Form -->
+
             <form id="form-signup" onsubmit="handleSignUp(event)" class="p-6 space-y-4 hidden-section">
+
                 <div>
+
                     <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อ-นามสกุล *</label>
+
                     <input type="text" id="signup_fullname" placeholder="กรอกชื่อ-นามสกุล" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:outline-none">
+
                 </div>
+
                 <div>
+
                     <label class="block text-sm font-medium text-gray-700 mb-1">รหัสพนักงาน / รหัสผู้รับเหมา *</label>
+
                     <input type="text" id="signup_empid" placeholder="เช่น EMP-102" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:outline-none">
+
                 </div>
+
                 <div>
+
                     <label class="block text-sm font-medium text-gray-700 mb-1">อีเมลสมัครใช้งาน (Email) *</label>
+
                     <input type="email" id="signup_email" placeholder="example@gmail.com" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:outline-none">
+
                 </div>
+
                 <div>
+
                     <label class="block text-sm font-medium text-gray-700 mb-1">ตั้งรหัสผ่าน (Password) *</label>
+
                     <input type="password" id="signup_password" placeholder="อย่างน้อย 6 ตัวอักษร" required minlength="6" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:outline-none">
+
                 </div>
+
                 <div>
+
                     <label class="block text-sm font-medium text-gray-700 mb-1">ประเภทบัญชี / สิทธิ์ใช้งาน *</label>
+
                     <select id="signup_role" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:outline-none bg-white">
+
                         <option value="General User">ผู้ขออนุญาตทั่วไป / ผู้รับเหมา</option>
+
                         <option value="Safety Officer (จป.)">เจ้าหน้าที่ความปลอดภัย (จป.)</option>
+
                     </select>
+
                 </div>
+
                 <button type="submit" id="btn-signup" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 rounded-lg transition">
+
                     ยืนยันการสมัครสมาชิก
+
                 </button>
+
             </form>
+
         </div>
 
         <!-- APP DASHBOARD SECTION -->
+
         <div id="app-section" class="hidden-section grid grid-cols-1 md:grid-cols-4 gap-6">
-            
+
             <!-- Sidebar Menu -->
+
             <div class="md:col-span-1 bg-white p-4 rounded-xl shadow-sm border border-gray-200 h-fit space-y-2">
+
                 <button onclick="showPage('permit-form')" id="menu-btn-form" class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-sky-600 bg-sky-50 hover:bg-sky-100 flex items-center space-x-2">
+
                     <span>📝</span> <span>ยื่นขอใบอนุญาต</span>
+
                 </button>
+                                </button>
+
                 <button onclick="showPage('status-tracker')" id="menu-btn-track" class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+
                     <span>🔍</span> <span>ติดตามสถานะ</span>
+
                 </button>
+
                 <button id="btn-safety-menu" onclick="showPage('safety-approval')" class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-gray-400 bg-gray-50 cursor-not-allowed flex items-center justify-between" disabled>
+
                     <div class="flex items-center space-x-2">
+
                         <span>🛡️</span> <span>Safety Approval</span>
+
                     </div>
+
                     <span id="badge-lock" class="text-xs bg-gray-200 px-1.5 py-0.5 rounded text-gray-500">🔒 ล็อก</span>
+
                 </button>
+
             </div>
 
             <!-- Content Area -->
+
             <div class="md:col-span-3 space-y-6">
-                
+
                 <!-- Page 1: แบบฟอร์มขอใบอนุญาต -->
+
                 <div id="page-permit-form" class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
+
                     <h2 class="text-xl font-bold text-gray-800 border-b pb-3">ระบบกรอกคำขอ Work Permit</h2>
+
                     <form id="workPermitForm" onsubmit="handleWorkPermitSubmit(event)" class="space-y-6">
-                        
+
                         <div class="p-4 bg-sky-50 rounded-lg">
+
                             <label class="block font-semibold text-sky-900 mb-1">เลขที่ใบอนุญาตทำงาน (Work Permit No.) <span class="text-red-500">*</span></label>
+
                             <input type="text" id="wp_no" name="wp_no" readonly required class="w-full px-3 py-2 bg-gray-100 border rounded-lg font-bold text-sky-700">
+
                         </div>
 
                         <!-- ข้อมูลผู้ขออนุญาต (ข้อ 1-6) -->
+
                         <div class="space-y-4">
+
                             <h3 class="text-lg font-semibold text-sky-800 border-l-4 border-sky-600 pl-2">ข้อมูลผู้ขออนุญาต</h3>
+
                             <div>
+
                                 <label class="block text-sm font-medium text-gray-700">1. ชื่อบริษัท <span class="text-red-500">*</span></label>
+
                                 <input type="text" name="q1" required placeholder="ใส่คำตอบ" class="w-full mt-1 px-3 py-2 border rounded-lg">
+
                             </div>
+
                             <div>
+
                                 <label class="block text-sm font-medium text-gray-700">2. ชื่อ-นามสกุล <span class="text-red-500">*</span></label>
+
                                 <input type="text" name="q2" required placeholder="ใส่คำตอบ" class="w-full mt-1 px-3 py-2 border rounded-lg">
+
                             </div>
+
                             <div>
+
                                 <label class="block text-sm font-medium text-gray-700">3. รหัสพนักงาน/ผู้รับเหมา <span class="text-red-500">*</span></label>
+
                                 <input type="text" name="q3" required placeholder="ใส่คำตอบ" class="w-full mt-1 px-3 py-2 border rounded-lg">
+
                             </div>
+
                             <div>
+
                                 <label class="block text-sm font-medium text-gray-700">4. Email <span class="text-red-500">*</span></label>
+
                                 <input type="email" name="q4" required placeholder="name@company.com" class="w-full mt-1 px-3 py-2 border rounded-lg">
+
                             </div>
+
                             <div>
+
                                 <label class="block text-sm font-medium text-gray-700">5. แผนก <span class="text-red-500">*</span></label>
+
                                 <div class="space-y-2 mt-1">
+
                                     <label class="flex items-center space-x-2"><input type="radio" name="q5" value="Production" required onclick="toggleOtherRadio('q5', false)"> <span>Production</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="radio" name="q5" value="Maintenance" onclick="toggleOtherRadio('q5', false)"> <span>Maintenance</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="radio" name="q5" value="Warehouse" onclick="toggleOtherRadio('q5', false)"> <span>Warehouse</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="radio" name="q5" value="Engineering" onclick="toggleOtherRadio('q5', false)"> <span>Engineering</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="radio" name="q5" value="QC" onclick="toggleOtherRadio('q5', false)"> <span>QC</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="radio" name="q5" value="Other" onclick="toggleOtherRadio('q5', true)"> <span>Other</span></label>
+
                                     <input type="text" id="q5_other" name="q5_other" class="hidden-section other-input" placeholder="โปรดระบุแผนก">
+
                                 </div>
+
                             </div>
+
                             <div>
+
                                 <label class="block text-sm font-medium text-gray-700">6. ตำแหน่งงาน <span class="text-red-500">*</span></label>
+
                                 <input type="text" name="q6" required placeholder="ใส่คำตอบ" class="w-full mt-1 px-3 py-2 border rounded-lg">
+
                             </div>
+
                         </div>
 
                         <!-- Safety Training (ข้อ 7-9) -->
+
                         <div class="space-y-4">
+
                             <h3 class="text-lg font-semibold text-sky-800 border-l-4 border-sky-600 pl-2">Safety Training</h3>
+
                             <div>
+
                                 <label class="block text-sm font-medium text-gray-700">7. ผ่านการอบรมมาตรฐานความปลอดภัย <span class="text-red-500">*</span></label>
+
                                 <div class="flex space-x-4 mt-1">
+
                                     <label class="flex items-center space-x-2"><input type="radio" name="q7" value="ผ่าน" required> <span>ผ่าน</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="radio" name="q7" value="ไม่ผ่าน"> <span>ไม่ผ่าน</span></label>
+
                                 </div>
+
                             </div>
+
                             <div>
+
                                 <label class="block text-sm font-medium text-gray-700">8. ใบรับรองผ่านการอบรมด้านความปลอดภัย <span class="text-red-500">*</span></label>
+
                                 <div class="space-y-2 mt-1">
+
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q8" value="Fire Safety"> <span>Fire Safety</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q8" value="Work at Height"> <span>Work at Height</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q8" value="Confined Space"> <span>Confined Space</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q8" value="Hot Work"> <span>Hot Work</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q8" value="Electrical Work"> <span>Electrical Work</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q8" value="Forklift"> <span>Forklift</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="checkbox" id="q8_other_cb" name="q8" value="Other" onchange="toggleOtherCB('q8_other_cb', 'q8_other')"> <span>Other</span></label>
+
                                     <input type="text" id="q8_other" name="q8_other" class="hidden-section other-input" placeholder="โปรดระบุใบรับรอง">
+
                                 </div>
+
                             </div>
+
                             <div>
+
                                 <label class="block text-sm font-medium text-gray-700">9. หลักฐานการอบรมมาตรฐานความปลอดภัย</label>
+
                                 <input type="file" name="q9" accept="image/*,.pdf" class="w-full mt-1 px-3 py-2 border rounded-lg bg-gray-50">
+
                                 <p class="text-xs text-gray-500 mt-1">เลือกไฟล์ได้ 1 ไฟล์ ขนาดไม่เกิน 10MB</p>
+
                             </div>
+
                         </div>
 
                         <!-- Smart Work Permit (ข้อ 10-16) -->
+
                         <div class="space-y-4">
+
                             <h3 class="text-lg font-semibold text-sky-800 border-l-4 border-sky-600 pl-2">Smart Work Permit</h3>
+
                             <div>
+
                                 <label class="block text-sm font-medium text-gray-700">10. ชื่อผู้ขอ Work Permit <span class="text-red-500">*</span></label>
+
                                 <input type="text" name="q10" required placeholder="ใส่คำตอบ" class="w-full mt-1 px-3 py-2 border rounded-lg">
+
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
                                 <div>
+
                                     <label class="block text-sm font-medium text-gray-700">11. บริษัท <span class="text-red-500">*</span></label>
+
                                     <input type="text" name="q11" required placeholder="ใส่คำตอบ" class="w-full mt-1 px-3 py-2 border rounded-lg">
+
                                 </div>
+
                                 <div>
+
                                     <label class="block text-sm font-medium text-gray-700">12. จำนวนผู้ปฏิบัติงาน <span class="text-red-500">*</span></label>
+
                                     <input type="number" name="q12" min="1" required placeholder="ใส่จำนวน" class="w-full mt-1 px-3 py-2 border rounded-lg">
+
                                 </div>
+
                             </div>
+
                             <div>
+
                                 <label class="block text-sm font-medium text-gray-700">13. รายชื่อผู้ปฏิบัติงาน <span class="text-red-500">*</span></label>
+
                                 <textarea name="q13" rows="3" required placeholder="ใส่รายชื่อผู้ปฏิบัติงาน" class="w-full mt-1 px-3 py-2 border rounded-lg"></textarea>
+
                             </div>
+
                             <div>
+
                                 <label class="block text-sm font-medium text-gray-700">14. พื้นที่การทำงาน <span class="text-red-500">*</span></label>
+
                                 <div class="space-y-2 mt-1">
+
                                     <label class="flex items-center space-x-2"><input type="radio" name="q14" value="Production Area" required onclick="toggleOtherRadio('q14', false)"> <span>Production Area</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="radio" name="q14" value="Warehouse" onclick="toggleOtherRadio('q14', false)"> <span>Warehouse</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="radio" name="q14" value="Roof" onclick="toggleOtherRadio('q14', false)"> <span>Roof</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="radio" name="q14" value="Maintenance Area" onclick="toggleOtherRadio('q14', false)"> <span>Maintenance Area</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="radio" name="q14" value="Utility Area" onclick="toggleOtherRadio('q14', false)"> <span>Utility Area</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="radio" name="q14" value="Confined Space Area" onclick="toggleOtherRadio('q14', false)"> <span>Confined Space Area</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="radio" name="q14" value="Other" onclick="toggleOtherRadio('q14', true)"> <span>Other</span></label>
+
                                     <input type="text" id="q14_other" name="q14_other" class="hidden-section other-input" placeholder="โปรดระบุพื้นที่การทำงาน">
+
                                 </div>
+
                             </div>
+
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
                                 <div>
+
                                     <label class="block text-sm font-medium text-gray-700">15. วันที่เริ่มงาน <span class="text-red-500">*</span></label>
+
                                     <input type="date" id="q15" name="q15" required class="w-full mt-1 px-3 py-2 border rounded-lg">
+
                                 </div>
+
                                 <div>
+
                                     <label class="block text-sm font-medium text-gray-700">16. วันที่สิ้นสุดงาน <span class="text-red-500">*</span></label>
+
                                     <input type="date" id="q16" name="q16" required class="w-full mt-1 px-3 py-2 border rounded-lg">
+
                                 </div>
+
                             </div>
+
                         </div>
 
+
+
                         <!-- อันตรายและการควบคุม (ข้อ 17-18) -->
+
                         <div class="space-y-4">
+
                             <h3 class="text-lg font-semibold text-sky-800 border-l-4 border-sky-600 pl-2">อันตรายและการควบคุม</h3>
+
                             <div>
+
                                 <label class="block text-sm font-medium text-gray-700">17. อันตรายที่คาดว่าจะพบ <span class="text-red-500">*</span></label>
+
                                 <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mt-1">
+
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q17" value="Fire"> <span>Fire</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q17" value="Fall from Height"> <span>Fall from Height</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q17" value="Electrical"> <span>Electrical</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q17" value="Chemical"> <span>Chemical</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q17" value="Falling Object"> <span>Falling Object</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q17" value="Confined Space"> <span>Confined Space</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q17" value="Machine"> <span>Machine</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="checkbox" name="q17" value="Noise"> <span>Noise</span></label>
+
                                     <label class="flex items-center space-x-2"><input type="checkbox" id="q17_other_cb" name="q17" value="Other" onchange="toggleOtherCB('q17_other_cb', 'q17_other')"> <span>Other</span></label>
+
                                 </div>
+
                                 <input type="text" id="q17_other" name="q17_other" class="hidden-section other-input mt-2" placeholder="โปรดระบุอันตรายเพิ่มเติม">
+
                             </div>
+
                             <div>
+
                                 <label class="block text-sm font-medium text-gray-700">18. เอกสารควบคุมมาตรการ</label>
+
                                 <input type="file" name="q18" accept="image/*,.pdf" class="w-full mt-1 px-3 py-2 border rounded-lg bg-gray-50">
+
                                 <p class="text-xs text-gray-500 mt-1">แนบเอกสารควบคุมมาตรการหรือเอกสารประกอบที่เกี่ยวข้อง</p>
+
                             </div>
+
                         </div>
+                                                </div>
 
                         <!-- PPE & Site Readiness Checklist (ข้อ 19-23) -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-semibold text-sky-800 border-l-4 border-sky-600 pl-2">PPE & Site Readiness Checklist</h3>
+
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">19. PPE ที่ต้องใช้ <span class="text-red-500">*</span></label>
-                                <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mt-1">
-                                    <label class="flex items-center space-x-2"><input type="checkbox" name="q20" value="Safety Helmet"> <span>Safety Helmet</span></label>
-                                    <label class="flex items-center space-x-2"><input type="checkbox" name="q20" value="Safety Shoes"> <span>Safety Shoes</span></label>
-                                    <label class="flex items-center space-x-2"><input type="checkbox" name="q20" value="Face Shield"> <span>Face Shield</span></label>
-                                    <label class="flex items-center space-x-2"><input type="checkbox" name="q20" value="Safety Glasses"> <span>Safety Glasses</span></label>
-                                    <label class="flex items-center space-x-2"><input type="checkbox" name="q20" value="Gloves"> <span>Gloves</span></label>
-                                    <label class="flex items-center space-x-2"><input type="checkbox" name="q20" value="Full Body Harness"> <span>Full Body Harness</span></label>
-                                    <label class="flex items-center space-x-2"><input type="checkbox" name="q20" value="Respirator"> <span>Respirator</span></label>
-                                    <label class="flex items-center space-x-2"><input type="checkbox" id="q20_other_cb" name="q20" value="Other" onchange="toggleOtherCB('q20_other_cb', 'q20_other')"> <span>Other</span></label>
-                                </div>
-                                <input type="text" id="q20_other" name="q20_other" class="hidden-section other-input mt-2" placeholder="โปรดระบุ PPE อื่นๆ">
+                                <label class="block text-sm font-medium text-gray-700">19. เลือกประเภทงาน (เลือกได้มากกว่า 1 ประเภท) <span class="text-red-500">*</span></label>
+                                <div id="ppe-work-types" class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2 rounded-lg border bg-slate-50 p-3"></div>
                             </div>
+
+                            <div id="ppe-checklist-area" class="space-y-4">
+                                <p class="text-sm text-gray-500">กรุณาเลือกประเภทงาน เพื่อแสดงรายการ PPE ที่เกี่ยวข้อง</p>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">PPE อื่น ๆ (ถ้ามี)</label>
+                                <input type="text" id="q20_other" name="q20_other" class="other-input mt-1" placeholder="โปรดระบุ PPE อื่น ๆ">
+                            </div>
+
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">20. มี Work Permit ที่เกี่ยวข้องหรือไม่? <span class="text-red-500">*</span></label>
                                 <div class="flex space-x-4 mt-1">
@@ -286,6 +534,7 @@
                                     <label class="flex items-center space-x-2"><input type="radio" name="q21" value="ไม่มี"> <span>ไม่มี</span></label>
                                 </div>
                             </div>
+
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">21. PPE พร้อมใช้งานหรือไม่ <span class="text-red-500">*</span></label>
                                 <div class="flex space-x-4 mt-1">
@@ -293,6 +542,7 @@
                                     <label class="flex items-center space-x-2"><input type="radio" name="q22" value="ไม่พร้อม"> <span>ไม่พร้อม</span></label>
                                 </div>
                             </div>
+
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">22. อุปกรณ์/เครื่องมือผ่านการตรวจสอบหรือไม่ <span class="text-red-500">*</span></label>
                                 <div class="flex space-x-4 mt-1">
@@ -300,6 +550,7 @@
                                     <label class="flex items-center space-x-2"><input type="radio" name="q23" value="ไม่ผ่าน"> <span>ไม่ผ่าน</span></label>
                                 </div>
                             </div>
+
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">23. มีผู้ควบคุมงานหรือไม่ <span class="text-red-500">*</span></label>
                                 <div class="flex space-x-4 mt-1">
@@ -309,17 +560,20 @@
                             </div>
                         </div>
 
-                        <!-- ผู้รับผิดชอบการปฏิบัติงาน (ข้อ 24-26) -->
+                        <!-- ผู้รับผิดชอบการปฏิบัติงาน -->
                         <div class="space-y-4">
                             <h3 class="text-lg font-semibold text-sky-800 border-l-4 border-sky-600 pl-2">ผู้รับผิดชอบการปฏิบัติงาน</h3>
+
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">24. ชื่อผู้รับผิดชอบ <span class="text-red-500">*</span></label>
                                 <input type="text" name="q25" required placeholder="ใส่คำตอบ" class="w-full mt-1 px-3 py-2 border rounded-lg">
                             </div>
+
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">25. เบอร์ติดต่อ <span class="text-red-500">*</span></label>
                                 <input type="text" name="q26" required placeholder="ใส่คำตอบ" class="w-full mt-1 px-3 py-2 border rounded-lg">
                             </div>
+
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">26. หมายเหตุเพิ่มเติม</label>
                                 <textarea name="q27" rows="2" placeholder="ใส่คำตอบ" class="w-full mt-1 px-3 py-2 border rounded-lg"></textarea>
@@ -332,37 +586,39 @@
                     </form>
                 </div>
 
-                <!-- Page 2: ติดตามสถานะ (ปรับปรุงให้สืบค้นด้วย เลขที่ WP + อีเมล เท่านั้น) -->
+                <!-- Page 2: ติดตามสถานะ -->
                 <div id="page-status-tracker" class="hidden-section bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-6">
                     <h2 class="text-xl font-bold text-gray-800 border-b pb-3">ติดตามสถานะ Work Permit</h2>
                     <p class="text-sm text-gray-600">กรุณากรอกเลขที่ Work Permit และ อีเมลผู้ขออนุญาต เพื่อตรวจสอบสถานะ</p>
-                    
+
                     <form onsubmit="handleSearchStatus(event)" class="space-y-4 bg-sky-50 p-4 rounded-lg border border-sky-100">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">เลขที่ Work Permit *</label>
                             <input type="text" id="track_wp_no" placeholder="เช่น AA_0611_4795" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
                         </div>
+
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">อีเมลผู้ขออนุญาต (Applicant Email) *</label>
                             <input type="email" id="track_email" placeholder="name@company.com" required class="w-full px-3 py-2 border border-gray-300 rounded-lg">
                         </div>
+
                         <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 rounded-lg transition">
                             ค้นหาสถานะ
                         </button>
                     </form>
 
-                    <div id="tracking-result-area" class="space-y-3 pt-2">
-                        <!-- ผลการค้นหาจะแสดงตรงนี้ -->
-                    </div>
+                    <div id="tracking-result-area" class="space-y-3 pt-2"></div>
                 </div>
 
-                <!-- Page 3: หน้าพิจารณาอนุมัติ (Safety Only - เพิ่มการแสดงรายละเอียดข้อมูลครบถ้วนก่อนอนุมัติ) -->
+                <!-- Page 3: หน้าพิจารณาอนุมัติ -->
                 <div id="page-safety-approval" class="hidden-section bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4">
                     <div class="flex justify-between items-center border-b pb-3">
                         <h2 class="text-xl font-bold text-gray-800">Safety Approval (สำหรับ จป.)</h2>
                         <span class="bg-sky-100 text-sky-800 text-xs font-semibold px-2.5 py-0.5 rounded">Safety Panel</span>
                     </div>
+
                     <p class="text-xs text-gray-500">ตรวจสอบรายละเอียดข้อมูลคำขอ 27 ข้ออย่างถี่ถ้วนก่อนพิจารณาอนุมัติ</p>
+
                     <div id="safety-approval-list" class="space-y-4">
                         <p class="text-gray-500 text-sm">กำลังโหลดรายการรออนุมัติ...</p>
                     </div>
@@ -372,28 +628,31 @@
         </div>
     </div>
 
-    <!-- MODAL / POPUP แสดงรายละเอียดข้อมูลคำขอแบบเต็มสำหรับ จป. -->
+    <!-- MODAL / POPUP แสดงรายละเอียดข้อมูลคำขอ -->
     <div id="detail-modal" class="hidden-section fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-xl max-w-2xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto shadow-xl">
             <div class="flex justify-between items-center border-b pb-3">
                 <h3 class="text-lg font-bold text-gray-800" id="modal-title">รายละเอียดคำขอ Work Permit</h3>
                 <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
             </div>
-            <div id="modal-body-content" class="space-y-3 text-sm text-gray-700">
-                <!-- ข้อมูลแบบละเอียดจะถูกฉีดเข้าที่นี่ -->
-            </div>
+
+            <div id="modal-body-content" class="space-y-3 text-sm text-gray-700"></div>
+
             <div class="border-t pt-3 flex justify-end">
                 <button onclick="closeModal()" class="bg-gray-500 hover:bg-gray-600 text-white text-xs px-4 py-2 rounded">ปิด</button>
             </div>
         </div>
     </div>
+        <!-- MAIN JAVASCRIPT -->
 
-    <!-- MAIN JAVASCRIPT -->
     <script>
+
         const SUPABASE_URL = 'https://oqthxncwleedvccganmg.supabase.co';
+
         const SUPABASE_ANON_KEY = 'sb_publishable_bhnJ7U04RVjyByqFE5bqiQ_Qa_ffBNJ';
-        
+
         let db = null;
+
         try {
             if (window.supabase) {
                 db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -406,437 +665,919 @@
         let userProfile = null;
         let activeSafetyData = [];
 
-        document.addEventListener('DOMContentLoaded', () => {
+        // รายการ PPE แยกตามประเภทงาน (เลือกได้หลายประเภท)
+        const PPE_BY_WORK_TYPE = {
+            "งานบนที่สูง (Work at Height)": [
+                "หมวกนิรภัยพร้อมสายรัดคาง (Safety Helmet with Chin Strap)",
+                "เข็มขัดนิรภัยแบบเต็มตัว (Full Body Harness)",
+                "สายช่วยชีวิต (Lanyard)",
+                "อุปกรณ์ดูดซับแรงกระชาก (Shock Absorber)",
+                "อุปกรณ์เชื่อมต่อกับจุดยึด (Connector)",
+                "อุปกรณ์ป้องกันการตกจากที่สูง (Fall Arrest System)",
+                "รองเท้านิรภัยกันลื่น (Safety Shoes)",
+                "ถุงมือนิรภัย (Safety Gloves)",
+                "แว่นตานิรภัย (Safety Glasses)"
+            ],
+
+            "งานที่อับอากาศ (Confined Space Work)": [
+                "หมวกนิรภัย (Safety Helmet)",
+                "เครื่องตรวจวัดก๊าซ (Gas Detector)",
+                "เครื่องช่วยหายใจ (Respiratory Protection Equipment)",
+                "ชุดป้องกันสารเคมี (Chemical Protective Suit)",
+                "ถุงมือป้องกันสารเคมี (Chemical-Resistant Gloves)",
+                "แว่นตานิรภัย (Safety Glasses)",
+                "รองเท้านิรภัย (Safety Shoes)",
+                "เข็มขัดนิรภัยแบบเต็มตัว (Full Body Harness)",
+                "ขาตั้งสามขาพร้อมรอกกู้ภัย (Tripod and Rescue Winch)",
+                "อุปกรณ์สื่อสารที่เหมาะสมกับสภาพพื้นที่ (Communication Equipment)"
+            ],
+
+            "งานเกี่ยวกับความร้อนและการเชื่อม (Hot Work and Welding)": [
+                "หน้ากากเชื่อม (Welding Helmet)",
+                "แว่นตานิรภัย (Safety Glasses)",
+                "กระบังหน้าป้องกันสะเก็ดไฟ (Face Shield)",
+                "ถุงมือหนังสำหรับงานเชื่อม (Welding Gloves)",
+                "เสื้อหรือชุดป้องกันความร้อนและสะเก็ดไฟ (Heat-Resistant Protective Clothing)",
+                "ปลอกแขนหนังป้องกันสะเก็ดไฟ (Leather Sleeves)",
+                "รองเท้านิรภัยหุ้มข้อ (Safety Boots)",
+                "อุปกรณ์ป้องกันระบบทางเดินหายใจสำหรับควันเชื่อม (Respiratory Protection)",
+                "ที่อุดหูหรือครอบหูลดเสียง (Earplugs or Earmuffs)"
+            ],
+
+            "งานเกี่ยวกับสารเคมีและวัตถุอันตราย (Chemical and Hazardous Materials Work)": [
+                "หมวกนิรภัย (Safety Helmet)",
+                "แว่นครอบตาป้องกันสารเคมี (Chemical Splash Goggles)",
+                "กระบังหน้าป้องกันสารเคมี (Chemical Face Shield)",
+                "ถุงมือป้องกันสารเคมี (Chemical-Resistant Gloves)",
+                "ชุดป้องกันสารเคมี (Chemical Protective Suit)",
+                "รองเท้าบูตป้องกันสารเคมี (Chemical-Resistant Boots)",
+                "หน้ากากกรองสารเคมี (Chemical Respirator)",
+                "หน้ากากกรองอนุภาคสำหรับฝุ่นที่เหมาะสม (Particulate Respirator)",
+                "ผ้ากันเปื้อนป้องกันสารเคมี (Chemical-Resistant Apron)"
+            ],
+
+            "งานเกี่ยวกับระบบไฟฟ้าแรงสูงและระบบพลังงาน (High-Voltage Electrical and Energy Systems Work)": [
+                "หมวกนิรภัยที่เหมาะกับงานไฟฟ้า (Electrical Safety Helmet)",
+                "ถุงมือฉนวนไฟฟ้า (Insulating Rubber Gloves)",
+                "ถุงมือหนังสวมทับถุงมือฉนวน (Leather Protector Gloves)",
+                "รองเท้านิรภัยที่เหมาะกับงานไฟฟ้า (Electrical Safety Footwear)",
+                "เสื้อผ้าป้องกันอาร์กแฟลช (Arc-Rated Clothing)",
+                "กระบังหน้าป้องกันอาร์กแฟลช (Arc-Rated Face Shield)",
+                "แว่นตานิรภัย (Safety Glasses)",
+                "อุปกรณ์ป้องกันการได้ยิน (Hearing Protection)",
+                "ชุดป้องกันไฟฟ้าสถิต (Anti-Static Clothing)"
+            ],
+
+            "งานก่อสร้างและรื้อถอน (Construction and Demolition Work)": [
+                "หมวกนิรภัย (Safety Helmet)",
+                "แว่นตานิรภัย (Safety Glasses)",
+                "กระบังหน้าป้องกันเศษวัสดุ (Face Shield)",
+                "หน้ากากกรองฝุ่น (Dust Respirator)",
+                "ถุงมือนิรภัย (Safety Gloves)",
+                "รองเท้านิรภัยหัวเหล็กหรือวัสดุป้องกันแรงกระแทก (Safety Shoes)",
+                "เสื้อสะท้อนแสง (High-Visibility Vest)",
+                "ที่อุดหูหรือครอบหูลดเสียง (Hearing Protection)",
+                "ชุดป้องกันการตกจากที่สูง (Fall Protection Equipment)",
+                "อุปกรณ์ป้องกันเข่า (Knee Pads)"
+            ],
+
+            "งานซ่อมแซม บำรุงรักษา และติดตั้ง (Repair, Maintenance and Installation Work)": [
+                "หมวกนิรภัย (Safety Helmet)",
+                "แว่นตานิรภัย (Safety Glasses)",
+                "ถุงมือนิรภัย (Safety Gloves)",
+                "รองเท้านิรภัย (Safety Shoes)",
+                "เสื้อสะท้อนแสง (High-Visibility Vest)",
+                "ที่อุดหูหรือครอบหูลดเสียง (Hearing Protection)",
+                "หน้ากากกรองฝุ่นหรือสารเคมีตามลักษณะงาน (Respiratory Protection)",
+                "กระบังหน้าป้องกันสะเก็ดวัสดุ (Face Shield)",
+                "ชุดป้องกันการตกจากที่สูง (Fall Protection Equipment)",
+                "ชุดป้องกันสารเคมี (Chemical Protective Clothing)"
+            ],
+
+            "งานตรวจสอบและทดสอบทางวิศวกรรม (Engineering Inspection and Testing)": [
+                "หมวกนิรภัย (Safety Helmet)",
+                "แว่นตานิรภัย (Safety Glasses)",
+                "ถุงมือนิรภัย (Safety Gloves)",
+                "รองเท้านิรภัย (Safety Shoes)",
+                "เสื้อสะท้อนแสง (High-Visibility Vest)",
+                "อุปกรณ์ป้องกันการได้ยิน (Hearing Protection)",
+                "หน้ากากกรองฝุ่นหรือสารเคมีตามความเสี่ยง (Respiratory Protection)",
+                "ชุดป้องกันการตกจากที่สูง (Fall Protection Equipment)",
+                "กระบังหน้าป้องกันสะเก็ดวัสดุ (Face Shield)",
+                "ถุงมือฉนวนไฟฟ้าสำหรับงานทดสอบระบบไฟฟ้า (Insulating Rubber Gloves)"
+            ],
+
+            "งานทำความสะอาดและฟื้นฟูสภาพ (Cleaning and Restoration Work)": [
+                "หมวกนิรภัยกรณีมีความเสี่ยงจากวัสดุตกหล่น (Safety Helmet)",
+                "แว่นครอบตาป้องกันสารเคมี (Chemical Splash Goggles)",
+                "กระบังหน้าป้องกันสารเคมี (Chemical Face Shield)",
+                "ถุงมือป้องกันสารเคมี (Chemical-Resistant Gloves)",
+                "รองเท้าบูตกันน้ำหรือทนสารเคมี (Waterproof or Chemical-Resistant Boots)",
+                "ชุดป้องกันสารเคมีหรือชุดกันน้ำ (Protective Suit)",
+                "หน้ากากกรองฝุ่นหรือสารเคมี (Respiratory Protection)",
+                "เสื้อสะท้อนแสงกรณีทำงานใกล้ยานพาหนะ (High-Visibility Vest)",
+                "ที่อุดหูหรือครอบหูลดเสียงกรณีใช้เครื่องจักรเสียงดัง (Hearing Protection)",
+                "อุปกรณ์ป้องกันการตกจากที่สูงกรณีทำความสะอาดพื้นที่สูง (Fall Protection Equipment)"
+            ]
+        };
+
+        function renderPPEChecklist() {
+            const typeContainer = document.getElementById('ppe-work-types');
+            const ppeContainer = document.getElementById('ppe-checklist-area');
+
+            if (!typeContainer || !ppeContainer) return;
+
+            typeContainer.innerHTML = Object.keys(PPE_BY_WORK_TYPE).map((type, index) => `
+                <label class="flex items-start gap-2 text-sm">
+                    <input type="checkbox" name="q19_worktype" value="${type}" class="mt-1 ppe-work-type">
+                    <span>${index + 1}. ${type}</span>
+                </label>
+            `).join('');
+
+            typeContainer.addEventListener('change', () => {
+                const previouslyChecked = new Set(
+                    [...ppeContainer.querySelectorAll('input[name="q20"]:checked')].map(input => input.value)
+                );
+
+                const selectedTypes = [...typeContainer.querySelectorAll('.ppe-work-type:checked')].map(input => input.value);
+
+                if (selectedTypes.length === 0) {
+                    ppeContainer.innerHTML = '<p class="text-sm text-gray-500">กรุณาเลือกประเภทงาน เพื่อแสดงรายการ PPE ที่เกี่ยวข้อง</p>';
+                    return;
+                }
+
+                const allItems = [...new Set(selectedTypes.flatMap(type => PPE_BY_WORK_TYPE[type]))];
+
+                ppeContainer.innerHTML = `
+                    <section class="rounded-lg border border-sky-200 overflow-hidden">
+                        <h4 class="bg-sky-50 px-3 py-2 text-sm font-semibold text-sky-900">รายการ PPE ตามประเภทงานที่เลือก</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 p-3">
+                            ${allItems.map(item => `
+                                <label class="flex items-start gap-2 text-sm">
+                                    <input type="checkbox" name="q20" value="${item}" class="mt-1" ${previouslyChecked.has(item) ? 'checked' : ''}>
+                                    <span>${item}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </section>
+                `;
+            });
+        }
+                document.addEventListener('DOMContentLoaded', () => {
+
             generateWPNumber();
+
             checkExistingSession();
+
             setupDateValidation();
+
+            renderPPEChecklist();
+
         });
 
+
         function generateWPNumber() {
+
             const now = new Date();
-            const dateStr = String(now.getDate()).padStart(2, '0') + String(now.getMonth() + 1).padStart(2, '0');
+
+            const dateStr =
+                String(now.getDate()).padStart(2, '0') +
+                String(now.getMonth() + 1).padStart(2, '0');
+
             const rand = Math.floor(1000 + Math.random() * 9000);
+
             const wpInput = document.getElementById('wp_no');
-            if (wpInput) wpInput.value = `AA_${dateStr}_${rand}`;
+
+            if (wpInput) {
+                wpInput.value = `AA_${dateStr}_${rand}`;
+            }
+
         }
+
 
         function setupDateValidation() {
+
             const startDate = document.getElementById('q15');
+
             const endDate = document.getElementById('q16');
+
             if (!startDate || !endDate) return;
+
             startDate.addEventListener('change', function () {
+
                 endDate.min = startDate.value;
+
                 if (endDate.value && endDate.value < startDate.value) {
+
                     endDate.value = '';
+
                 }
+
             });
+
             endDate.addEventListener('change', function () {
-                if (startDate.value && endDate.value && endDate.value < startDate.value) {
+
+                if (
+                    startDate.value &&
+                    endDate.value &&
+                    endDate.value < startDate.value
+                ) {
+
                     alert('วันที่สิ้นสุดงานต้องไม่ก่อนวันที่เริ่มงาน');
+
                     endDate.value = '';
+
                 }
+
             });
+
         }
+
 
         async function checkExistingSession() {
+
             if (!db) return;
+
             const { data: { session } } = await db.auth.getSession();
+
             if (session?.user) {
+
                 currentUser = session.user;
+
                 await fetchUserProfile(currentUser.id);
+
                 initDashboardUI();
+
             } else {
+
                 document.getElementById('auth-section').classList.remove('hidden-section');
+
                 document.getElementById('app-section').classList.add('hidden-section');
+
             }
+
         }
+
 
         function switchAuthTab(type) {
+
             if (type === 'login') {
+
                 document.getElementById('form-login').classList.remove('hidden-section');
+
                 document.getElementById('form-signup').classList.add('hidden-section');
-                document.getElementById('tab-login').className = "w-1/2 py-3 font-semibold text-center text-sky-600 border-b-2 border-sky-600";
-                document.getElementById('tab-signup').className = "w-1/2 py-3 font-semibold text-center text-gray-500 hover:text-sky-600";
+
+                document.getElementById('tab-login').className =
+                    "w-1/2 py-3 font-semibold text-center text-sky-600 border-b-2 border-sky-600";
+
+                document.getElementById('tab-signup').className =
+                    "w-1/2 py-3 font-semibold text-center text-gray-500 hover:text-sky-600";
+
             } else {
+
                 document.getElementById('form-login').classList.add('hidden-section');
+
                 document.getElementById('form-signup').classList.remove('hidden-section');
-                document.getElementById('tab-signup').className = "w-1/2 py-3 font-semibold text-center text-sky-600 border-b-2 border-sky-600";
-                document.getElementById('tab-login').className = "w-1/2 py-3 font-semibold text-center text-gray-500 hover:text-sky-600";
+
+                document.getElementById('tab-signup').className =
+                    "w-1/2 py-3 font-semibold text-center text-sky-600 border-b-2 border-sky-600";
+
+                document.getElementById('tab-login').className =
+                    "w-1/2 py-3 font-semibold text-center text-gray-500 hover:text-sky-600";
+
             }
+
         }
 
+
         async function handleSignUp(event) {
+
             event.preventDefault();
+
             if (!db) return alert('ฐานข้อมูลยังไม่พร้อม');
-            
-            const fullname = document.getElementById('signup_fullname').value.trim();
-            const empid = document.getElementById('signup_empid').value.trim();
-            const email = document.getElementById('signup_email').value.trim();
-            const password = document.getElementById('signup_password').value;
-            const selectedRole = document.getElementById('signup_role').value;
+
+            const fullname =
+                document.getElementById('signup_fullname').value.trim();
+
+            const empid =
+                document.getElementById('signup_empid').value.trim();
+
+            const email =
+                document.getElementById('signup_email').value.trim();
+
+            const password =
+                document.getElementById('signup_password').value;
+
+            const selectedRole =
+                document.getElementById('signup_role').value;
 
             const btn = document.getElementById('btn-signup');
+
             btn.disabled = true;
+
             btn.innerText = 'กำลังสมัครสมาชิก...';
 
             try {
-                const { data, error } = await db.auth.signUp({ email, password });
-                if (error) throw error;
-                if (data?.user) {
-                    await db.from('profiles').upsert([{
-                        id: data.user.id,
-                        fullname: fullname,
-                        employee_id: empid,
-                        role: selectedRole,
-                        updated_at: new Date()
-                    }], { onConflict: 'id' });
-                }
-                alert('🎉 สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ');
-                switchAuthTab('login');
-            } catch (err) {
-                alert(`❌ สมัครสมาชิกล้มเหลว: ${err.message}`);
-            } finally {
-                btn.disabled = false;
-                btn.innerText = 'ยืนยันการสมัครสมาชิก';
-            }
-        }
 
-        async function handleLogin(event) {
+                const { data, error } = await db.auth.signUp({
+                    email,
+                    password
+                });
+
+                if (error) throw error;
+
+                if (data?.user) {
+
+                    await db.from('profiles').upsert([{
+
+                        id: data.user.id,
+
+                        fullname: fullname,
+
+                        employee_id: empid,
+
+                        role: selectedRole,
+
+                        updated_at: new Date()
+
+                    }], {
+                        onConflict: 'id'
+                    });
+
+                }
+
+                alert('🎉 สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ');
+
+                switchAuthTab('login');
+
+            } catch (err) {
+
+                alert(`❌ สมัครสมาชิกล้มเหลว: ${err.message}`);
+
+            } finally {
+
+                btn.disabled = false;
+
+                btn.innerText = 'สมัครสมาชิก';
+
+            }
+
+        }
+                async function handleLogin(event) {
+
             event.preventDefault();
+
             if (!db) return;
+
             const email = document.getElementById('login_email').value.trim();
+
             const password = document.getElementById('login_password').value;
 
             const btn = document.getElementById('btn-login');
+
             btn.disabled = true;
+
             btn.innerText = 'กำลังเข้าสู่ระบบ...';
 
             try {
+
                 const { data, error } = await db.auth.signInWithPassword({ email, password });
+
                 if (error) throw error;
+
                 currentUser = data.user;
+
                 await fetchUserProfile(currentUser.id);
+
                 initDashboardUI();
+
             } catch (err) {
+
                 alert(`❌ เข้าสู่ระบบไม่สำเร็จ: ${err.message}`);
+
             } finally {
+
                 btn.disabled = false;
+
                 btn.innerText = 'เข้าสู่ระบบ';
+
             }
+
         }
+
 
         async function fetchUserProfile(userId) {
+
             const { data, error } = await db.from('profiles').select('*').eq('id', userId).single();
+
             if (!error && data) {
+
                 userProfile = data;
+
             } else {
+
                 userProfile = { fullname: currentUser.email, role: 'General User' };
+
             }
+
         }
+
 
         function initDashboardUI() {
+
             document.getElementById('auth-section').classList.add('hidden-section');
+
             document.getElementById('app-section').classList.remove('hidden-section');
+
             document.getElementById('user-info-bar').classList.remove('hidden-section');
+
             document.getElementById('nav-user-name').textContent = userProfile.fullname;
+
             document.getElementById('nav-user-role').textContent = `สิทธิ์: ${userProfile.role}`;
 
+
             const isSafety = userProfile.role === 'Safety Officer (จป.)';
+
             const btnSafety = document.getElementById('btn-safety-menu');
+
             const badgeLock = document.getElementById('badge-lock');
 
+
             if (isSafety) {
+
                 btnSafety.disabled = false;
+
                 btnSafety.classList.remove('text-gray-400', 'bg-gray-50', 'cursor-not-allowed');
+
                 btnSafety.classList.add('text-emerald-700', 'hover:bg-emerald-50');
+
                 badgeLock.textContent = '✅ ปลดล็อก';
+
                 badgeLock.classList.replace('bg-gray-200', 'bg-emerald-200');
+
                 badgeLock.classList.replace('text-gray-500', 'text-emerald-800');
+
             }
+
         }
+
 
         async function handleLogout() {
+
             if (db) await db.auth.signOut();
+
             window.location.reload();
+
         }
+
 
         function showPage(pageName) {
+
             document.getElementById('page-permit-form').classList.add('hidden-section');
+
             document.getElementById('page-status-tracker').classList.add('hidden-section');
+
             document.getElementById('page-safety-approval').classList.add('hidden-section');
-            
+
+
             document.getElementById(`page-${pageName}`).classList.remove('hidden-section');
+
             if (pageName === 'safety-approval') {
+
                 loadSafetyRequests();
+
             }
+
         }
+
 
         function toggleOtherRadio(groupName, isOther) {
+
             const otherInput = document.getElementById(`${groupName}_other`);
+
             if (otherInput) {
+
                 if (isOther) {
+
                     otherInput.classList.remove('hidden-section');
+
                 } else {
+
                     otherInput.classList.add('hidden-section');
+
                     otherInput.value = '';
+
                 }
+
             }
+
         }
+
 
         function toggleOtherCB(cbId, inputId) {
+
             const cb = document.getElementById(cbId);
+
             const input = document.getElementById(inputId);
+
             if (cb && input) {
+
                 if (cb.checked) {
+
                     input.classList.remove('hidden-section');
+
                 } else {
+
                     input.classList.add('hidden-section');
+
                     input.value = '';
+
                 }
+
             }
+
         }
 
+
         async function handleWorkPermitSubmit(event) {
+
             event.preventDefault();
+
             const form = event.target;
+
             const formData = new FormData(form);
-            const dataObj = {};
-            
+                        const dataObj = {};
+
             // จัดเก็บข้อมูลแบบ Multiple Checkbox ให้ถูกต้อง
             formData.forEach((value, key) => {
+
                 if (dataObj[key]) {
+
                     if (!Array.isArray(dataObj[key])) {
+
                         dataObj[key] = [dataObj[key]];
+
                     }
+
                     dataObj[key].push(value);
+
                 } else {
+
                     dataObj[key] = value;
+
                 }
+
             });
+
 
             const wpNo = document.getElementById('wp_no').value;
 
+
             try {
+
                 const { error } = await db.from('work_permit_requests').insert([{
+
                     wp_no: wpNo,
+
                     company: dataObj.q1,
+
                     employee_id: dataObj.q3,
+
                     applicant_email: dataObj.q4,
+
                     applicant_name: dataObj.q2,
+
                     submitted_at: new Date().toISOString(),
+
                     status: 'Pending',
+
                     form_data: dataObj
+
                 }]);
+
                 if (error) throw error;
+
                 alert(`✅ ยื่นคำขอเรียบร้อยแล้ว!\nเลขที่ Work Permit: ${wpNo}`);
+
                 form.reset();
+
                 generateWPNumber();
+
                 showPage('status-tracker');
+
             } catch (err) {
+
                 alert('❌ ยื่นคำขอไม่สำเร็จ: ' + err.message);
+
             }
+
         }
+
+
 
         // ฟังก์ชันค้นหาสถานะคำขอเฉพาะบุคคลด้วย WP No. และ Email
         async function handleSearchStatus(event) {
+
             event.preventDefault();
+
             const wpNo = document.getElementById('track_wp_no').value.trim();
+
             const email = document.getElementById('track_email').value.trim();
+
             const resultArea = document.getElementById('tracking-result-area');
+
 
             resultArea.innerHTML = '<p class="text-gray-500 text-sm">กำลังค้นหาข้อมูล...</p>';
 
+
             try {
+
                 const { data, error } = await db.from('work_permit_requests')
+
                     .select('*')
+
                     .eq('wp_no', wpNo)
+
                     .eq('applicant_email', email);
+
 
                 if (error) throw error;
 
+
                 if (!data || data.length === 0) {
+
                     resultArea.innerHTML = `
+
                         <div class="p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+
                             ❌ ไม่พบข้อมูลคำขอ! กรุณาตรวจสอบเลขที่ Work Permit และ อีเมลให้ถูกต้อง
+
                         </div>
+
                     `;
+
                     return;
+
                 }
 
+
                 const item = data[0];
+
                 const formObj = item.form_data || {};
 
+
                 resultArea.innerHTML = `
+
                     <div class="p-4 border border-sky-200 bg-sky-50 rounded-lg space-y-3">
+
                         <div class="flex justify-between items-center border-b border-sky-200 pb-2">
+
                             <div>
+
                                 <span class="font-bold text-sky-900 text-base">${item.wp_no}</span>
+
                                 <p class="text-xs text-gray-600">ยื่นเมื่อ: ${new Date(item.submitted_at).toLocaleString('th-TH')}</p>
+
                             </div>
+
                             <span class="px-3 py-1 rounded-full text-xs font-semibold ${getStatusBadge(item.status)}">
+
                                 ${item.status}
+
                             </span>
+
                         </div>
+
                         <div class="text-xs space-y-1 text-gray-700">
+
                             <p><strong>ผู้ขออนุญาต:</strong> ${item.applicant_name}</p>
+
                             <p><strong>บริษัท:</strong> ${item.company || '-'}</p>
+
                             <p><strong>พื้นที่ปฏิบัติงาน:</strong> ${formObj.q14 || '-'}</p>
+
                             <p><strong>ระยะเวลา:</strong> ${formObj.q15 || '-'} ถึง ${formObj.q16 || '-'}</p>
+
                         </div>
+
                     </div>
+
                 `;
+
             } catch (err) {
+
                 resultArea.innerHTML = `<p class="text-red-500 text-sm">เกิดข้อผิดพลาด: ${err.message}</p>`;
+
             }
+
         }
+
+
 
         // โหลดข้อมูลคำขอทั้งหมดสำหรับ Safety จป.
         async function loadSafetyRequests() {
+
             const safetyContainer = document.getElementById('safety-approval-list');
+
             safetyContainer.innerHTML = '<p class="text-gray-500 text-sm">กำลังโหลดรายการรออนุมัติ...</p>';
 
+
             try {
+
                 const { data, error } = await db.from('work_permit_requests')
+
                     .select('*')
+
                     .order('submitted_at', { ascending: false });
+
 
                 if (error) throw error;
 
-                activeSafetyData = data || [];
-                safetyContainer.innerHTML = '';
 
-                if (activeSafetyData.length === 0) {
-                    safetyContainer.innerHTML = '<p class="text-gray-500 text-sm">ไม่มีรายการคำขอในระบบ</p>';
+                if (!data || data.length === 0) {
+
+                    safetyContainer.innerHTML = '<p class="text-gray-500 text-sm">ยังไม่มีคำขอ Work Permit</p>';
+
                     return;
+
                 }
 
-                activeSafetyData.forEach((item, index) => {
-                    const formObj = item.form_data || {};
-                    const ppeList = Array.isArray(formObj.q20) ? formObj.q20.join(', ') : (formObj.q20 || '-');
-                    const hazardList = Array.isArray(formObj.q17) ? formObj.q17.join(', ') : (formObj.q17 || '-');
 
-                    const safetyCard = `
-                        <div class="p-4 border border-gray-200 bg-white rounded-xl shadow-sm space-y-3">
-                            <div class="flex justify-between items-start border-b pb-2">
-                                <div>
-                                    <span class="font-bold text-gray-800 text-base">${item.wp_no}</span>
-                                    <span class="ml-2 text-xs text-gray-500">(${item.company || '-'})</span>
-                                    <p class="text-xs text-gray-600 mt-0.5">ผู้ขออนุญาต: <strong>${item.applicant_name}</strong> | รหัส: ${item.employee_id || '-'}</p>
-                                </div>
-                                <span class="px-3 py-1 rounded-full text-xs font-semibold ${getStatusBadge(item.status)}">
-                                    ${item.status}
-                                </span>
+                safetyContainer.innerHTML = data.map(item => `
+
+                    <div class="p-4 border border-gray-200 rounded-lg mb-3 bg-white">
+
+                        <div class="flex justify-between items-start">
+
+                            <div>
+
+                                <p class="font-bold text-sky-800">${item.wp_no}</p>
+
+                                <p class="text-xs text-gray-500">${item.applicant_name || '-'}</p>
+
                             </div>
 
-                            <!-- ส่วนแสดงข้อมูลสำคัญก่อนอนุมัติ -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs bg-gray-50 p-3 rounded-lg border text-gray-700">
-                                <div><strong>📍 พื้นที่ทำงาน:</strong> ${formObj.q14 || '-'}</div>
-                                <div><strong>📅 วันที่:</strong> ${formObj.q15 || '-'} ถึง ${formObj.q16 || '-'}</div>
-                                <div><strong>👥 จำนวนผู้ปฏิบัติงาน:</strong> ${formObj.q12 || '1'} คน</div>
-                                <div><strong>⚠️ อันตรายที่พบ:</strong> ${hazardList}</div>
-                                <div class="md:col-span-2"><strong>🦺 PPE ที่ใช้:</strong> ${ppeList}</div>
-                            </div>
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold ${getStatusBadge(item.status)}">
 
-                            <div class="flex justify-between items-center pt-1">
-                                <button onclick="openModal(${index})" class="text-sky-600 hover:text-sky-800 text-xs font-semibold underline">
-                                    🔍 ดูข้อมูลคำขอทั้งหมด (27 ข้อ)
-                                </button>
-                                ${item.status === 'Pending' ? `
-                                    <div class="flex space-x-2">
-                                        <button onclick="updateStatus('${item.id}', 'Approved')" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded hover:bg-emerald-700 transition">อนุมัติ</button>
-                                        <button onclick="updateStatus('${item.id}', 'Rejected')" class="bg-red-600 text-white text-xs px-3 py-1.5 rounded hover:bg-red-700 transition">ไม่อนุมัติ</button>
-                                    </div>
-                                ` : ''}
-                            </div>
+                                ${item.status}
+
+                            </span>
+
                         </div>
-                    `;
-                    safetyContainer.innerHTML += safetyCard;
-                });
-            } catch (err) {
-                safetyContainer.innerHTML = `<p class="text-red-500 text-sm">เกิดข้อผิดพลาดในการโหลดข้อมูล: ${err.message}</p>`;
-            }
-        }
 
-        // เปิด Modal แสดงข้อมูลคำขอ 27 ข้อเต็มรูปแบบ
+                        <div class="mt-3 flex justify-end gap-2">
+
+                            <button onclick="openModal('${item.id}')"
+
+                                class="px-3 py-2 bg-sky-600 text-white rounded-lg text-xs hover:bg-sky-700">
+
+                                ตรวจสอบรายละเอียด
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `).join('');
+
+
+            } catch (err) {
+
+                safetyContainer.innerHTML = `<p class="text-red-500 text-sm">เกิดข้อผิดพลาด: ${err.message}</p>`;
+
+            }
+
+        }
+                // เปิด Modal แสดงข้อมูลคำขอ Work Permit
         function openModal(index) {
+
             const item = activeSafetyData[index];
+
             if (!item) return;
+
             const f = item.form_data || {};
 
-            document.getElementById('modal-title').textContent = `รายละเอียด Work Permit: ${item.wp_no}`;
-            
+            document.getElementById('modal-title').textContent =
+                `รายละเอียด Work Permit: ${item.wp_no}`;
+
             const modalContent = document.getElementById('modal-body-content');
+
             modalContent.innerHTML = `
+
                 <div class="space-y-3 divide-y">
+
                     <div>
-                        <h4 class="font-bold text-sky-800 mb-1">ข้อมูลผู้ขออนุญาต (ข้อ 1-6)</h4>
-                        <p>1. บริษัท/สังกัด: ${f.q1 || '-'}</p>
-                        <p>2. ชื่อ-นามสกุล: ${f.q2 || '-'}</p>
-                        <p>3. รหัสพนักงาน: ${f.q3 || '-'}</p>
-                        <p>4. Email: ${f.q4 || '-'}</p>
-                        <p>5. แผนก: ${f.q5 === 'Other' ? f.q5_other : (f.q5 || '-')}</p>
-                        <p>6. ตำแหน่งงาน: ${f.q6 || '-'}</p>
+                        <h4 class="font-bold text-sky-800 mb-1">ข้อมูลผู้ขออนุญาต</h4>
+                        <p>บริษัท/สังกัด: ${f.q1 || '-'}</p>
+                        <p>ชื่อ-นามสกุล: ${f.q2 || '-'}</p>
+                        <p>รหัสพนักงาน: ${f.q3 || '-'}</p>
+                        <p>Email: ${f.q4 || '-'}</p>
+                        <p>แผนก: ${f.q5 || '-'}</p>
+                        <p>ตำแหน่งงาน: ${f.q6 || '-'}</p>
                     </div>
+
                     <div class="pt-2">
-                        <h4 class="font-bold text-sky-800 mb-1">Safety Training (ข้อ 7-9)</h4>
-                        <p>7. การอบรมมาตรฐาน: ${f.q7 || '-'}</p>
-                        <p>8. ใบรับรองความปลอดภัย: ${Array.isArray(f.q8) ? f.q8.join(', ') : (f.q8 || '-')}</p>
+                        <h4 class="font-bold text-sky-800 mb-1">Safety Training</h4>
+                        <p>การอบรมมาตรฐาน: ${f.q7 || '-'}</p>
+                        <p>ใบรับรองความปลอดภัย: ${f.q8 || '-'}</p>
                     </div>
+
                     <div class="pt-2">
-                        <h4 class="font-bold text-sky-800 mb-1">Work Permit Details (ข้อ 10-16)</h4>
-                        <p>10. ชื่อผู้ขอ: ${f.q10 || '-'}</p>
-                        <p>11. บริษัท: ${f.q11 || '-'}</p>
-                        <p>12. จำนวนผู้ปฏิบัติงาน: ${f.q12 || '-'} คน</p>
-                        <p>13. รายชื่อผู้ปฏิบัติงาน: ${f.q13 || '-'}</p>
-                        <p>14. พื้นที่ทำงาน: ${f.q14 === 'Other' ? f.q14_other : (f.q14 || '-')}</p>
-                        <p>15-16. วันที่ทำงาน: ${f.q15 || '-'} ถึง ${f.q16 || '-'}</p>
+                        <h4 class="font-bold text-sky-800 mb-1">Work Permit Details</h4>
+                        <p>ชื่อผู้ขอ: ${f.q10 || '-'}</p>
+                        <p>บริษัท: ${f.q11 || '-'}</p>
+                        <p>จำนวนผู้ปฏิบัติงาน: ${f.q12 || '-'} คน</p>
+                        <p>รายชื่อผู้ปฏิบัติงาน: ${f.q13 || '-'}</p>
+                        <p>พื้นที่ทำงาน: ${f.q14 || '-'}</p>
+                        <p>วันที่ทำงาน: ${f.q15 || '-'} ถึง ${f.q16 || '-'}</p>
                     </div>
+
                     <div class="pt-2">
-                        <h4 class="font-bold text-sky-800 mb-1">อันตราย & PPE Checklist (ข้อ 17-23)</h4>
-                        <p>17. อันตรายที่คาดว่าจะพบ: ${Array.isArray(f.q17) ? f.q17.join(', ') : (f.q17 || '-')}</p>
-                        <p>19. PPE ที่ใช้: ${Array.isArray(f.q20) ? f.q20.join(', ') : (f.q20 || '-')}</p>
-                        <p>20. Work Permit เกี่ยวข้อง: ${f.q21 || '-'}</p>
-                        <p>21. PPE พร้อมใช้งาน: ${f.q22 || '-'}</p>
-                        <p>22. เครื่องมือผ่านการตรวจ: ${f.q23 || '-'}</p>
-                        <p>23. ผู้ควบคุมงาน: ${f.q24 || '-'}</p>
+                        <h4 class="font-bold text-sky-800 mb-1">อันตรายและ PPE Checklist</h4>
+                        <p>อันตรายที่คาดว่าจะพบ: ${f.q17 || '-'}</p>
+                        <p>ประเภทงาน: ${f.q19_worktype || '-'}</p>
+                        <p>PPE ที่เลือก: ${f.q20 || '-'}</p>
+                        <p>Work Permit ที่เกี่ยวข้อง: ${f.q21 || '-'}</p>
+                        <p>PPE พร้อมใช้งาน: ${f.q22 || '-'}</p>
+                        <p>เครื่องมือผ่านการตรวจ: ${f.q23 || '-'}</p>
+                        <p>ผู้ควบคุมงาน: ${f.q24 || '-'}</p>
                     </div>
+
                     <div class="pt-2">
-                        <h4 class="font-bold text-sky-800 mb-1">ผู้รับผิดชอบ (ข้อ 24-26)</h4>
-                        <p>24. ชื่อผู้รับผิดชอบ: ${f.q25 || '-'}</p>
-                        <p>25. เบอร์ติดต่อ: ${f.q26 || '-'}</p>
-                        <p>26. หมายเหตุ: ${f.q27 || '-'}</p>
+                        <h4 class="font-bold text-sky-800 mb-1">ผู้รับผิดชอบ</h4>
+                        <p>ชื่อผู้รับผิดชอบ: ${f.q25 || '-'}</p>
+                        <p>เบอร์ติดต่อ: ${f.q26 || '-'}</p>
+                        <p>หมายเหตุ: ${f.q27 || '-'}</p>
                     </div>
+
                 </div>
+
             `;
 
-            document.getElementById('detail-modal').classList.remove('hidden-section');
+            document.getElementById('detail-modal')
+                .classList.remove('hidden-section');
+
         }
+
 
         function closeModal() {
-            document.getElementById('detail-modal').classList.add('hidden-section');
+
+            document.getElementById('detail-modal')
+                .classList.add('hidden-section');
+
         }
+
 
         async function updateStatus(requestId, newStatus) {
+
             if (userProfile.role !== 'Safety Officer (จป.)') {
+
                 alert('❌ เฉพาะเจ้าหน้าที่ Safety เท่านั้นที่สามารถพิจารณาอนุมัติได้');
+
                 return;
+
             }
-            const { error } = await db.from('work_permit_requests').update({ status: newStatus }).eq('id', requestId);
+
+            const { error } = await db
+                .from('work_permit_requests')
+                .update({ status: newStatus })
+                .eq('id', requestId);
+
             if (error) {
+
                 alert('❌ อัปเดตสถานะไม่สำเร็จ: ' + error.message);
+
             } else {
+
                 alert(`✅ เปลี่ยนสถานะเป็น [${newStatus}] สำเร็จ`);
+
                 loadSafetyRequests();
+
             }
+
         }
 
+
         function getStatusBadge(status) {
+
             switch (status) {
-                case 'Approved': return 'bg-emerald-100 text-emerald-800';
-                case 'Rejected': return 'bg-red-100 text-red-800';
-                default: return 'bg-yellow-100 text-yellow-800';
+
+                case 'Approved':
+                    return 'bg-emerald-100 text-emerald-800';
+
+                case 'Rejected':
+                    return 'bg-red-100 text-red-800';
+
+                default:
+                    return 'bg-yellow-100 text-yellow-800';
+
             }
+
         }
+
     </script>
+
 </body>
+
 </html>
