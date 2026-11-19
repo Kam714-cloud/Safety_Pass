@@ -188,53 +188,50 @@
 
         <div id="app-section" class="hidden-section grid grid-cols-1 md:grid-cols-4 gap-6">
 
-            <!-- Sidebar Menu -->
+          
+<!-- Sidebar Menu -->
+<div class="md:col-span-1 bg-white p-4 rounded-xl shadow-sm border border-gray-200 h-fit space-y-2">
 
-            <div class="md:col-span-1 bg-white p-4 rounded-xl shadow-sm border border-gray-200 h-fit space-y-2">
+    <!-- ยื่นขอใบอนุญาต -->
+    <button type="button"
+        id="menu-btn-form"
+        onclick="showPage('permit-form')"
+        class="w-full text-left px-4 py-3 rounded-lg font-medium text-gray-700 hover:bg-sky-50 flex items-center gap-2">
+        <span>📝</span>
+        <span>ยื่นขอใบอนุญาต</span>
+    </button>
 
+    <!-- ติดตามสถานะ -->
+    <button type="button"
+        id="menu-btn-track"
+        onclick="showPage('status-tracker')"
+        class="w-full text-left px-4 py-3 rounded-lg font-medium text-gray-700 hover:bg-sky-50 flex items-center gap-2">
+        <span>🔍</span>
+        <span>ติดตามสถานะ</span>
+    </button>
 
-<!-- ปุ่มยื่นขอใบอนุญาต -->
-<button type="button"
-    onclick="showPage('permit-form')"
-    id="menu-btn-form"
-    class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-sky-600 bg-sky-50 hover:bg-sky-100 flex items-center space-x-2">
+    <!-- Safety Approval -->
+    <button type="button"
+        id="btn-safety-menu"
+        onclick="showPage('safety-approval')"
+        class="w-full text-left px-4 py-3 rounded-lg font-medium text-gray-400 bg-gray-50 cursor-not-allowed flex items-center justify-between"
+        disabled>
 
-    <span>📝</span>
-    <span>ยื่นขอใบอนุญาต</span>
+        <span class="flex items-center gap-2">
+            <span>🛡️</span>
+            <span>Safety Approval</span>
+        </span>
 
-</button>
-
-<!-- ปุ่มติดตามสถานะ -->
-<button type="button"
-    onclick="showPage('status-tracker')"
-    id="menu-btn-track"
-    class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
-
-    <span>🔍</span>
-    <span>ติดตามสถานะ</span>
-
-</button>
-
-<!-- ปุ่ม Safety Approval -->
-<button type="button"
-    id="btn-safety-menu"
-    onclick="showPage('safety-approval')"
-    class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-gray-400 bg-gray-50 cursor-not-allowed flex items-center justify-between"
-    disabled>
-
-    <div class="flex items-center space-x-2">
-        <span>🛡️</span>
-        <span>Safety Approval</span>
-    </div>
-
-    <span id="badge-lock"
-        class="text-xs bg-gray-200 px-1.5 py-0.5 rounded text-gray-500">
-        🔒 ล็อก
-    </span>
-
-</button>
+        <span id="badge-lock"
+            class="text-xs bg-gray-200 px-2 py-1 rounded text-gray-500">
+            🔒 ล็อก
+        </span>
+    </button>
 
 </div>
+
+
+
             
                 <button id="btn-safety-menu" onclick="showPage('safety-approval')" class="w-full text-left px-4 py-2.5 rounded-lg font-medium text-gray-400 bg-gray-50 cursor-not-allowed flex items-center justify-between" disabled>
 
@@ -1288,13 +1285,32 @@
 
                 if (error) throw error;
 
-                alert(`✅ ยื่นคำขอเรียบร้อยแล้ว!\nเลขที่ Work Permit: ${wpNo}`);
+              
+alert(`✅ ยื่นคำขอเรียบร้อยแล้ว!\nเลขที่ Work Permit: ${wpNo}`);
 
-                form.reset();
+// บันทึกเลขที่ Work Permit และอีเมลไว้ในหน้าติดตาม
+document.getElementById('track_wp_no').value = wpNo;
+document.getElementById('track_email').value = dataObj.q4;
 
-                generateWPNumber();
+// ล้างแบบฟอร์ม
+form.reset();
 
-                showPage('status-tracker');
+// สร้างเลข Work Permit ใหม่
+generateWPNumber();
+
+// เปิดหน้าติดตามสถานะ
+showPage('status-tracker');
+
+// แสดงข้อความแนะนำ
+document.getElementById('tracking-result-area').innerHTML = `
+    <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800">
+        <p class="font-semibold">✅ ส่งคำขอเรียบร้อยแล้ว</p>
+        <p class="text-sm mt-1">
+            กรุณากดปุ่ม "ค้นหาสถานะ" เพื่อตรวจสอบสถานะคำขอ
+        </p>
+    </div>
+`;
+
 
             } catch (err) {
 
@@ -1309,7 +1325,10 @@
         // ฟังก์ชันค้นหาสถานะคำขอเฉพาะบุคคลด้วย WP No. และ Email
         async function handleSearchStatus(event) {
 
-            event.preventDefault();
+            event.preventDefault();if (!db) {
+    alert('ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณารีเฟรชหน้าเว็บ');
+    return;
+}
 
             const wpNo = document.getElementById('track_wp_no').value.trim();
 
