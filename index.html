@@ -1327,7 +1327,9 @@ document.getElementById('tracking-result-area').innerHTML = `
 
 
        
-// ฟังก์ชันค้นหาสถานะคำขอเฉพาะบุคคลด้วย WP No. และ Email
+
+// ฟังก์ชันค้นหาสถานะ Work Permit
+// แสดงเฉพาะข้อมูลติดตามสถานะ ไม่แสดง PPE
 async function handleSearchStatus(event) {
     event.preventDefault();
 
@@ -1340,7 +1342,8 @@ async function handleSearchStatus(event) {
     const email = document.getElementById('track_email').value.trim();
     const resultArea = document.getElementById('tracking-result-area');
 
-    resultArea.innerHTML = '<p class="text-gray-500 text-sm">กำลังค้นหาข้อมูล...</p>';
+    resultArea.innerHTML =
+        '<p class="text-gray-500 text-sm">กำลังค้นหาข้อมูล...</p>';
 
     try {
         const { data, error } = await db
@@ -1354,7 +1357,7 @@ async function handleSearchStatus(event) {
         if (!data || data.length === 0) {
             resultArea.innerHTML = `
                 <div class="p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-                    ❌ ไม่พบข้อมูลคำขอ! กรุณาตรวจสอบเลขที่ Work Permit และอีเมลให้ถูกต้อง
+                    ❌ ไม่พบข้อมูลคำขอ กรุณาตรวจสอบเลขที่ Work Permit และอีเมล
                 </div>
             `;
             return;
@@ -1363,7 +1366,13 @@ async function handleSearchStatus(event) {
         const item = data[0];
         const formObj = item.form_data || {};
 
-        // แสดงเฉพาะข้อมูลติดตามสถานะ ไม่แสดง PPE หรือ Checklist
+        const statusText =
+            item.status === 'Approved'
+                ? '✅ คำขอได้รับการอนุมัติแล้ว'
+                : item.status === 'Rejected'
+                ? '❌ คำขอไม่ได้รับการอนุมัติ กรุณาติดต่อเจ้าหน้าที่ Safety'
+                : '⏳ คำขออยู่ระหว่างรอเจ้าหน้าที่ Safety พิจารณา';
+
         resultArea.innerHTML = `
             <div class="p-4 border border-sky-200 bg-sky-50 rounded-lg space-y-3">
 
@@ -1373,7 +1382,8 @@ async function handleSearchStatus(event) {
                             ${item.wp_no || '-'}
                         </span>
                         <p class="text-xs text-gray-600">
-                            ยื่นเมื่อ: ${item.submitted_at
+                            ยื่นเมื่อ:
+                            ${item.submitted_at
                                 ? new Date(item.submitted_at).toLocaleString('th-TH')
                                 : '-'}
                         </p>
@@ -1397,11 +1407,7 @@ async function handleSearchStatus(event) {
                         สถานะการพิจารณา
                     </p>
                     <p class="text-sm text-gray-600 mt-1">
-                        ${item.status === 'Approved'
-                            ? '✅ คำขอได้รับการอนุมัติแล้ว'
-                            : item.status === 'Rejected'
-                            ? '❌ คำขอไม่ได้รับการอนุมัติ กรุณาติดต่อเจ้าหน้าที่ Safety'
-                            : '⏳ คำขออยู่ระหว่างรอเจ้าหน้าที่ Safety พิจารณา'}
+                        ${statusText}
                     </p>
                 </div>
 
