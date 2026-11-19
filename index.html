@@ -1326,107 +1326,96 @@ document.getElementById('tracking-result-area').innerHTML = `
 
 
 
-        // ฟังก์ชันค้นหาสถานะคำขอเฉพาะบุคคลด้วย WP No. และ Email
-        async function handleSearchStatus(event) {
+       
+// ฟังก์ชันค้นหาสถานะคำขอเฉพาะบุคคลด้วย WP No. และ Email
+async function handleSearchStatus(event) {
+    event.preventDefault();
 
-            event.preventDefault();if (!db) {
-    alert('ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณารีเฟรชหน้าเว็บ');
-    return;
-}
+    if (!db) {
+        alert('ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณารีเฟรชหน้าเว็บ');
+        return;
+    }
 
-            const wpNo = document.getElementById('track_wp_no').value.trim();
+    const wpNo = document.getElementById('track_wp_no').value.trim();
+    const email = document.getElementById('track_email').value.trim();
+    const resultArea = document.getElementById('tracking-result-area');
 
-            const email = document.getElementById('track_email').value.trim();
+    resultArea.innerHTML = '<p class="text-gray-500 text-sm">กำลังค้นหาข้อมูล...</p>';
 
-            const resultArea = document.getElementById('tracking-result-area');
+    try {
+        const { data, error } = await db
+            .from('work_permit_requests')
+            .select('wp_no, submitted_at, status, applicant_name, company, form_data')
+            .eq('wp_no', wpNo)
+            .eq('applicant_email', email);
 
+        if (error) throw error;
 
-            resultArea.innerHTML = '<p class="text-gray-500 text-sm">กำลังค้นหาข้อมูล...</p>';
-
-
-            try {
-
-                const { data, error } = await db.from('work_permit_requests')
-
-                    .select('*')
-
-                    .eq('wp_no', wpNo)
-
-                    .eq('applicant_email', email);
-
-
-                if (error) throw error;
-
-
-                if (!data || data.length === 0) {
-
-                    resultArea.innerHTML = `
-
-                        <div class="p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-
-                            ❌ ไม่พบข้อมูลคำขอ! กรุณาตรวจสอบเลขที่ Work Permit และ อีเมลให้ถูกต้อง
-
-                        </div>
-
-                    `;
-
-                    return;
-
-                }
-
-
-                const item = data[0];
-
-                const formObj = item.form_data || {};
-
-
-                resultArea.innerHTML = `
-
-                    <div class="p-4 border border-sky-200 bg-sky-50 rounded-lg space-y-3">
-
-                        <div class="flex justify-between items-center border-b border-sky-200 pb-2">
-
-                            <div>
-
-                                <span class="font-bold text-sky-900 text-base">${item.wp_no}</span>
-
-                                <p class="text-xs text-gray-600">ยื่นเมื่อ: ${new Date(item.submitted_at).toLocaleString('th-TH')}</p>
-
-                            </div>
-
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold ${getStatusBadge(item.status)}">
-
-                                ${item.status}
-
-                            </span>
-
-                        </div>
-
-                        <div class="text-xs space-y-1 text-gray-700">
-
-                            <p><strong>ผู้ขออนุญาต:</strong> ${item.applicant_name}</p>
-
-                            <p><strong>บริษัท:</strong> ${item.company || '-'}</p>
-
-                            <p><strong>พื้นที่ปฏิบัติงาน:</strong> ${formObj.q14 || '-'}</p>
-
-                            <p><strong>ระยะเวลา:</strong> ${formObj.q15 || '-'} ถึง ${formObj.q16 || '-'}</p>
-
-                        </div>
-
-                    </div>
-
-                `;
-
-            } catch (err) {
-
-                resultArea.innerHTML = `<p class="text-red-500 text-sm">เกิดข้อผิดพลาด: ${err.message}</p>`;
-
-            }
-
+        if (!data || data.length === 0) {
+            resultArea.innerHTML = `
+                <div class="p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+                    ❌ ไม่พบข้อมูลคำขอ! กรุณาตรวจสอบเลขที่ Work Permit และอีเมลให้ถูกต้อง
+                </div>
+            `;
+            return;
         }
 
+        const item = data[0];
+        const formObj = item.form_data || {};
 
+        // แสดงเฉพาะข้อมูลติดตามสถานะ ไม่แสดง PPE หรือ Checklist
+        resultArea.innerHTML = `
+            <div class="p-4 border border-sky-200 bg-sky-50 rounded-lg space-y-3">
+
+                <div class="flex justify-between items-center border-b border-sky-200 pb-2">
+                    <div>
+                        <span class="font-bold text-sky-900 text-base">
+                            ${item.wp_no || '-'}
+                        </span>
+                        <p class="text-xs text-gray-600">
+                            ยื่นเมื่อ: ${item.submitted_at
+                                ? new Date(item.submitted_at).toLocaleString('th-TH')
+                                : '-'}
+                        </p>
+                    </div>
+
+                    <span class="px-3 py-1 rounded-full text-xs font-semibold ${getStatusBadge(item.status)}">
+                        ${item.status || 'Pending'}
+                    </span>
+                </div>
+
+                <div class="text-sm space-y-2 text-gray-700">
+                    <p><strong>ผู้ขออนุญาต:</strong> ${item.applicant_name || '-'}</p>
+                    <p><strong>บริษัท:</strong> ${item.company || '-'}</p>
+                    <p><strong>พื้นที่ปฏิบัติงาน:</strong> ${formObj.q14 || '-'}</p>
+                    <p><strong>วันที่เริ่มงาน:</strong> ${formObj.q15 || '-'}</p>
+                    <p><strong>วันที่สิ้นสุดงาน:</strong> ${formObj.q16 || '-'}</p>
+                </div>
+
+                <div class="border-t border-sky-200 pt-3">
+                    <p class="text-sm font-semibold text-gray-700">
+                        สถานะการพิจารณา
+                    </p>
+                    <p class="text-sm text-gray-600 mt-1">
+                        ${item.status === 'Approved'
+                            ? '✅ คำขอได้รับการอนุมัติแล้ว'
+                            : item.status === 'Rejected'
+                            ? '❌ คำขอไม่ได้รับการอนุมัติ กรุณาติดต่อเจ้าหน้าที่ Safety'
+                            : '⏳ คำขออยู่ระหว่างรอเจ้าหน้าที่ Safety พิจารณา'}
+                    </p>
+                </div>
+
+            </div>
+        `;
+
+    } catch (err) {
+        resultArea.innerHTML = `
+            <p class="text-red-500 text-sm">
+                เกิดข้อผิดพลาด: ${err.message}
+            </p>
+        `;
+    }
+}
 
         // โหลดข้อมูลคำขอทั้งหมดสำหรับ Safety จป.
         async function loadSafetyRequests() {
