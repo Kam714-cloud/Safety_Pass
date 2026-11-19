@@ -1143,24 +1143,44 @@
         }
 
 
-        function showPage(pageName) {
+function showPage(pageName) {
+    // รายชื่อหน้าทั้งหมดในระบบ
+    const pageIds = [
+        'page-permit-form',
+        'page-status-tracker',
+        'page-safety-approval'
+    ];
 
-            document.getElementById('page-permit-form').classList.add('hidden-section');
-
-            document.getElementById('page-status-tracker').classList.add('hidden-section');
-
-            document.getElementById('page-safety-approval').classList.add('hidden-section');
-
-
-            document.getElementById(`page-${pageName}`).classList.remove('hidden-section');
-
-            if (pageName === 'safety-approval') {
-
-                loadSafetyRequests();
-
-            }
-
+    // ซ่อนทุกหน้าก่อน
+    pageIds.forEach(function(id) {
+        const page = document.getElementById(id);
+        if (page) {
+            page.classList.add('hidden-section');
         }
+    });
+
+    // เปิดเฉพาะหน้าที่ผู้ใช้เลือก
+    const targetPage = document.getElementById('page-' + pageName);
+
+    if (!targetPage) {
+        console.error('ไม่พบหน้าที่ต้องการ:', 'page-' + pageName);
+        alert('ไม่พบหน้าที่ต้องการ กรุณาตรวจสอบการตั้งค่าหน้าเว็บ');
+        return;
+    }
+
+    targetPage.classList.remove('hidden-section');
+
+    // โหลดรายการคำขอเมื่อเข้า Safety Approval
+    if (pageName === 'safety-approval') {
+        loadSafetyRequests();
+    }
+
+    // เลื่อนกลับไปด้านบน
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
 
 
         function toggleOtherRadio(groupName, isOther) {
